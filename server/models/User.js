@@ -7,6 +7,7 @@ const UserSchema = new Schema({
     password: { type: String, required: true },
     restaurantId: { type: Schema.Types.ObjectId, ref: "Restaurant" },
     role: { type: String, required: true },
+    telephone: Number,
 });
 
 UserSchema.pre("save", async function (next) {
