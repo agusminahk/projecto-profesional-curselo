@@ -1,26 +1,26 @@
 import React from "react";
 import {
-  chakra,
   Box,
   Image,
-  Flex,
-  useColorModeValue,
-  Link,
 } from "@chakra-ui/react";
+import { Link } from "react-router-dom"
 
-export const CardAdmin = ({ mensaje }) => {
+export const CardAdmin = ({ mensaje, url }) => {
   return (
-      <Box
-        borderWidth="2px"
-        borderRadius="3px"
-        minWidth="150px" 
-        minHeight="150px" 
-      >
-          <Image src="https://cdn.pixabay.com/photo/2018/05/01/15/06/user-3365840_960_720.png"/>
-          <Box fontWeight="bold">
-            {mensaje}
-          </Box>
-      </Box>
+      <Link to={url}>
+        <Box
+          borderWidth="2px"
+          borderRadius="3px"
+          borderColor="#999"
+          minWidth="150px" 
+          minHeight="150px" 
+          >
+            <Image src="https://cdn.pixabay.com/photo/2018/05/01/15/06/user-3365840_960_720.png"/>
+            <Box fontWeight="bold">
+              {mensaje}
+            </Box>
+        </Box>
+      </Link>
   );
 };
 /*

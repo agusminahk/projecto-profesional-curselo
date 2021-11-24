@@ -27,8 +27,8 @@ export const Client = ({ client }) => {
                     <Image maxH="30px" src="https://cdn.icon-icons.com/icons2/2506/PNG/512/user_icon_150670.png"></Image>
                 </Th>
                 <Th>{name}</Th>
-                <Th>{status}</Th>
                 <Th>{country}</Th>
+                <Th>{status}</Th>
             </Tr>
 
             <Modal isOpen={isOpen} onClose={onClose}>

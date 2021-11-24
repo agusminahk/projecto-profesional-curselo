@@ -1,5 +1,5 @@
 import React from "react";
-
+import { Link } from "react-router-dom"
 import {
   chakra,
   Box,
@@ -40,9 +40,11 @@ export const NavbarAdmin = () => {
               
               <VisuallyHidden>Choc</VisuallyHidden>
             </chakra.a>
-            <chakra.h1 fontSize="xl" fontWeight="medium" ml="2">
-              Admin
-            </chakra.h1>
+            <Link to="/">
+              <chakra.h1 fontSize="xl" fontWeight="medium" ml="2">
+                Admin
+              </chakra.h1>
+            </Link>
           </Flex>
           <HStack display="flex" alignItems="center" spacing={1}>
             <HStack
@@ -51,9 +53,8 @@ export const NavbarAdmin = () => {
               color="brand.500"
               display={{ base: "none", md: "inline-flex" }}
             >
-              <Button variant="ghost">Personalizar</Button>
-              <Button variant="ghost">Perfil</Button>
-              <Button variant="ghost">Alcance</Button>
+              <Link to="/perfil"><Button variant="ghost">Perfil</Button></Link>
+              <Link to="/alcance"><Button variant="ghost">Alcance</Button></Link>
               <Button variant="ghost">Cerrar sesión</Button>
             </HStack>
             <Button colorScheme="brand" size="sm">
@@ -89,16 +90,16 @@ export const NavbarAdmin = () => {
                   aria-label="Close menu"
                   onClick={mobileNav.onClose}
                 />
-
-                <Button w="full" variant="ghost">
-                  Personalizar
-                </Button>
-                <Button w="full" variant="ghost">
-                  Perfil
-                </Button>
-                <Button w="full" variant="ghost">
-                  Alcance
-                </Button>
+                <Link to="/perfil">
+                  <Button w="full" variant="ghost">
+                    Perfil
+                  </Button>
+                </Link>
+                <Link to="/alcance">
+                  <Button w="full" variant="ghost">
+                    Alcance
+                  </Button>
+                </Link>
                 <Button w="full" variant="ghost">
                   Cerrar sesión
                 </Button>

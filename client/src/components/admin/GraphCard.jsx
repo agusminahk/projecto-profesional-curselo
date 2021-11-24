@@ -10,7 +10,11 @@ import {
 
 export const GraphCard = () => {
     return (<Box
-    borderWidth="1px" 
+      borderWidth="2px"
+      borderRadius="3px"
+      borderColor="#999"
+      minWidth="150px" 
+      minHeight="150px" 
   >
       <Box fontWeight="bold">
         Cardano
