@@ -8,8 +8,22 @@ import {
   Link,
 } from "@chakra-ui/react";
 
-export const CardAdmin = () => {
+export const CardAdmin = ({ mensaje }) => {
   return (
+      <Box
+        borderWidth="2px"
+        borderRadius="3px"
+        minWidth="150px" 
+        minHeight="150px" 
+      >
+          <Image src="https://cdn.pixabay.com/photo/2018/05/01/15/06/user-3365840_960_720.png"/>
+          <Box fontWeight="bold">
+            {mensaje}
+          </Box>
+      </Box>
+  );
+};
+/*
     <Flex
       bg={useColorModeValue("#F9FAFB", "gray.600")}
       p={0}
@@ -55,5 +69,4 @@ export const CardAdmin = () => {
         </Box>
       </Box>
     </Flex>
-  );
-};
+*/
