@@ -14,32 +14,62 @@ export const ClientsView = () => {
         {
             name: "Nombre bastante largo",
             status: "active",
-            country: "Argentina"
+            country: "Argentina",
+            provincia: "Tucuman",
+            email: "example@mail.com",
+            phone: "+54 381 579-6366",
+            direction: "Santafe 1980",
+            postalCode: "400"
         },
         {
             name: "etcetcetc",
             status: "active",
-            country: "Argentina"
+            country: "Argentina",
+            provincia: "Tucuman",
+            email: "example@mail.com",
+            phone: "+54 381 579-6366",
+            direction: "Santafe 1980",
+            postalCode: "400"
         },
         {
             name: "otr nombre",
             status: "active",
-            country: "Argentina"
+            country: "Argentina",
+            provincia: "Tucuman",
+            email: "example@mail.com",
+            phone: "+54 381 579-6366",
+            direction: "Santafe 1980",
+            postalCode: "400"
         },
         {
             name: "burguer king",
             status: "inactive",
-            country: "Argentina"
+            country: "Argentina",
+            provincia: "Tucuman",
+            email: "example@mail.com",
+            phone: "+54 381 579-6366",
+            direction: "Santafe 1980",
+            postalCode: "400"
         },
         {
             name: "taco bells",
             status: "active",
-            country: "Argentina"
+            country: "Argentina",
+            provincia: "Tucuman",
+            email: "example@mail.com",
+            phone: "+54 381 579-6366",
+            direction: "Santafe 1980",
+            postalCode: "400"
         },
         {
             name: "KFC",
             status: "inactive",
-            country: "Argentina"
+            country: "Argentina",
+            provincia: "Tucuman",
+            email: "example@mail.com",
+            phone: "+54 381 579-6366",
+            direction: "Santafe 1980",
+            postalCode: "400"
         },
     ]
 
