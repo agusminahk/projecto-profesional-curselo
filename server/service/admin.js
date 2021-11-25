@@ -53,6 +53,7 @@ class AdminService {
 
     static async createStaff(body) {
         try {
+            // ver si hacemos un redirect
             const staff = new User(body);
 
             const resp = await staff.save();

@@ -3,6 +3,7 @@ const AdminController = require("../controller/admin");
 
 // agregar una ruta para poder pedir de nuevo el servicio q fue dado de baja
 // agregar una ruta para poder hacer el cierre diario y q se limpie el historial
+// ver si se agrega una propiedad nueva q sea pedidos y una ves entregado pasen al historial
 adminRoutes.get('/search', AdminController.search)
 
 adminRoutes.post("/restaurant", AdminController.createRestaurant);

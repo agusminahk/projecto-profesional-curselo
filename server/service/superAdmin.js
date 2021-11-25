@@ -1,8 +1,6 @@
 const User = require("../models/User");
 const Restaurant = require("../models/Restaurant");
 const Metrics = require("../models/Metric");
-const Category = require("../models/Category");
-const Product = require("../models/Product");
 
 class SuperAdminService {
     static async createClient(body) {
@@ -39,13 +37,9 @@ class SuperAdminService {
 
     static async deleteClient(id) {
         try {
-            const user = await User.deleteMany({ restaurantId: id });
-            const category = await Category.deleteMany({ restaurantId: id });
-            const products = await Product.deleteMany({ restaurantId: id });
-            const metrics = await Metrics.deleteMany({ restaurantId: id });
             const restaurant = await Restaurant.deleteMany({ _id: id });
 
-            console.log(user, category, products, metrics, restaurant);
+            console.log(restaurant);
 
             return { error: false, data: restaurant };
         } catch (error) {

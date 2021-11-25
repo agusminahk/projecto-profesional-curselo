@@ -10,6 +10,7 @@ const MestricSchema = new Schema({
             total: { type: Number, required: true },
         },
     ],
+    paymentMethod: [{name: {type: String, required: true}, units: { type: Number, required: true}}],
     date: { type: Date, default: Date.now },
 });
 

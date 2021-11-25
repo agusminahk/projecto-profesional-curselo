@@ -1,11 +1,21 @@
 const router = require("express").Router();
 
-// const userRoutes = require("./user");
-// const categoriesRoutes = require("./categories");
-// const productsRoutes = require("./products");
+const clientRoutes = require('./client')
+const superAdminRoutes = require("./superAdmin");
+const adminRoutes = require("./admin");
+const staffRoutes = require("./staff");
 
-// router.use("/user", userRoutes);
-// router.use("/products", productsRoutes);
-// router.use("/categories", categoriesRoutes);
+// Client
+router.use('/client', clientRoutes)
+
+// Super Admin
+router.use("/superAdmin", superAdminRoutes);
+
+// Admin
+router.use("/admin", adminRoutes);
+
+// Staff
+router.use("/staff", staffRoutes);
+
 
 module.exports = router;
