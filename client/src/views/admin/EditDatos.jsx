@@ -16,6 +16,7 @@ import {
   Stack,
   Button,
 } from "@chakra-ui/react";
+import { FormControl, FormLabel, FormErrorMessage, FormHelperText, Divider } from "@chakra-ui/react";
 import { FaBell, FaClipboardCheck, FaRss } from "react-icons/fa";
 import { AiFillGift } from "react-icons/ai";
 import { BsGearFill } from "react-icons/bs";
@@ -24,7 +25,7 @@ import { HiCode, HiCollection } from "react-icons/hi";
 import { MdHome } from "react-icons/md";
 import React from "react";
 
-export function SidebarSettings() {
+export function EditDatos() {
   const sidebar = useDisclosure();
 
   const NavItem = (props) => {
@@ -116,13 +117,32 @@ export function SidebarSettings() {
             </Button>
           </Stack>
         </Flex>
-        <Text>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Debitis dicta, molestiae ullam, laborum
-          labore blanditiis odit quod excepturi reprehenderit deserunt, id repellendus optio. Pariatur
-          doloremque accusantium mollitia optio odio qui.
-        </Text>
+        <Box w="60%">
+          <Divider />
+
+          <FormControl mt="30px" id="email">
+            <FormLabel>Email </FormLabel>
+            <Input type="email" />
+            <FormHelperText> Ingrese su email.</FormHelperText>
+          </FormControl>
+
+          <Divider />
+
+          <FormControl mt="20px" id="nombre">
+            <FormLabel>Nombre</FormLabel>
+            <Input type="nombre" />
+            <FormHelperText>Ingrese su nombre.</FormHelperText>
+          </FormControl>
+
+          <Divider />
+
+          <FormControl mt="20px" id="apellido">
+            <FormLabel>Apellido</FormLabel>
+            <Input type="apellido" />
+            <FormHelperText>Ingrese su apellido.</FormHelperText>
+          </FormControl>
+        </Box>
       </Box>
     </Box>
   );
 }
-//<FiMenu />

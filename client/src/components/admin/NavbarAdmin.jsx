@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom"
+import { Link } from "react-router-dom";
 import {
   chakra,
   Box,
@@ -15,29 +15,16 @@ import {
 } from "@chakra-ui/react";
 import { AiOutlineMenu } from "react-icons/ai";
 
-
 export const NavbarAdmin = () => {
   const bg = useColorModeValue("white", "gray.800");
   const mobileNav = useDisclosure();
 
   return (
     <React.Fragment>
-      <chakra.header
-        bg={bg}
-        w="full"
-        px={{ base: 2, sm: 4 }}
-        py={4}
-        shadow="md"
-      >
+      <chakra.header zIndex="9999" bg={bg} w="full" px={{ base: 2, sm: 4 }} py={4} shadow="md">
         <Flex alignItems="center" justifyContent="space-between" mx="auto">
           <Flex>
-            <chakra.a
-              href="/"
-              title="Choc Home Page"
-              display="flex"
-              alignItems="center"
-            >
-              
+            <chakra.a href="/" title="Choc Home Page" display="flex" alignItems="center">
               <VisuallyHidden>Choc</VisuallyHidden>
             </chakra.a>
             <Link to="/">
@@ -47,14 +34,13 @@ export const NavbarAdmin = () => {
             </Link>
           </Flex>
           <HStack display="flex" alignItems="center" spacing={1}>
-            <HStack
-              spacing={1}
-              mr={1}
-              color="brand.500"
-              display={{ base: "none", md: "inline-flex" }}
-            >
-              <Link to="/perfil"><Button variant="ghost">Perfil</Button></Link>
-              <Link to="/alcance"><Button variant="ghost">Alcance</Button></Link>
+            <HStack spacing={1} mr={1} color="brand.500" display={{ base: "none", md: "inline-flex" }}>
+              <Link to="/perfil">
+                <Button variant="ghost">Perfil</Button>
+              </Link>
+              <Link to="/alcance">
+                <Button variant="ghost">Alcance</Button>
+              </Link>
               <Button variant="ghost">Cerrar sesión</Button>
             </HStack>
             <Button colorScheme="brand" size="sm">
@@ -86,10 +72,7 @@ export const NavbarAdmin = () => {
                 rounded="sm"
                 shadow="sm"
               >
-                <CloseButton
-                  aria-label="Close menu"
-                  onClick={mobileNav.onClose}
-                />
+                <CloseButton aria-label="Close menu" onClick={mobileNav.onClose} />
                 <Link to="/perfil">
                   <Button w="full" variant="ghost">
                     Perfil
@@ -110,4 +93,4 @@ export const NavbarAdmin = () => {
       </chakra.header>
     </React.Fragment>
   );
-}
+};
