@@ -1,12 +1,15 @@
 const express = require('express');
 const session = require('express-session');
 const volleyball = require('volleyball');
-const cookieParser = require('cookie-parser');
 const cors = require('cors');
-require('dotenv').config();
-
 const router = require('./routes/');
 const client = require('./config/db');
+const cookieParser = require('cookie-parser');
+const admin = require('firebase-admin');
+require('dotenv').config();
+
+const serviceAccount = require('./serviceAccountKey.json');
+require('./config/firebase-config');
 
 const app = express();
 
@@ -27,10 +30,14 @@ app.use(
     })
 );
 
+admin.initializeApp({
+    credential: admin.credential.cert(serviceAccount),
+    databaseURL: 'https://curselo-7d35c.firebaseio.com',
+});
+
 app.use('/api', router);
 
 client.then(() => {
-    //setupController();
     app.listen(process.env.PORT || 8080, () => {
         console.log('Backend server is running on http://localhost:8080');
     });
