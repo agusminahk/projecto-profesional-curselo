@@ -12,6 +12,7 @@ import { NavbarAdmin } from '../components/admin/NavbarAdmin';
 import { ClientsView } from "./admin/ClientsView"
 import { NewClient } from './admin/NewClient';
 import { Profile } from './Profile';
+import { Settings } from "./admin/Settings";
 
 const App = () => {
     return (
@@ -22,6 +23,7 @@ const App = () => {
                 <Route exact path="/clientes" element={<ClientsView />} />
                 <Route exact path="/nuevousuario" element={<NewClient />} />
                 <Route exact path="/perfil" element={<Profile/>} />
+                <Route exact path="/ajustes" element={<Settings />} />
             </Routes>
         </div>
     )
