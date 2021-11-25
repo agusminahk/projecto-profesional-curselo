@@ -19,7 +19,6 @@ import {
 export const Client = ({ client }) => {
     const { name, status, country } = client
     const { isOpen, onOpen, onClose } = useDisclosure()
-    console.log(client)
     return (
         <>
             <Tr onClick={onOpen}>

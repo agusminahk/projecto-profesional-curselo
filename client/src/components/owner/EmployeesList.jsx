@@ -63,8 +63,8 @@ export const EmployeesList = () => {
             <Thead>
                 <Tr>
                     <Th>Nombre</Th>
+                    <Th display={["none", "none"]}>Rol</Th>
                     <Th display={["none", "none", "none", "table-cell"]}>Email</Th>
-                    <Th>Rol</Th>
                     <Th display={["none", "none", "table-cell"]}>Número de telefono</Th>
                     <Th></Th>
                 </Tr>

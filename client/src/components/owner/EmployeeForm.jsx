@@ -15,8 +15,8 @@ export const EmployeeForm = ({ editing, employee, createRow }) => {
     
     return (
         <Flex align={"center"} justify={"center"}>
-          <Stack spacing={0} mx={"auto"} w={"xl"} py={0} px={8}>
-            <Box rounded={"lg"} bg={useColorModeValue("white", "gray.700")} p={8}>
+          <Stack spacing={0} mx={"auto"} w={"xl"} py={0} px={6}>
+            <Box rounded={"lg"} bg={useColorModeValue("white", "gray.700")}>
               <Stack spacing={4}>
                 <FormControl id="firstname">
                   <FormLabel>Nombre </FormLabel>

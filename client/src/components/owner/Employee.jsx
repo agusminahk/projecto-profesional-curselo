@@ -31,13 +31,13 @@ export const Employee = ({ employee, createRow = false }) => {
     <>
     <Tr onClick={onOpen}>
             {
-                createRow ? <Button m={2} mr={0} onClick={() => setEditing(true)} _hover={{backgroundColor: "gray.900"}} backgroundColor="blue.800" color="blue.50">Crear empleado</Button> : (
+                createRow ? <Button m={2} p={2} mr={0} onClick={() => setEditing(true)} _hover={{backgroundColor: "gray.900"}} backgroundColor="blue.800" color="blue.50">Crear empleado</Button> : (
                 <>
                     <Th >{firstName} {lastName}</Th>
+                    <Th >{rol}</Th>
                     <Th display={["none", "none", "none", "table-cell"]}>{email}</Th>
-                    <Th>{rol}</Th>
                     <Th display={["none", "none", "table-cell"]}>{telephone}</Th>
-                    <Th display="flex" flexDirection="row-reverse"><Button onClick={() => setEditing(true)} _hover={{backgroundColor: "blue.800"}} backgroundColor="blue.500" color="blue.50">Editar</Button></Th>
+                    <Th pl={0} display="flex" flexDirection="row-reverse"><Button onClick={() => setEditing(true)} _hover={{backgroundColor: "blue.800"}} backgroundColor="blue.500" color="blue.50">Editar</Button></Th>
                 </>
                 )
             }   
