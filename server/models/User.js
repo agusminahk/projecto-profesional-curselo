@@ -11,14 +11,6 @@ const UserSchema = new Schema({
     telephone: Number,
 });
 
-UserSchema.pre('save', async function (next) {
-    if (this.password) {
-        const hash = await bcrypt.hash(this.password, 10);
-        this.password = hash;
-    }
-    next();
-});
-
 UserSchema.set('toJSON', {
     transform: (document, returnedObject) => {
         delete returnedObject.__v;

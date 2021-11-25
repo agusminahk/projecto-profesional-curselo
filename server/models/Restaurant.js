@@ -29,6 +29,7 @@ const RestaurantSchema = new Schema({
         city: { type: String, required: true },
         direction: { type: String, required: true },
     },
+    img: { type: String, required: true}
 });
 
 module.exports = model("Restaurant", RestaurantSchema);
