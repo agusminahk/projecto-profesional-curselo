@@ -1,28 +1,21 @@
-const { Schema, model } = require("mongoose");
-const bcrypt = require("bcrypt");
+const { Schema, model } = require('mongoose');
+const bcrypt = require('bcrypt');
 
 const UserSchema = new Schema({
+    _id: { type: String, required: true },
     firstname: { type: String, required: true },
     lastname: { type: String, required: true },
     email: { type: String, required: true },
-    role: { type: String, default: "admin" },
-    restaurantId: { type: Schema.Types.ObjectId, ref: "Restaurant" },
+    role: { type: String, default: 'admin' },
+    restaurantId: { type: Schema.Types.ObjectId, ref: 'Restaurant' },
     telephone: Number,
 });
 
-UserSchema.pre("save", async function (next) {
-    if (this.password) {
-        const hash = await bcrypt.hash(this.password, 10);
-        this.password = hash;
-    }
-    next();
-});
-
-UserSchema.set("toJSON", {
+UserSchema.set('toJSON', {
     transform: (document, returnedObject) => {
         delete returnedObject.__v;
-        delete returnedObject.password;
+        // delete returnedObject.password;
     },
 });
 
-module.exports = model("User", UserSchema);
+module.exports = model('User', UserSchema);
