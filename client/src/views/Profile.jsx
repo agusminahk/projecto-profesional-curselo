@@ -43,7 +43,7 @@ export function Profile() {
           flexDirection="column"
           alignItems="center"
         >
-          <u>Tu perfil!</u>
+          <u>Tu perfil</u>
         </Text>
         <br />
         <br />

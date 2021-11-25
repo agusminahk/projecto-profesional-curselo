@@ -11,7 +11,7 @@ import { AdminHome } from "./admin/AdminHome"
 import { NavbarAdmin } from '../components/admin/NavbarAdmin';
 import { ClientsView } from "./admin/ClientsView"
 import { NewClient } from './admin/NewClient';
-import { Profile } from './admin/Profile';
+import { Profile } from './Profile';
 
 const App = () => {
     return (

@@ -91,16 +91,16 @@ export const NavbarAdmin = () => {
                   onClick={mobileNav.onClose}
                 />
                 <Link to="/perfil">
-                  <Button w="full" variant="ghost">
+                  <Button w="full" variant="ghost" onClick={mobileNav.onClose}>
                     Perfil
                   </Button>
                 </Link>
                 <Link to="/alcance">
-                  <Button w="full" variant="ghost">
+                  <Button w="full" variant="ghost" onClick={mobileNav.onClose}>
                     Alcance
                   </Button>
                 </Link>
-                <Button w="full" variant="ghost">
+                <Button w="full" variant="ghost" onClick={mobileNav.onClose}>
                   Cerrar sesión
                 </Button>
               </VStack>
