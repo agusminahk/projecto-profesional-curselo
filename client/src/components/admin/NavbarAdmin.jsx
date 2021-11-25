@@ -57,9 +57,6 @@ export const NavbarAdmin = () => {
               <Link to="/alcance"><Button variant="ghost">Alcance</Button></Link>
               <Button variant="ghost">Cerrar sesión</Button>
             </HStack>
-            <Button colorScheme="brand" size="sm">
-              Get Started
-            </Button>
             <Box display={{ base: "inline-flex", md: "none" }}>
               <IconButton
                 display={{ base: "flex", md: "none" }}

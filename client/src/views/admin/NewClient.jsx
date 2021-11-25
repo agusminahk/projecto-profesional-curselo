@@ -20,9 +20,13 @@ import {
             </Stack>
             <Box rounded={"lg"} bg={useColorModeValue("white", "gray.700")} boxShadow={"lg"} p={8}>
               <Stack spacing={4}>
-                <FormControl id="username">
-                  <FormLabel>Username </FormLabel>
-                  <Input type="email" />
+                <FormControl id="firstname">
+                  <FormLabel>Nombre</FormLabel>
+                  <Input type="text"/>
+                </FormControl>
+                <FormControl id="lastname">
+                  <FormLabel>Apellido </FormLabel>
+                  <Input type="text" />
                 </FormControl>
                 <FormControl id="email">
                   <FormLabel>Email </FormLabel>

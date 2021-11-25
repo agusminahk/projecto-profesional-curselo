@@ -9,7 +9,7 @@ export const HomeGridAdmin = () => {
             <CardAdmin mensaje="Añadir usuario" url="/nuevousuario"/>
             <CardAdmin mensaje="Clientes" url="/clientes"/>
             <CardAdmin mensaje="Metricas" url="/metricas"/>
-            <CardAdmin mensaje="Settings" url="/settings"/>
+            <CardAdmin mensaje="Settings" url="/ajustes"/>
         </SimpleGrid>
         <SimpleGrid minChildWidth="150px" m="20px" mt="40px" spacing={10}>
             <GraphCard />   

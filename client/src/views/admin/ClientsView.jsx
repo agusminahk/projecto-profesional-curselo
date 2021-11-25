@@ -80,7 +80,7 @@ export const ClientsView = () => {
                     <Th>Image</Th>
                     <Th>Name</Th>
                     <Th>Pais</Th>
-                    <Th>Status</Th>
+                    <Th display={["none", "none", "table-cell"]}>Status</Th>
                 </Tr>
             </Thead>
             <Tbody>
