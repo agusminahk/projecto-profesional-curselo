@@ -59,13 +59,12 @@ export const EmployeesList = () => {
 
     return (
         <Table variant="striped" w="100%" m="auto" mt="50px" size="sm">
-            {console.log(window)}
             <Thead>
                 <Tr>
                     <Th>Nombre</Th>
-                    <Th display={["none", "none"]}>Rol</Th>
-                    <Th display={["none", "none", "none", "table-cell"]}>Email</Th>
+                    <Th>Rol</Th>
                     <Th display={["none", "none", "table-cell"]}>Número de telefono</Th>
+                    <Th display={["none", "none", "none", "table-cell"]}>Email</Th>
                     <Th></Th>
                 </Tr>
             </Thead>
