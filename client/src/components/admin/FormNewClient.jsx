@@ -15,14 +15,6 @@ import {
 } from "@chakra-ui/react";
 
 export const FormNewCLient = () => {
-
-
-
-  const handleSubmit=() => {
-    
-  }
-
-
   return (
     <>
       <Flex minH={"100vh"} align={"center"} justify={"center"} bg={useColorModeValue("gray.50", "gray.800")}>
@@ -32,9 +24,13 @@ export const FormNewCLient = () => {
           </Stack>
           <Box rounded={"lg"} bg={useColorModeValue("white", "gray.700")} boxShadow={"lg"} p={8}>
             <Stack spacing={4}>
-              <FormControl id="username">
-                <FormLabel>Username </FormLabel>
-                <Input type="email" />
+              <FormControl id="firstname">
+                <FormLabel>Nombre </FormLabel>
+                <Input type="text" />
+              </FormControl>
+              <FormControl id="lastname">
+                <FormLabel>Apellido </FormLabel>
+                <Input type="text" />
               </FormControl>
               <FormControl id="email">
                 <FormLabel>Email </FormLabel>

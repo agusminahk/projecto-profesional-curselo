@@ -25,11 +25,13 @@ export const NavbarAdmin = () => {
       <chakra.header
         bg={bg}
         w="full"
+        backgroundColor="blue.600"
+        color="gray.50"
         px={{ base: 2, sm: 4 }}
         py={4}
         shadow="md"
       >
-        <Flex alignItems="center" justifyContent="space-between" mx="auto">
+        <Flex alignItems="center" justifyContent="space-between" mx="auto" >
           <Flex>
             <chakra.a
               href="/"
@@ -57,15 +59,13 @@ export const NavbarAdmin = () => {
               <Link to="/alcance"><Button variant="ghost">Alcance</Button></Link>
               <Button variant="ghost">Cerrar sesión</Button>
             </HStack>
-            <Button colorScheme="brand" size="sm">
-              Get Started
-            </Button>
             <Box display={{ base: "inline-flex", md: "none" }}>
               <IconButton
                 display={{ base: "flex", md: "none" }}
                 aria-label="Open menu"
                 fontSize="20px"
-                color={useColorModeValue("gray.800", "inherit")}
+                color={useColorModeValue("gray.50", "inherit")}
+                _hover={{backgroundColor: "blue.900"}}
                 variant="ghost"
                 icon={<AiOutlineMenu />}
                 onClick={mobileNav.onOpen}
@@ -81,10 +81,12 @@ export const NavbarAdmin = () => {
                 p={2}
                 pb={4}
                 m={2}
-                bg={bg}
+                bg={"blue.800"}
                 spacing={3}
                 rounded="sm"
                 shadow="sm"
+                borderRadius="15px"
+                boxShadow="dark-lg"
               >
                 <CloseButton
                   aria-label="Close menu"

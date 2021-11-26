@@ -19,7 +19,6 @@ import {
 export const Client = ({ client }) => {
     const { name, status, country } = client
     const { isOpen, onOpen, onClose } = useDisclosure()
-    console.log(client)
     return (
         <>
             <Tr onClick={onOpen}>
@@ -28,7 +27,7 @@ export const Client = ({ client }) => {
                 </Th>
                 <Th>{name}</Th>
                 <Th>{country}</Th>
-                <Th>{status}</Th>
+                <Th display={["none", "none", "table-cell"]}>{status}</Th>
             </Tr>
 
             <Modal isOpen={isOpen} onClose={onClose}>
