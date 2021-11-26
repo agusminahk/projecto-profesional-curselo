@@ -12,6 +12,9 @@ import { Profile } from './Profile';
 import { Settings } from "./admin/Settings";
 import { Employees } from './owner/Employees';
 import { OwnerHome } from './owner/OwnerHome';
+import { EditDatos } from "./admin/EditDatos";
+import { Personalizar } from "./admin/Personalizar";
+import { PresentMenu } from "./PresentMenu";
 import { Box } from '@chakra-ui/layout';
 import { ProductsList } from '../components/menu/ProductsList';
 
@@ -32,6 +35,9 @@ const App = () => {
                 <Route path="/ajustes" element={ <Settings /> }/>
                 <Route path="/empleados" element={ <Employees /> }/>
                 <Route path="/217/cerveza-script" element={ <ProductsList /> }/>
+                <Route exact path="/editar" element={<EditDatos />} />
+                <Route exact path="/personalizar" element={<Personalizar />} />
+                <Route exact path="/present" element={<PresentMenu />} />
             </Routes>
         </Box>
     )

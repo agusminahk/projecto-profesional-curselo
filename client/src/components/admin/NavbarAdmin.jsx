@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom"
+import { Link } from "react-router-dom";
 import {
   chakra,
   Box,
@@ -14,7 +14,6 @@ import {
   CloseButton,
 } from "@chakra-ui/react";
 import { AiOutlineMenu } from "react-icons/ai";
-
 
 export const NavbarAdmin = () => {
   const bg = useColorModeValue("white", "gray.800");
@@ -33,13 +32,7 @@ export const NavbarAdmin = () => {
       >
         <Flex alignItems="center" justifyContent="space-between" mx="auto" >
           <Flex>
-            <chakra.a
-              href="/"
-              title="Choc Home Page"
-              display="flex"
-              alignItems="center"
-            >
-              
+            <chakra.a href="/" title="Choc Home Page" display="flex" alignItems="center">
               <VisuallyHidden>Choc</VisuallyHidden>
             </chakra.a>
             <Link to="/">
@@ -49,14 +42,13 @@ export const NavbarAdmin = () => {
             </Link>
           </Flex>
           <HStack display="flex" alignItems="center" spacing={1}>
-            <HStack
-              spacing={1}
-              mr={1}
-              color="brand.500"
-              display={{ base: "none", md: "inline-flex" }}
-            >
-              <Link to="/perfil"><Button variant="ghost">Perfil</Button></Link>
-              <Link to="/alcance"><Button variant="ghost">Alcance</Button></Link>
+            <HStack spacing={1} mr={1} color="brand.500" display={{ base: "none", md: "inline-flex" }}>
+              <Link to="/perfil">
+                <Button variant="ghost">Perfil</Button>
+              </Link>
+              <Link to="/alcance">
+                <Button variant="ghost">Alcance</Button>
+              </Link>
               <Button variant="ghost">Cerrar sesión</Button>
             </HStack>
             <Box display={{ base: "inline-flex", md: "none" }}>
@@ -88,10 +80,7 @@ export const NavbarAdmin = () => {
                 borderRadius="15px"
                 boxShadow="dark-lg"
               >
-                <CloseButton
-                  aria-label="Close menu"
-                  onClick={mobileNav.onClose}
-                />
+                <CloseButton aria-label="Close menu" onClick={mobileNav.onClose} />
                 <Link to="/perfil">
                   <Button w="full" variant="ghost" onClick={mobileNav.onClose}>
                     Perfil
@@ -112,4 +101,4 @@ export const NavbarAdmin = () => {
       </chakra.header>
     </React.Fragment>
   );
-}
+};

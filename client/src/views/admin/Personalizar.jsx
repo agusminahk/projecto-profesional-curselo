@@ -15,16 +15,21 @@ import {
   useDisclosure,
   Stack,
   Button,
+  Heading,
 } from "@chakra-ui/react";
+import { FormControl, FormLabel, FormErrorMessage, FormHelperText, Divider } from "@chakra-ui/react";
 import { FaBell, FaClipboardCheck, FaRss } from "react-icons/fa";
 import { AiFillGift } from "react-icons/ai";
 import { BsGearFill } from "react-icons/bs";
 import { FiMenu, FiSearch } from "react-icons/fi";
 import { HiCode, HiCollection } from "react-icons/hi";
 import { MdHome } from "react-icons/md";
-import React from "react";
+import { React } from "react";
+import { Link } from "react-router-dom";
 
-export function SidebarSettings() {
+import { PersonalizarAdmin } from "../../components/admin/Personalizar.Admin";
+
+export function Personalizar() {
   const sidebar = useDisclosure();
 
   const NavItem = (props) => {
@@ -37,15 +42,15 @@ export function SidebarSettings() {
         rounded="md"
         py="3"
         cursor="pointer"
-        color="whiteAlpha.700"
+        color="black"
         _hover={{
           bg: "blackAlpha.300",
-          color: "whiteAlpha.900",
+          color: "blue.600",
         }}
         role="group"
         fontWeight="semibold"
         transition=".15s ease"
-        w="40px"
+        w="full"
         {...rest}
       >
         {icon && (
@@ -53,7 +58,7 @@ export function SidebarSettings() {
             mr="2"
             boxSize="4"
             _groupHover={{
-              color: "gray.300",
+              color: "blue.600",
             }}
             as={icon}
           />
@@ -75,54 +80,70 @@ export function SidebarSettings() {
       pb="10"
       overflowX="hidden"
       overflowY="auto"
-      bg="brand.600"
+      bg="white"
       borderColor="blackAlpha.300"
       borderRightWidth="1px"
       w="60"
+      color="black"
       {...props}
     >
       <Flex px="4" py="5" align="center">
-        <Text icon={BsGearFill} fontSize="2xl" ml="2" color="white" fontWeight="semibold">
+        <Text icon={BsGearFill} fontSize="2xl" ml="2" fontWeight="semibold">
           Settings
         </Text>
       </Flex>
       <Flex direction="column" as="nav" fontSize="sm" color="gray.600" aria-label="Main Navigation">
-        <NavItem icon={MdHome}>Home</NavItem>
-        <NavItem icon={HiCollection}>veremos</NavItem>
-        <NavItem icon={FaClipboardCheck}>Personalizar</NavItem>
+        <Link to="/home">
+          <NavItem icon={MdHome}>Home</NavItem>
+        </Link>
+
+        <Link to="/">
+          <NavItem icon={HiCollection}>veremos</NavItem>
+        </Link>
+
+        <Link to="/personalizar">
+          <NavItem bg="blackAlpha.300" color="blue.600" icon={FaClipboardCheck}>
+            Personalizar
+          </NavItem>{" "}
+        </Link>
+
         <NavItem icon={AiFillGift}>veremos</NavItem>
-        <NavItem icon={BsGearFill}>Editar perfil</NavItem>
+
+        <Link to="/editar">
+          <NavItem icon={BsGearFill}>Editar perfil</NavItem>
+        </Link>
       </Flex>
     </Box>
   );
   return (
-    <Box as="section" bg={useColorModeValue("black.50", "black.700")} minH="100vh">
+    <Box ml={{ base: 0, md: 60 }} transition=".3s ease" bg="white">
       <SidebarContent display={{ base: "none", md: "unset" }} />
-
-      <Box ml={{ base: 0, md: 60 }} transition=".3s ease">
-        <Flex>
-          <Stack
-            display={{ base: "inline-flex", md: "none" }}
-            bg="#1A202C"
-            direction="row"
-            spacing={5}
-            align="center"
-          >
-            <Button mr="10px" colorScheme="teal" variant="outline">
-              Personalizar
-            </Button>
-            <Button margin="10px" colorScheme="teal" variant="outline">
-              Editar datos
-            </Button>
-          </Stack>
-        </Flex>
-        <Text>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Debitis dicta, molestiae ullam, laborum
-          labore blanditiis odit quod excepturi reprehenderit deserunt, id repellendus optio. Pariatur
-          doloremque accusantium mollitia optio odio qui.
-        </Text>
+      <Flex>
+        <Stack
+          display={{ base: "inline-flex", md: "none" }}
+          bg="white"
+          direction="row"
+          spacing={5}
+          align="center"
+        >
+          <Box ml="45px">
+            <Link to="/personalizar">
+              <Button color="black" mr="10px" colorScheme="black.100" variant="outline">
+                Personalizar
+              </Button>
+            </Link>
+            <Link to="/editar">
+              <Button color="black" bg="gray.200" margin="10px" colorScheme="black.100" variant="outline">
+                Editar perfil
+              </Button>
+            </Link>
+          </Box>
+        </Stack>
+      </Flex>
+      <Box>
+        <PersonalizarAdmin />
+        <Divider />
       </Box>
     </Box>
   );
 }
-//<FiMenu />
