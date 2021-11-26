@@ -16,6 +16,42 @@ class AdminService {
         }
     }
 
+    static async confirmOrder(id, table, body) {
+        try {
+            const restaurant = await Restaurant.findById(id);
+            const arr = [];
+
+            const order = restaurant.orders.filter((e, i) => {
+                if (e.table === table) {
+                    e["index"] = i;
+                    return e;
+                }
+            });
+
+            restaurant.orders.splice(order[0].index, 1);
+
+            order.map((e) => arr.push({ total: e.total, products: e.products, date: e.date, paymentMethod: body.paymentMethod }));
+
+            restaurant.history.push(arr[0]);
+
+            const resp = await restaurant.save();
+
+            return { error: false, data: resp };
+        } catch (error) {
+            return { error: true, data: error.message };
+        }
+    }
+
+    static async dailyClosing(id) {
+        try {
+            const resp = await Restaurant.findOneByIdAndUpdate(id);
+
+            return { error: false, data: resp };
+        } catch (error) {
+            return { error: true, data: error.message };
+        }
+    }
+
     static async createRestaurant(body) {
         try {
             const restaurant = new Restaurant(body); // despues acomodar bien abrir objeto y poner bien donde van las cosas

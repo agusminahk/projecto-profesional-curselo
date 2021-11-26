@@ -8,6 +8,7 @@ const ProductSchema = new Schema({
     category: { type: Schema.Types.ObjectId, ref: "Category", default: "Otros" },
     subcategory: [{ type: String }],
     price: { type: Number, required: true },
+    img: { type: String, required: true},
     onSale: { state: { type: Boolean, default: false }, description: String },
 });
 

@@ -1,5 +1,3 @@
-const Product = require("../models/Product");
-const Category = require("../models/Category");
 const Restaurant = require("../models/Restaurant");
 const clientSearch = require("../utils/clientSearch");
 
