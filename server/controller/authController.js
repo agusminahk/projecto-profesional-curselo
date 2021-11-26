@@ -13,23 +13,17 @@ const AuthService = require('../service/authService');
 class AuthController {
     static async register(req, res) {
         try {
-            const auth = getAuth();
-            const fire_user = await createUserWithEmailAndPassword(auth, req.body.email, req.body.password);
-            const mongo_user = await AuthService.register(req.body, fire_user);
-            const token = fire_user._tokenResponse.idToken;
+            const options = { maxAge: expiresIn, httpOnly: true };
+            const { user, sessionCokie } = await AuthService.register(req.body);
 
-            if (mongo_user._id) {
-                const expiresIn = 60 * 60 * 24 * 3 * 3600;
-                const sessionCokie = await admin.auth().createSessionCookie(token, { expiresIn });
-                const options = { maxAge: expiresIn, httpOnly: true };
-
+            if (user._id) {
                 res.cookie('session', sessionCokie, options);
-                res.cookie('user', mongo_user, options);
+                res.cookie('user', user, options);
 
-                return res.status(201).send(mongo_user);
+                return res.status(201).json({ status: 'success', user });
             }
 
-            return res.status(401).send('UNAUTHORIZED REQUEST!');
+            return res.status(401).send('Error at Register!');
         } catch (error) {
             res.status(500).json({ error: error.message });
         }
@@ -37,23 +31,16 @@ class AuthController {
 
     static async login(req, res) {
         try {
-            const auth = getAuth();
-            await setPersistence(auth, browserSessionPersistence);
-            const fire_user = await signInWithEmailAndPassword(auth, req.body.email, req.body.password);
-
-            const {
-                _tokenResponse: { email, idToken },
-            } = fire_user;
-            const [mongo_user] = await AuthService.login(email);
-
-            const expiresIn = 60 * 60 * 24 * 3 * 3600;
             const options = { maxAge: expiresIn, httpOnly: true };
+            const { user, sessionCokie } = await AuthService.login(req.body);
 
-            const sessionCookie = await admin.auth().createSessionCookie(idToken, { expiresIn });
-            res.cookie('session', sessionCookie, options);
-            res.cookie('user', mongo_user, options);
+            if (user._id) {
+                res.cookie('session', sessionCokie, options);
+                res.cookie('user', user, options);
 
-            return res.json({ status: 'success' });
+                return res.status(200).json({ status: 'success', user });
+            }
+            return res.status(401).send('Error at Login!');
         } catch (error) {
             return res.status(401).send('UNAUTHORIZED REQUEST!');
         }
