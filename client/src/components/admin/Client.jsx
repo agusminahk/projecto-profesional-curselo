@@ -24,7 +24,7 @@ export const Client = ({ client }) => {
         <>
             <Tr onClick={onOpen}>
                 <Th>
-                    <Image maxH="30px" src="https://cdn.icon-icons.com/icons2/2506/PNG/512/user_icon_150670.png"></Image>
+                    <Image maxH="30px" src="https://paseolibertad.com.ar/wp-content/uploads/2020/07/BURGER-KING.png"></Image>
                 </Th>
                 <Th>{name}</Th>
                 <Th>{country}</Th>
@@ -46,7 +46,7 @@ export const Client = ({ client }) => {
                     <ListItem>Provincia: Tucuman</ListItem>
                     <ListItem>Dirección: Santa Fe 1980</ListItem>
                     <ListItem>Codigo postal: 4000</ListItem>
-                    <ListItem>Activo / inactivo: <Checkbox defaultChecked={client.status == "active"}>status</Checkbox></ListItem>
+                    <ListItem>Activo / inactivo <Checkbox defaultChecked={client.status == "active"}></Checkbox></ListItem>
                 </UnorderedList>
             </ModalBody>
 

@@ -26,9 +26,10 @@ import { HiCode, HiCollection } from "react-icons/hi";
 import { MdHome } from "react-icons/md";
 import { React } from "react";
 import { Link } from "react-router-dom";
-import { EditUser } from "../../components/admin/EditUser";
 
-export function EditDatos() {
+import { PersonalizarAdmin } from "../../components/admin/Personalizar.Admin";
+
+export function Personalizar() {
   const sidebar = useDisclosure();
 
   const NavItem = (props) => {
@@ -92,16 +93,24 @@ export function EditDatos() {
         </Text>
       </Flex>
       <Flex direction="column" as="nav" fontSize="sm" color="gray.600" aria-label="Main Navigation">
-        <NavItem icon={MdHome}>Home</NavItem>
-        <NavItem icon={HiCollection}>veremos</NavItem>
-        <Link to="/personalizar">
-          <NavItem icon={FaClipboardCheck}>Personalizar</NavItem>{" "}
+        <Link to="/home">
+          <NavItem icon={MdHome}>Home</NavItem>
         </Link>
+
+        <Link to="/">
+          <NavItem icon={HiCollection}>veremos</NavItem>
+        </Link>
+
+        <Link to="/personalizar">
+          <NavItem bg="blackAlpha.300" color="blue.600" icon={FaClipboardCheck}>
+            Personalizar
+          </NavItem>{" "}
+        </Link>
+
         <NavItem icon={AiFillGift}>veremos</NavItem>
+
         <Link to="/editar">
-          <NavItem bg="blackAlpha.300" color="blue.600" icon={BsGearFill}>
-            Editar perfil
-          </NavItem>
+          <NavItem icon={BsGearFill}>Editar perfil</NavItem>
         </Link>
       </Flex>
     </Box>
@@ -132,11 +141,8 @@ export function EditDatos() {
         </Stack>
       </Flex>
       <Box>
-        <Heading>Editar perfil</Heading>
-
+        <PersonalizarAdmin />
         <Divider />
-
-        <EditUser />
       </Box>
     </Box>
   );

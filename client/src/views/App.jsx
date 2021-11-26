@@ -4,8 +4,10 @@ import { AdminHome } from "./admin/AdminHome";
 import { NavbarAdmin } from "../components/admin/NavbarAdmin";
 import { ClientsView } from "./admin/ClientsView";
 import { NewClient } from "./admin/NewClient";
+import { Profile } from "./Profile";
 import { Settings } from "./admin/Settings";
 import { EditDatos } from "./admin/EditDatos";
+import { Personalizar } from "./admin/Personalizar";
 
 const App = () => {
   return (
@@ -13,10 +15,12 @@ const App = () => {
       <NavbarAdmin />
       <Routes>
         <Route exact path="/" element={<AdminHome />} />
-        <Route exact path="/ajustes" element={<Settings />} />
         <Route exact path="/clientes" element={<ClientsView />} />
         <Route exact path="/nuevousuario" element={<NewClient />} />
+        <Route exact path="/perfil" element={<Profile />} />
+        <Route exact path="/ajustes" element={<Settings />} />
         <Route exact path="/editar" element={<EditDatos />} />
+        <Route exact path="/personalizar" element={<Personalizar />} />
       </Routes>
     </div>
   );
