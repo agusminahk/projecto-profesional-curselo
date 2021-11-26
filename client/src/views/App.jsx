@@ -8,11 +8,12 @@ import { Profile } from "./Profile";
 import { Settings } from "./admin/Settings";
 import { EditDatos } from "./admin/EditDatos";
 import { Personalizar } from "./admin/Personalizar";
+import { PresentMenu } from "./PresentMenu";
 
 const App = () => {
+  //<NavbarAdmin />
   return (
     <div style={{ backgroundColor: "#FFF", height: "100vh" }}>
-      <NavbarAdmin />
       <Routes>
         <Route exact path="/" element={<AdminHome />} />
         <Route exact path="/clientes" element={<ClientsView />} />
@@ -21,6 +22,7 @@ const App = () => {
         <Route exact path="/ajustes" element={<Settings />} />
         <Route exact path="/editar" element={<EditDatos />} />
         <Route exact path="/personalizar" element={<Personalizar />} />
+        <Route exact path="/present" element={<PresentMenu />} />
       </Routes>
     </div>
   );
