@@ -6,7 +6,6 @@ const Product = require("./models/Product");
 
 const RestaurantSchema = new Schema({
     name: { type: String, required: true },
-    email: { type: String, required: true },
     productsId: [{ type: Schema.Types.ObjectId, required: true, ref: "Product" }],
     categoriesId: [{ type: Schema.Types.ObjectId, required: true, ref: "Category" }],
     state: { type: Boolean, default: true },
@@ -17,10 +16,12 @@ const RestaurantSchema = new Schema({
                 {
                     name: { type: String, required: true },
                     units: { type: Number, required: true },
+                    _id: { type: Schema.Types.ObjectId, required: true, ref: "Product" },
                 },
             ],
             total: { type: Number, required: true },
-            state: { type: String, default: 'No Preparado' },
+            state: { type: String, default: "Unprepared" },
+            confirmed: { type: Boolean, default: false },
             date: { type: Date, default: Date.now },
         },
     ],

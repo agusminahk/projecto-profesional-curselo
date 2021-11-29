@@ -4,6 +4,7 @@ const Metrics = require("../models/Metric");
 const Category = require("../models/Category");
 const Product = require("../models/Product");
 const adminSearch = require("../utils/adminSearch");
+const closeDay = require("../utils/closeDay");
 
 class AdminService {
     static async search(type, id) {
@@ -16,7 +17,7 @@ class AdminService {
         }
     }
 
-    static async confirmOrder(id, table, body) {
+    static async confirmPurchase(id, table, body) {
         try {
             const restaurant = await Restaurant.findById(id);
             const arr = [];
@@ -27,7 +28,7 @@ class AdminService {
                     return e;
                 }
             });
-
+            // probar si puedo hacer el map seguido del filter
             restaurant.orders.splice(order[0].index, 1);
 
             order.map((e) => arr.push({ total: e.total, products: e.products, date: e.date, paymentMethod: body.paymentMethod }));
@@ -42,11 +43,47 @@ class AdminService {
         }
     }
 
-    static async dailyClosing(id) {
+    static async confirmOrder(id, table) {
         try {
-            const resp = await Restaurant.findOneByIdAndUpdate(id);
+            const resp = await Restaurant.findOneByIdAndUpdate(
+                id,
+                {
+                    $set: {
+                        "orders.$[index].confirmed": true,
+                    },
+                },
+                {
+                    arrayFilters: [{ "index.table": table }],
+                    new: true,
+                }
+            );
 
             return { error: false, data: resp };
+        } catch (error) {
+            return { error: true, data: error.message };
+        }
+    }
+
+    static async dailyClosing(id) {
+        try {
+            const restaurant = await Restaurant.findById(id);
+
+            const metrics = closeDay(restaurant.history); // me falta hacer lo mismo con las tarjetas y ver si lo hago con el date
+
+            restaurant.history = [];
+
+            await restaurant.save();
+
+            const newMetrics = new Metrics({
+                restaurantId: id,
+                dailySale: metrics.total,
+                productsId: metrics.products,
+                paymentMethod: metrics.paymentMethod,
+            });
+
+            await newMetrics.save();
+
+            return { error: false, data: restaurant };
         } catch (error) {
             return { error: true, data: error.message };
         }

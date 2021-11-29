@@ -7,6 +7,7 @@ const AdminController = require("../controller/admin");
 // agregar una ruta para confirmar el pedido una ves pagado y pasarlo al historial
 adminRoutes.get("/search", AdminController.search);
 
+adminRoutes.post("/confirm/purchase", AdminController.confirmPurchase);
 adminRoutes.post("/confirm/order", AdminController.confirmOrder);
 adminRoutes.post("/confirm/dailyClosing", AdminController.dailyClosing);
 
