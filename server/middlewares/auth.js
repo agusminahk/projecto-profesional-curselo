@@ -5,9 +5,7 @@ const verify = (req, res, next) => {
     admin
         .auth()
         .verifySessionCookie(sessionCookie, true)
-        .then((userData) => {
-            return userData.email ? next() : res.status(401).send('UNAUTHORIZED');
-        })
+        .then(({ email }) => (email ? next() : res.status(401).send('UNAUTHORIZED')))
         .catch((e) => res.status(401).send('UNAUTHORIZED'));
 };
 

@@ -20,41 +20,40 @@ class AuthService {
                 _tokenResponse: { idToken, email, localId },
             } = fire_user;
 
-            const newUser = {
+            const user = await new User({
                 _id: localId,
-                firstname: body.firstName,
-                lastname: body.lastName,
+                firstname: body.firstname,
+                lastname: body.lastname,
                 email: email,
                 role: body.role || 'admin',
                 telephone: body.telephone,
-            };
-
-            const user = await new User(newUser).save();
+            }).save();
 
             const expiresIn = 60 * 60 * 24 * 3 * 3600;
             const sessionCokie = await admin.auth().createSessionCookie(idToken, { expiresIn });
 
-            return { user, sessionCokie };
+            return { user, sessionCokie, expiresIn };
         } catch (error) {
             return { error: true, data: error.message };
         }
     }
 
-    static async login(email) {
+    static async login(body) {
         try {
             const expiresIn = 60 * 60 * 24 * 3 * 3600;
+
             const auth = getAuth();
             await setPersistence(auth, browserSessionPersistence);
-            const fire_user = await signInWithEmailAndPassword(auth, req.body.email, req.body.password);
+            const fire_user = await signInWithEmailAndPassword(auth, body.email, body.password);
 
             const {
                 _tokenResponse: { email, idToken },
             } = fire_user;
 
-            const sessionCookie = await admin.auth().createSessionCookie(idToken, { expiresIn });
-            const user = await User.find({ email });
+            const sessionCokie = await admin.auth().createSessionCookie(idToken, { expiresIn });
+            const [user] = await User.find({ email });
 
-            return { user, sessionCookie };
+            return { user, sessionCokie, expiresIn };
         } catch (error) {
             return { error: true, data: error.message };
         }

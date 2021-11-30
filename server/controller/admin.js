@@ -1,4 +1,4 @@
-const AdminService = require("../service/admin");
+const AdminService = require('../service/admin');
 
 class AdminController {
     static async search(req, res) {
@@ -53,6 +53,12 @@ class AdminController {
 
     static async updateUser(req, res) {
         const { error, data } = await AdminService.updateUser(req.params.id, req.body);
+
+        return error ? res.status(data.status || 500).send({ message: data }) : res.json(data);
+    }
+
+    static async uploadImage(req, res) {
+        const { error, data } = await AdminService.uploadImage();
 
         return error ? res.status(data.status || 500).send({ message: data }) : res.json(data);
     }

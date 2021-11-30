@@ -1,9 +1,10 @@
-const User = require("../models/User");
-const Restaurant = require("../models/Restaurant");
-const Metrics = require("../models/Metric");
-const Category = require("../models/Category");
-const Product = require("../models/Product");
-const adminSearch = require("../utils/adminSearch");
+const User = require('../models/User');
+const Restaurant = require('../models/Restaurant');
+const Metrics = require('../models/Metric');
+const Category = require('../models/Category');
+const Product = require('../models/Product');
+const adminSearch = require('../utils/adminSearch');
+const multer = require('multer');
 
 class AdminService {
     static async search(type, id) {
@@ -103,6 +104,37 @@ class AdminService {
         } catch (error) {
             return { error: true, data: error.message };
         }
+    }
+
+    static async uploadImage(req) {
+        try {
+            const restaurant = await Restaurant.findById(req.params.id);
+            console.log(restaurant);
+        } catch (error) {
+            return { error: true, data: error.message };
+        }
+
+        const multerStorage = multer.diskStorage({
+            destination: 'upload',
+            filename: (req, file, cb) => {
+                cb(null, file.originalname);
+            },
+        });
+
+        const upload = multer({
+            storage: multerStorage,
+        }).single('image');
+
+        // try {
+        //     const update = await Restaurant.findByIdAndUpdate(id, {
+        //         $set: {
+        //             logo: { data: req.file.filename && req.file.filename, contentType: 'image/png' },
+        //             banner: { data: req.file.filename && req.file.filename, contentType: 'image/png' },
+        //         },
+        //     });
+        // } catch (error) {
+        //     return { error: true, data: error.message };
+        // }
     }
 
     static async deleteProduct(id) {

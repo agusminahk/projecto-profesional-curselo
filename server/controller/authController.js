@@ -1,22 +1,12 @@
-const admin = require('firebase-admin');
-const {
-    getAuth,
-    setPersistence,
-    signInWithEmailAndPassword,
-    browserSessionPersistence,
-    createUserWithEmailAndPassword,
-    GoogleAuthProvider,
-} = require('firebase/auth');
-
 const AuthService = require('../service/authService');
 
 class AuthController {
     static async register(req, res) {
         try {
+            const { user, sessionCokie, expiresIn } = await AuthService.register(req.body);
             const options = { maxAge: expiresIn, httpOnly: true };
-            const { user, sessionCokie } = await AuthService.register(req.body);
 
-            if (user._id) {
+            if (user.email) {
                 res.cookie('session', sessionCokie, options);
                 res.cookie('user', user, options);
 
@@ -31,8 +21,8 @@ class AuthController {
 
     static async login(req, res) {
         try {
+            const { user, sessionCokie, expiresIn } = await AuthService.login(req.body);
             const options = { maxAge: expiresIn, httpOnly: true };
-            const { user, sessionCokie } = await AuthService.login(req.body);
 
             if (user._id) {
                 res.cookie('session', sessionCokie, options);
