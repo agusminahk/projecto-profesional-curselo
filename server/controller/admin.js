@@ -51,12 +51,6 @@ class AdminController {
         return error ? res.status(data.status || 500).send({ message: data }) : res.json(data);
     }
 
-    static async createStaff(req, res) {
-        const { error, data } = await AdminService.createStaff(req.body);
-
-        return error ? res.status(data.status || 500).send({ message: data }) : res.json(data);
-    }
-
     static async updateRestaurant(req, res) {
         const { error, data } = await AdminService.updateRestaurant(req.params.id, req.body);
 
@@ -88,13 +82,13 @@ class AdminController {
     }
 
     static async deleteProduct(req, res) {
-        const { error, data } = await AdminService.deleteProduct(req.params.id);
+        const { error, data } = await AdminService.deleteProduct(req.params.id, req.cookie.user);
 
         return error ? res.status(data.status || 500).send({ message: data }) : res.json(data);
     }
 
     static async deleteCategory(req, res) {
-        const { error, data } = await AdminService.deleteCategory(req.params.id);
+        const { error, data } = await AdminService.deleteCategory(req.params.id, req.cookie.user);
 
         return error ? res.status(data.status || 500).send({ message: data }) : res.json(data);
     }

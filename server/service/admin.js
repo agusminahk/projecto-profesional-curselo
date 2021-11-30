@@ -1,10 +1,10 @@
-const User = require('../models/User');
-const Restaurant = require('../models/Restaurant');
-const Metrics = require('../models/Metric');
-const Category = require('../models/Category');
-const Product = require('../models/Product');
-const adminSearch = require('../utils/adminSearch');
-const closeDay = require('../utils/closeDay');
+const User = require("../models/User");
+const Restaurant = require("../models/Restaurant");
+const Metrics = require("../models/Metric");
+const Category = require("../models/Category");
+const Product = require("../models/Product");
+const adminSearch = require("../utils/adminSearch");
+const closeDay = require("../utils/closeDay");
 
 class AdminService {
     static async search(type, id) {
@@ -24,7 +24,7 @@ class AdminService {
 
             const order = restaurant.orders.filter((e, i) => {
                 if (e.table === table) {
-                    e['index'] = i;
+                    e["index"] = i;
                     return e;
                 }
             });
@@ -56,11 +56,11 @@ class AdminService {
                 id,
                 {
                     $set: {
-                        'orders.$[index].confirmed': true,
+                        "orders.$[index].confirmed": true,
                     },
                 },
                 {
-                    arrayFilters: [{ 'index.table': table }],
+                    arrayFilters: [{ "index.table": table }],
                     new: true,
                 }
             );
@@ -113,6 +113,7 @@ class AdminService {
             const product = new Product(body);
 
             const resp = await product.save();
+
             return { error: false, data: resp };
         } catch (error) {
             return { error: true, data: error.message };
@@ -124,19 +125,6 @@ class AdminService {
             const category = new Category(body);
 
             const resp = await category.save();
-
-            return { error: false, data: resp };
-        } catch (error) {
-            return { error: true, data: error.message };
-        }
-    }
-
-    static async createStaff(body) {
-        try {
-            // ver si hacemos un redirect
-            const staff = new User(body);
-
-            const resp = await staff.save();
 
             return { error: false, data: resp };
         } catch (error) {
@@ -185,31 +173,53 @@ class AdminService {
         }
     }
 
-    static async deleteProduct(id) {
+    static async deleteProduct(id, user) {
         try {
-            const product = await Product.deleteMany(id, { $set: { state: true } }, { new: true });
+            console.log(user);
+
+            await Product.find(id, { $set: { state: true } }, { new: true });
+
             const restaurant = await Restaurant.findByIdAndUpdate(
-                id, // este id remplazar por el id del usuario logeado averiguar como hacer con firebase
+                user.restaurantId,
                 {
                     $pull: {
                         productsId: id,
                     },
                 },
                 { new: true }
-            ); // sacar la referencia del producto dentro del array
-            console.log(restaurant, product);
-            return { error: false, data: product };
+            );
+
+            return { error: false, data: restaurant };
         } catch (error) {
             return { error: true, data: error.message };
         }
     }
 
-    static async deleteCategory(id) {
+    static async deleteCategory(id, user) {
         try {
-            const category = await Category.deleteMany(id, { $set: { state: true } }, { new: true });
-            const product = await Product.findByIdAndUpdate(id, {}); // sacarle las categorias a todos los productos
+            await Category.deleteOne({ _id: id });
 
-            return { error: false, data: category };
+            await Product.updateMany(
+                { $and: [{ restaurantId: user.restaurantId }, { category: id }] },
+                {
+                    $set: {
+                        category: "Otros",
+                        subcategory: [],
+                    },
+                }
+            );
+
+            const restaurant = await Restaurant.findByIdAndUpdate(
+                user.restaurantId,
+                {
+                    $pull: {
+                        categoriesId: id,
+                    },
+                },
+                { new: true }
+            );
+
+            return { error: false, data: restaurant };
         } catch (error) {
             return { error: true, data: error.message };
         }
@@ -217,7 +227,7 @@ class AdminService {
 
     static async deleteStaff(id) {
         try {
-            const user = await User.findByIdAndDelete(id);
+            const user = await User.deleteOne({ _id: id });
 
             return { error: false, data: user };
         } catch (error) {

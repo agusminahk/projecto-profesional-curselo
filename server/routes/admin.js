@@ -15,7 +15,6 @@ adminRoutes.post('/confirm/dailyClosing', AdminController.dailyClosing);
 adminRoutes.post('/restaurant', AdminController.createRestaurant);
 adminRoutes.post('/product', AdminController.createProduct);
 adminRoutes.post('/category', AdminController.createCategory);
-adminRoutes.post('/staff', AdminController.createStaff);
 
 adminRoutes.put('/restaurant/:id', AdminController.updateRestaurant);
 adminRoutes.put('/product/:id', AdminController.updateProduct);
@@ -23,8 +22,8 @@ adminRoutes.put('/category/:id', AdminController.updateCategory);
 adminRoutes.put('/images/:id', setImage, AdminController.uploadImage);
 adminRoutes.put('/staff/:id', AdminController.updateUser); // para modificar el rol q tenga o algun otro dato
 
-adminRoutes.delete('/product/:id', AdminController.deleteProduct);
-adminRoutes.delete('/category/:id', AdminController.deleteCategory);
-adminRoutes.delete('/staff/:id', AdminController.deleteStaff);
+adminRoutes.delete('/product/:id', AdminController.deleteProduct); // id del producto
+adminRoutes.delete('/category/:id', AdminController.deleteCategory); // id de la categoria
+adminRoutes.delete('/staff/:id', AdminController.deleteStaff); // id del empleado
 
 module.exports = adminRoutes;
