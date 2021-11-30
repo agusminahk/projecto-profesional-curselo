@@ -13,10 +13,9 @@ adminRoutes.post('/category', AdminController.createCategory);
 adminRoutes.post('/staff', AdminController.createStaff);
 
 adminRoutes.put('/restaurant/:id', AdminController.updateRestaurant);
-adminRoutes.put('/restaurant/images/:id', setImage, AdminController.uploadImage);
 adminRoutes.put('/product/:id', AdminController.updateProduct);
 adminRoutes.put('/category/:id', AdminController.updateCategory);
-
+adminRoutes.put('/images/:id', setImage, AdminController.uploadImage);
 adminRoutes.put('/staff/:id', AdminController.updateUser); // para modificar el rol q tenga o algun otro dato
 
 adminRoutes.delete('/product/:id', AdminController.deleteProduct);
