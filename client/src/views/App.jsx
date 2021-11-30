@@ -59,5 +59,9 @@ const App = () => {
         </Box>
     )
 };
+<<<<<<< HEAD
 
 export default App;
+=======
+export default App;
+>>>>>>> fae2374fff0072fb6e84bddd7db4d8b419f8cd61
