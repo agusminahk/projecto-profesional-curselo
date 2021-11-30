@@ -41,7 +41,6 @@ export const Register = () => {
             else if (!/^[A-Za-z ]*$/.test(values.lastName)) errors.lastName = "Ingrese solo letras y espacios"
             if (!values.password) errors.password = 'Campo requerido';
             else {
-                errors.password = ""
                 if (!/^.{8,}$/.test(values.password)) errors.password = "Debe ser de 8 de largo"
                 else if (!/[a-zA-Z]/.test(values.password)) errors.password = "Debe contener al menos una letra"
                 else if (!/\d/.test(values.password)) errors.password = "Debe contener al menos un número"
@@ -51,10 +50,10 @@ export const Register = () => {
                     !/\(?\+{0,1}[0-9]{1,3}\)? ?-?[0-9]{1,3} ?-?[0-9]{3,5} ?-?[0-9]{4}( ?-?[0-9]{3})?$/.test(values.phone)
                     || values.phone.length > 18)
                 ) errors.phone = "Número de telefono no valido"
-            
             return errors
         },
         onSubmit: values => console.log(values)
+        
     })
 
     return <>
