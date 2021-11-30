@@ -15,6 +15,8 @@ import { OwnerHome } from './owner/OwnerHome';
 import { EditDatos } from "./admin/EditDatos";
 import { Personalizar } from "./admin/Personalizar";
 import { PresentMenu } from "./PresentMenu";
+import { Login } from "./Login";
+import { Register } from "./Register";
 import { Box } from '@chakra-ui/layout';
 import { ProductsList } from '../components/menu/ProductsList';
 
@@ -33,6 +35,8 @@ const App = () => {
                 <Route path="/nuevousuario" element={ <NewClient />}/>
                 <Route path="/perfil" element={ <Profile/> }/>
                 <Route path="/ajustes" element={ <Settings /> }/>
+                <Route path="/login" element={ <Login /> }/>
+                <Route path="/register" element={ <Register /> }/>
                 <Route path="/empleados" element={ <Employees /> }/>
                 <Route path="/217/cerveza-script" element={ <ProductsList /> }/>
                 <Route exact path="/editar" element={<EditDatos />} />
