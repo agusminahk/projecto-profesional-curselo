@@ -18,6 +18,7 @@ import { PresentMenu } from "./PresentMenu";
 import { Box } from '@chakra-ui/layout';
 import { ProductsList } from '../components/menu/ProductsList';
 import { Login } from './Login'
+import { Register } from './Register'
 import { useDispatch, useSelector } from "react-redux";
 
 const App = () => {
@@ -52,6 +53,7 @@ const App = () => {
                 <Route exact path="/editar" element={<EditDatos />} />
                 <Route exact path="/personalizar" element={<Personalizar />} />
                 <Route exact path="/login" element={<Login />} />
+                <Route exact path="/register" element={<Register />} />
                 <Route exact path="/217/cereveza-script/present" element={<PresentMenu />} />
             </Routes>
         </Box>
