@@ -58,9 +58,9 @@ class AdminController {
     }
 
     static async uploadImage(req, res) {
-        const { error, data } = await AdminService.uploadImage();
+        const { filename, destination } = req.file;
 
-        return error ? res.status(data.status || 500).send({ message: data }) : res.json(data);
+        return !filename ? res.status(500).send('Upload Error') : res.json({ filename, destination });
     }
 
     static async deleteProduct(req, res) {

@@ -40,10 +40,10 @@ const RestaurantSchema = new Schema({
     metrics: [{ type: Schema.Types.ObjectId, ref: 'Metric' }],
     URL: { type: String, required: true },
     contact: {
-        email: String,
-        webpage: String,
-        telephone: Number,
-        instagram: String,
+        email: { type: String },
+        webpage: { type: String },
+        telephone: { type: Number },
+        instagram: { type: String },
     },
     location: {
         country: { type: String, required: true },
