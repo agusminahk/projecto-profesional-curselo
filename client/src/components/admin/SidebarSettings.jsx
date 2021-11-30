@@ -37,10 +37,10 @@ export function SidebarSettings() {
         rounded="md"
         py="3"
         cursor="pointer"
-        color="whiteAlpha.700"
+        // color="whiteAlpha.700"
         _hover={{
           bg: "blackAlpha.300",
-          color: "whiteAlpha.900",
+          // color: "whiteAlpha.900",
         }}
         role="group"
         fontWeight="semibold"
@@ -82,11 +82,11 @@ export function SidebarSettings() {
       {...props}
     >
       <Flex px="4" py="5" align="center">
-        <Text icon={BsGearFill} fontSize="2xl" ml="2" color="white" fontWeight="semibold">
+        <Text icon={BsGearFill} fontSize="2xl" ml="2" /* color="white" */ fontWeight="semibold">
           Settings
         </Text>
       </Flex>
-      <Flex direction="column" as="nav" fontSize="sm" color="gray.600" aria-label="Main Navigation">
+      <Flex direction="column" as="nav" fontSize="sm" /* color="gray.600" */ aria-label="Main Navigation">
         <NavItem icon={MdHome}>Home</NavItem>
         <NavItem icon={HiCollection}>veremos</NavItem>
         <NavItem icon={FaClipboardCheck}>Personalizar</NavItem>

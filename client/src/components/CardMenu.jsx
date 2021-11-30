@@ -34,7 +34,7 @@ export const CardMenu = ({ imagen, nombre }) => {
       <Box
         onClick={onOpen}
         w="xs"
-        bg={useColorModeValue("white", "gray.800")}
+        bg={useColorModeValue("white", "gray.50")}
         shadow="lg"
         rounded="lg"
         overflow="hidden"
@@ -52,17 +52,23 @@ export const CardMenu = ({ imagen, nombre }) => {
         />
 
         <Box py={5} textAlign="center">
-          <Link display="block" color={useColorModeValue("gray.800", "white")} fontWeight="bold">
+          <Link display="block" 
+          // color={useColorModeValue("gray.800", "white")} 
+          fontWeight="bold">
             {nombre}
           </Link>
-          <chakra.span fontSize="sm" color={useColorModeValue("gray.700", "gray.200")}>
+          <chakra.span fontSize="sm" 
+          // color={useColorModeValue("gray.700", "gray.200")}
+          >
             $340
           </chakra.span>
         </Box>
         <Box>
           <Modal isOpen={isOpen} onClose={onClose}>
             <ModalOverlay />
-            <ModalContent bg="black">
+            <ModalContent 
+            // bg="black"
+            >
               <ModalHeader>
                 <Heading as="h4" color="white" size="md">
                   {nombre}
