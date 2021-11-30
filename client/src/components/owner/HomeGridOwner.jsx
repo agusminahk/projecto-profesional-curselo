@@ -7,7 +7,7 @@ export const HomeGridOwner = () => {
     <>
         <SimpleGrid minChildWidth="150px" m="20px" spacing={10}> 
             <HomeCard mensaje="Editar staff" url="/empleados"/>
-            <HomeCard mensaje="Editar menu" url="/menu"/>
+            <HomeCard mensaje="Editar menu" url="/personalizar"/>
             <HomeCard mensaje="Metricas" url="/metricas"/>
             <HomeCard mensaje="Settings" url="/ajustes"/>
         </SimpleGrid>

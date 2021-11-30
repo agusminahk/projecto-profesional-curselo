@@ -30,7 +30,7 @@ import { CarrouselMenu } from "../components/carrouselMenu";
 import { CardMenu } from "../components/CardMenu";
 
 export function PresentMenu() {
-  const bg = useColorModeValue("white", "gray.800");
+  const bg = useColorModeValue("white", "gray.50");
   const mobileNav = useDisclosure();
   const { isOpen, onOpen, onClose } = useDisclosure();
   return (
@@ -39,7 +39,7 @@ export function PresentMenu() {
         <Flex alignItems="center" bg="white" justifyContent="space-between" mx="auto">
           <Flex>
             <Box>
-              <chakra.header bg="black" w="full" px={{ base: 2, sm: 4 }} py={4} shadow="md">
+              <chakra.header w="full" px={{ base: 2, sm: 4 }} py={4} shadow="md">
                 <Search2Icon
                   onClick={onOpen}
                   _hover={{
@@ -61,7 +61,7 @@ export function PresentMenu() {
       <Box>
         <Modal isOpen={isOpen} onClose={onClose}>
           <ModalOverlay />
-          <ModalContent bg="black">
+          <ModalContent>
             <ModalHeader>
               <Input placeholder="Buscar" w="95%" />
             </ModalHeader>
@@ -93,10 +93,10 @@ export function PresentMenu() {
           px={5}
           py={3}
         >
-          <Button mr="30px" bg="black">
+          <Button mr="30px">
             Destacados
           </Button>
-          <Button bg="black">Promociones</Button>
+          <Button>Promociones</Button>
         </Box>
 
         <Heading ml="5vw" mt="2vw" bg="white" color="black" as="h4" size="lg">
