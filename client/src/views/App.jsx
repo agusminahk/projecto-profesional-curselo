@@ -17,27 +17,42 @@ import { Personalizar } from "./admin/Personalizar";
 import { PresentMenu } from "./PresentMenu";
 import { Box } from '@chakra-ui/layout';
 import { ProductsList } from '../components/menu/ProductsList';
+import { Login } from './Login'
+import { useDispatch, useSelector } from "react-redux";
 
 const App = () => {
     const location = useLocation()
     
+    const user = useSelector((state) => state.user)
+
     return (
         <Box>
             {
                 location.pathname.split("")[1] == 2 ? null : <NavbarAdmin />
             }
+            {
+                user.role ? (
+                    user.role === "Superadmin" ? (
+                        <>SuperAdmin</>
+                    ) : (
+                        <>Employee/owner</>
+                    )
+                ) : (
+                    // El usuario no esta logeado
+                    <>Login</>
+                )
+            }
             <Routes>
-                <Route exact path="/" element={ <AdminHome />}/>
-                <Route exact path="/owner" element={ <OwnerHome />}/>
-                <Route path="/clientes" element={ <ClientsView />}/>
-                <Route path="/nuevousuario" element={ <NewClient />}/>
-                <Route path="/perfil" element={ <Profile/> }/>
+                <Route exact path="/owner" element={ <OwnerHome />}/>    
+                {/* <Route path="/productos" element={ < />}/> */}
+                <Route exact path="/" element={ <AdminHome /> }/>
                 <Route path="/ajustes" element={ <Settings /> }/>
                 <Route path="/empleados" element={ <Employees /> }/>
                 <Route path="/217/cerveza-script" element={ <ProductsList /> }/>
                 <Route exact path="/editar" element={<EditDatos />} />
                 <Route exact path="/personalizar" element={<Personalizar />} />
-                <Route exact path="/present" element={<PresentMenu />} />
+                <Route exact path="/login" element={<Login />} />
+                <Route exact path="/217/cereveza-script/present" element={<PresentMenu />} />
             </Routes>
         </Box>
     )
