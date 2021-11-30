@@ -8,7 +8,7 @@ const UserSchema = new Schema({
     email: { type: String, required: true },
     role: { type: String, default: "admin" },
     restaurantId: { type: Schema.Types.ObjectId, ref: "Restaurant" },
-    telephone: { type: Number, default: 0 },
+    telephone: { type: String, default: '' },
 });
 
 UserSchema.set("toJSON", {

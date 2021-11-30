@@ -1,14 +1,12 @@
 const closeDay = (arr, obj = {}, sum = 0) => {
     arr.map((e) => (sum += e.total));
 
-    arr.map((e) => {
-        e.products.map((p) => {
-            if (obj[p._id]) {
-                obj[p._id].units += p.units;
-            } else {
-                obj[p._id] = { _id: p._id, units: p.units };
-            }
-        });
+    arr.products.map((e) => {
+        if (obj[e._id]) {
+            obj[e._id].units += e.units;
+        } else {
+            obj[e._id] = { _id: e._id, units: e.units };
+        }
     });
 
     const products = Object.values(obj);
