@@ -6,8 +6,7 @@ const MestricSchema = new Schema({
     productsId: [
         {
             _id: { type: Schema.Types.ObjectId, required: true, ref: "Product" },
-            units: { type: Number, required: true },
-            total: { type: Number, required: true },
+            units: { type: Number, required: true }
         },
     ],
     paymentMethod: [{name: {type: String, required: true}, units: { type: Number, required: true}}],

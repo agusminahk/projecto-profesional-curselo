@@ -4,6 +4,7 @@ const Metrics = require("../models/Metric");
 const Category = require("../models/Category");
 const Product = require("../models/Product");
 const adminSearch = require("../utils/adminSearch");
+const closeDay = require("../utils/closeDay");
 
 class AdminService {
     static async search(type, id) {
@@ -16,7 +17,7 @@ class AdminService {
         }
     }
 
-    static async confirmOrder(id, table, body) {
+    static async confirmPurchase(id, table, body) {
         try {
             const restaurant = await Restaurant.findById(id);
             const arr = [];
@@ -27,10 +28,17 @@ class AdminService {
                     return e;
                 }
             });
-
+            // probar si puedo hacer el map seguido del filter
             restaurant.orders.splice(order[0].index, 1);
 
-            order.map((e) => arr.push({ total: e.total, products: e.products, date: e.date, paymentMethod: body.paymentMethod }));
+            order.map((e) =>
+                arr.push({
+                    total: e.total,
+                    products: e.products,
+                    date: e.date,
+                    paymentMethod: body.paymentMethod,
+                })
+            );
 
             restaurant.history.push(arr[0]);
 
@@ -42,11 +50,47 @@ class AdminService {
         }
     }
 
-    static async dailyClosing(id) {
+    static async confirmOrder(id, table) {
         try {
-            const resp = await Restaurant.findOneByIdAndUpdate(id);
+            const resp = await Restaurant.findOneByIdAndUpdate(
+                id,
+                {
+                    $set: {
+                        "orders.$[index].confirmed": true,
+                    },
+                },
+                {
+                    arrayFilters: [{ "index.table": table }],
+                    new: true,
+                }
+            );
 
             return { error: false, data: resp };
+        } catch (error) {
+            return { error: true, data: error.message };
+        }
+    }
+
+    static async dailyClosing(id) {
+        try {
+            const restaurant = await Restaurant.findById(id);
+
+            const metrics = closeDay(restaurant.history); // me falta hacer lo mismo con las tarjetas y ver si lo hago con el date
+
+            restaurant.history = [];
+
+            await restaurant.save();
+
+            const newMetrics = new Metrics({
+                restaurantId: id,
+                dailySale: metrics.total,
+                productsId: metrics.products,
+                paymentMethod: metrics.paymentMethod,
+            });
+
+            await newMetrics.save();
+
+            return { error: false, data: restaurant };
         } catch (error) {
             return { error: true, data: error.message };
         }
@@ -69,6 +113,7 @@ class AdminService {
             const product = new Product(body);
 
             const resp = await product.save();
+
             return { error: false, data: resp };
         } catch (error) {
             return { error: true, data: error.message };
@@ -80,19 +125,6 @@ class AdminService {
             const category = new Category(body);
 
             const resp = await category.save();
-
-            return { error: false, data: resp };
-        } catch (error) {
-            return { error: true, data: error.message };
-        }
-    }
-
-    static async createStaff(body) {
-        try {
-            // ver si hacemos un redirect
-            const staff = new User(body);
-
-            const resp = await staff.save();
 
             return { error: false, data: resp };
         } catch (error) {
@@ -141,31 +173,53 @@ class AdminService {
         }
     }
 
-    static async deleteProduct(id) {
+    static async deleteProduct(id, user) {
         try {
-            const product = await Product.deleteMany(id, { $set: { state: true } }, { new: true });
+            console.log(user);
+
+            await Product.find(id, { $set: { state: true } }, { new: true });
+
             const restaurant = await Restaurant.findByIdAndUpdate(
-                id, // este id remplazar por el id del usuario logeado averiguar como hacer con firebase
+                user.restaurantId,
                 {
                     $pull: {
                         productsId: id,
                     },
                 },
                 { new: true }
-            ); // sacar la referencia del producto dentro del array
-            console.log(restaurant, product);
-            return { error: false, data: product };
+            );
+
+            return { error: false, data: restaurant };
         } catch (error) {
             return { error: true, data: error.message };
         }
     }
 
-    static async deleteCategory(id) {
+    static async deleteCategory(id, user) {
         try {
-            const category = await Category.deleteMany(id, { $set: { state: true } }, { new: true });
-            const product = await Product.findByIdAndUpdate(id, {}); // sacarle las categorias a todos los productos
+            await Category.deleteOne({ _id: id });
 
-            return { error: false, data: category };
+            await Product.updateMany(
+                { $and: [{ restaurantId: user.restaurantId }, { category: id }] },
+                {
+                    $set: {
+                        category: "Otros",
+                        subcategory: [],
+                    },
+                }
+            );
+
+            const restaurant = await Restaurant.findByIdAndUpdate(
+                user.restaurantId,
+                {
+                    $pull: {
+                        categoriesId: id,
+                    },
+                },
+                { new: true }
+            );
+
+            return { error: false, data: restaurant };
         } catch (error) {
             return { error: true, data: error.message };
         }
@@ -173,7 +227,7 @@ class AdminService {
 
     static async deleteStaff(id) {
         try {
-            const user = await User.findByIdAndDelete(id);
+            const user = await User.deleteOne({ _id: id });
 
             return { error: false, data: user };
         } catch (error) {
