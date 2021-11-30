@@ -9,7 +9,7 @@ const RestaurantSchema = new Schema({
     email: { type: String, required: true },
     productsId: [{ type: Schema.Types.ObjectId, required: true, ref: 'Product' }],
     categoriesId: [{ type: Schema.Types.ObjectId, required: true, ref: 'Category' }],
-    state: { type: Boolean, default: true },
+    state: { type: Boolean, default: false },
     orders: [
         {
             table: { type: Number, required: true },
