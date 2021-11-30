@@ -9,6 +9,30 @@ class AdminController {
         return error ? res.status(data.status || 500).send({ message: data }) : res.json(data);
     }
 
+    static async confirmPurchase(req, res) {
+        const { id, table } = req.query;
+
+        const { error, data } = await AdminService.confirmPurchase(id, table, req.body);
+
+        return error ? res.status(data.status || 500).send({ message: data }) : res.json(data);
+    }
+
+    static async confirmOrder(req, res) {
+        const { id, table } = req.query;
+
+        const { error, data } = await AdminService.confirmOrder(id, table);
+
+        return error ? res.status(data.status || 500).send({ message: data }) : res.json(data);
+    }
+
+    static async dailyClosing(req, res) {
+        const { id } = req.query;
+
+        const { error, data } = await AdminService.dailyClosing(id);
+
+        return error ? res.status(data.status || 500).send({ message: data }) : res.json(data);
+    }
+
     static async createRestaurant(req, res) {
         const { error, data } = await AdminService.createRestaurant(req.body);
 

@@ -1,6 +1,6 @@
-const User = require("../models/User");
-const Restaurant = require("../models/Restaurant");
-const Metrics = require("../models/Metric");
+const User = require('../models/User');
+const Restaurant = require('../models/Restaurant');
+const Metrics = require('../models/Metric');
 
 class SuperAdminService {
     static async createClient(body) {

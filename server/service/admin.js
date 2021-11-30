@@ -4,7 +4,7 @@ const Metrics = require('../models/Metric');
 const Category = require('../models/Category');
 const Product = require('../models/Product');
 const adminSearch = require('../utils/adminSearch');
-const multer = require('multer');
+const closeDay = require('../utils/closeDay');
 
 class AdminService {
     static async search(type, id) {
@@ -12,6 +12,85 @@ class AdminService {
             const resp = await adminSearch[type](id);
 
             return { error: false, data: resp };
+        } catch (error) {
+            return { error: true, data: error.message };
+        }
+    }
+
+    static async confirmPurchase(id, table, body) {
+        try {
+            const restaurant = await Restaurant.findById(id);
+            const arr = [];
+
+            const order = restaurant.orders.filter((e, i) => {
+                if (e.table === table) {
+                    e['index'] = i;
+                    return e;
+                }
+            });
+            // probar si puedo hacer el map seguido del filter
+            restaurant.orders.splice(order[0].index, 1);
+
+            order.map((e) =>
+                arr.push({
+                    total: e.total,
+                    products: e.products,
+                    date: e.date,
+                    paymentMethod: body.paymentMethod,
+                })
+            );
+
+            restaurant.history.push(arr[0]);
+
+            const resp = await restaurant.save();
+
+            return { error: false, data: resp };
+        } catch (error) {
+            return { error: true, data: error.message };
+        }
+    }
+
+    static async confirmOrder(id, table) {
+        try {
+            const resp = await Restaurant.findOneByIdAndUpdate(
+                id,
+                {
+                    $set: {
+                        'orders.$[index].confirmed': true,
+                    },
+                },
+                {
+                    arrayFilters: [{ 'index.table': table }],
+                    new: true,
+                }
+            );
+
+            return { error: false, data: resp };
+        } catch (error) {
+            return { error: true, data: error.message };
+        }
+    }
+
+    static async dailyClosing(id) {
+        try {
+            const restaurant = await Restaurant.findById(id);
+
+            const metrics = closeDay(restaurant.history); // me falta hacer lo mismo con las tarjetas y ver si lo hago con el date
+
+            restaurant.history = [];
+
+            await restaurant.save();
+
+            const newMetrics = new Metrics({
+                restaurantId: id,
+                dailySale: metrics.total,
+                productsId: metrics.products,
+                paymentMethod: metrics.paymentMethod,
+            });
+
+            await newMetrics.save();
+
+            return { error: false, data: restaurant };
         } catch (error) {
             return { error: true, data: error.message };
         }

@@ -5,7 +5,12 @@ const setImage = require('../middlewares/multer');
 // agregar una ruta para poder pedir de nuevo el servicio q fue dado de baja
 // agregar una ruta para poder hacer el cierre diario y q se limpie el historial
 // ver si se agrega una propiedad nueva q sea pedidos y una ves entregado pasen al historial
+// agregar una ruta para confirmar el pedido una ves pagado y pasarlo al historial
 adminRoutes.get('/search', AdminController.search);
+
+adminRoutes.post('/confirm/purchase', AdminController.confirmPurchase);
+adminRoutes.post('/confirm/order', AdminController.confirmOrder);
+adminRoutes.post('/confirm/dailyClosing', AdminController.dailyClosing);
 
 adminRoutes.post('/restaurant', AdminController.createRestaurant);
 adminRoutes.post('/product', AdminController.createProduct);
