@@ -1,4 +1,4 @@
-const SuperAdminService = require("../service/superAdmin");
+const SuperAdminService = require('../service/superAdmin');
 
 class SuperAdminController {
     static async createClient(req, res) {
@@ -26,7 +26,7 @@ class SuperAdminController {
     }
 
     static async getClients(req, res) {
-        const { error, data } = await SuperAdminService.getClients();
+        const { error, data } = await SuperAdminService.getClients(req.query);
 
         return error ? res.status(data.status || 500).send({ message: data }) : res.json(data);
     }

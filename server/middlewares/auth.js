@@ -1,7 +1,7 @@
 const admin = require('firebase-admin');
 
 const verify = (req, res, next) => {
-    const sessionCookie = req.cookies.session || '';
+    const sessionCookie = req.cookie.session || '';
     admin
         .auth()
         .verifySessionCookie(sessionCookie, true)

@@ -1,6 +1,7 @@
 import React from 'react';
+import ActivateRestaurant from '../components/ActivateRestaurant';
 
 const App = () => {
-    return <div></div>;
+    return <ActivateRestaurant />;
 };
 export default App;
