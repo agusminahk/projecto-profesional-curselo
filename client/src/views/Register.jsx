@@ -52,8 +52,9 @@ export const Register = () => {
                 ) errors.phone = "Número de telefono no valido"
             return errors
         },
-        onSubmit: values => console.log(values)
-        
+        onSubmit: values => {
+                        
+        }
     })
 
     return <>
