@@ -13,8 +13,12 @@ const crearRestaurant = {
 const crearCategory = {
     "restaurantId": "61a6678aa4d93417a13d114b",
     "name": "Bebidas",
-    "subCategory": ["vinos", "gaseosas", "cervezas"],
+    "subcategory": ["vinos", "gaseosas", "cervezas"],
 };
+
+const crearCategory = {
+    "name": "Otros"
+}
 
 const crearProduto = {
     "restaurantId": "61a6678aa4d93417a13d114b",

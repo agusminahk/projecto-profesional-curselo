@@ -2,10 +2,11 @@ const Category = require("../models/Category");
 const Product = require("../models/Product");
 
 const clientSearch = {
-    category: (name) => Category.find({ name: { $regex: name, $options: "i" } }),
+    category: (name, restId) => Category.find({ $and: [{ restaurantId: restId }, { name: { $regex: name, $options: "i" } }] }),
     categoryId: (id) => Category.findOneById(id),
-    subcategory: (name) => Category.find({ subCategory: { $regex: name, $options: "i" } }),
-    product: (name) => Product.find({ name: { $regex: name, $options: "i" } }),
+    subcategory: (name, restId) =>
+        Category.find({ $and: [{ restaurantId: restId }, { subCategory: { $regex: name, $options: "i" } }] }),
+    product: (name, restId) => Product.find({ $and: [{ restaurantId: restId }, { name: { $regex: name, $options: "i" } }] }),
     productId: (id) => Product.findOneById(id),
 };
 
