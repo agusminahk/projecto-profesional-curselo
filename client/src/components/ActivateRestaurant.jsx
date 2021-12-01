@@ -1,12 +1,11 @@
 import React from 'react';
-import { Flex, Text, Button, Box, Accordion, Wrap, Divider } from '@chakra-ui/react';
+import { Flex, Text, Box, Accordion, Wrap } from '@chakra-ui/react';
 
 import useActivate from '../hook/useActivate';
 import ActivateCard from '../common/ActivateCard';
 
 const ActivateRestaurant = () => {
-    const { restaurants } = useActivate();
-    console.log(restaurants);
+    const { restaurants, setRestaurants } = useActivate();
 
     return (
         <Flex
@@ -16,13 +15,14 @@ const ActivateRestaurant = () => {
             direction="column"
             maxW="98vw"
             minW="98vw"
+            minH="90vh"
             margin="0 auto"
-            top="12vw"
+            top="10vh"
             position="relative"
             style={{ maxHeight: 'calc(100vh-12vw)' }}
         >
             <Box
-                fontSize="1.3rem"
+                fontSize="2rem"
                 boxShadow="base"
                 h="3rem"
                 justifyContent="space-between"
@@ -38,10 +38,10 @@ const ActivateRestaurant = () => {
 
             <Wrap spacing="5px" justifyContent="center" maxW={'98vw'} py={5}>
                 {restaurants.length
-                    ? restaurants.map((resto) => {
+                    ? restaurants.map((resto, idx) => {
                           return (
-                              <Accordion allowToggle w="full" margin="0 auto" textAlign="center">
-                                  <ActivateCard resto={resto} />
+                              <Accordion allowToggle w="full" h="full" margin="0 auto" textAlign="center" key={idx}>
+                                  <ActivateCard resto={resto} restaurants={restaurants} setRest={setRestaurants} />
                               </Accordion>
                           );
                       })
