@@ -35,10 +35,11 @@ class SuperAdminService {
         }
     }
 
-    static async getClients() {
+    static async getClients(query) {
         try {
-            const resp = await Restaurant.find({});
-
+            const { state } = query;
+            const resp =
+                (state === 'false' && (await Restaurant.find({ state: false }))) || (await Restaurant.find({}));
             return { error: false, data: resp };
         } catch (error) {
             return { error: true, data: error.message };
