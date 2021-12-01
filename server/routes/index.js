@@ -20,6 +20,7 @@ router.use("/admin", checkAuthAdmin, adminRoutes);
 // Staff
 router.use("/staff", staffRoutes);
 
+// Auth
 router.use("/auth", authRouter);
 
 module.exports = router;
