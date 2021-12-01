@@ -1,11 +1,11 @@
-const User = require("../models/User");
-const Restaurant = require("../models/Restaurant");
-const Metrics = require("../models/Metric");
-const Category = require("../models/Category");
-const Product = require("../models/Product");
+const User = require('../models/User');
+const Restaurant = require('../models/Restaurant');
+const Metrics = require('../models/Metric');
+const Category = require('../models/Category');
+const Product = require('../models/Product');
 
-const adminSearch = require("../utils/adminSearch");
-const closeDay = require("../utils/closeDay");
+const adminSearch = require('../utils/adminSearch');
+const closeDay = require('../utils/closeDay');
 
 class AdminService {
     static async search(type, id) {
@@ -25,7 +25,7 @@ class AdminService {
 
             const order = restaurant.orders.filter((e, i) => {
                 if (e.table === table) {
-                    e["index"] = i;
+                    e['index'] = i;
                     return e;
                 }
             });
@@ -57,11 +57,11 @@ class AdminService {
                 id,
                 {
                     $set: {
-                        "orders.$[index].confirmed": true,
+                        'orders.$[index].confirmed': true,
                     },
                 },
                 {
-                    arrayFilters: [{ "index.table": table }],
+                    arrayFilters: [{ 'index.table': table }],
                     new: true,
                 }
             );
@@ -102,7 +102,7 @@ class AdminService {
             const restaurant = new Restaurant(body);
             const resp = await restaurant.save();
 
-            const userUpdate = await User.findByIdAndUpdate(user._id, { $set: { restaurantId: resp._id } }, { new: true });
+            // const userUpdate = await User.findByIdAndUpdate(user._id, { $set: { restaurantId: resp._id } }, { new: true });
 
             return { error: false, data: resp };
         } catch (error) {
@@ -146,7 +146,11 @@ class AdminService {
 
     static async createSubCategory(body) {
         try {
-            const resp = await Category.findByIdAndUpdate(body.categoryId, { $push: { subcategory: body.name } }, { new: true });
+            const resp = await Category.findByIdAndUpdate(
+                body.categoryId,
+                { $push: { subcategory: body.name } },
+                { new: true }
+            );
 
             return { error: false, data: resp };
         } catch (error) {
@@ -163,14 +167,14 @@ class AdminService {
                     $set: {
                         name: body.name,
                         URL: body.url,
-                        "contact.email": body.email,
-                        "contact.webpage": body.webpage,
-                        "contact.telephone": body.telephone,
-                        "contact.instagram": body.instagram,
-                        "location.country": body.country,
-                        "location.province": body.province,
-                        "location.city": body.city,
-                        "location.direction": body.direction,
+                        'contact.email': body.email,
+                        'contact.webpage': body.webpage,
+                        'contact.telephone': body.telephone,
+                        'contact.instagram': body.instagram,
+                        'location.country': body.country,
+                        'location.province': body.province,
+                        'location.city': body.city,
+                        'location.direction': body.direction,
                         logo: body.logo,
                         banner: body.banner,
                     },
@@ -209,7 +213,7 @@ class AdminService {
             const resp = await Category.findByIdAndUpdate(
                 id,
                 {
-                    $set: { "subcategory.$[name]": body.name },
+                    $set: { 'subcategory.$[name]': body.name },
                 },
                 { arrayFilters: [{ name: name }], new: true }
             );
@@ -218,7 +222,7 @@ class AdminService {
                 { subcategory: name },
                 {
                     $set: {
-                        "subcategory.$[name]": body.name,
+                        'subcategory.$[name]': body.name,
                     },
                 },
                 { arrayFilters: [{ name: name }], new: true }
@@ -272,7 +276,7 @@ class AdminService {
                 { $and: [{ restaurantId: user.restaurantId }, { category: id }] },
                 {
                     $set: {
-                        category: "Otros",
+                        category: 'Otros',
                         subcategory: [],
                     },
                 }
