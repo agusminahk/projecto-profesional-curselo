@@ -1,0 +1,188 @@
+{
+    "data": [
+        {
+            "name": "IPA",
+            "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec justo risus, pretium vitae ligula sit amet, sollicitudin efficitur felis. Maecenas. ",
+            "isActive": "true",
+            "category": "Bebidas",
+            "subCategory": "Cervezas",
+            "price": 250
+        },
+        {
+            "name": "Kolsch",
+            "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec justo risus, pretium vitae ligula sit amet, sollicitudin efficitur felis. Maecenas. ",
+            "isActive": "true",
+            "category": "Bebidas",
+            "subCategory": "Cervezas",
+            "price": 250
+        },
+        {
+            "name": "Ataltica",
+            "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec justo risus, pretium vitae ligula sit amet, sollicitudin efficitur felis. Maecenas. ",
+            "isActive": "true",
+            "category": "Bebidas",
+            "subCategory": "Cervezas",
+            "price": 250
+        },
+        {
+            "name": "Coca cola",
+            "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec justo risus, pretium vitae ligula sit amet, sollicitudin efficitur felis. Maecenas. ",
+            "isActive": "true",
+            "category": "Bebidas",
+            "subCategory": "Sin alcohol",
+            "price": 180
+        },
+        {
+            "name": "Sprite",
+            "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec justo risus, pretium vitae ligula sit amet, sollicitudin efficitur felis. Maecenas. ",
+            "isActive": "true",
+            "category": "Bebidas",
+            "subCategory": "Sin alcohol",
+            "price": 195
+        },
+        {
+            "name": "Fanta naranja",
+            "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec justo risus, pretium vitae ligula sit amet, sollicitudin efficitur felis. Maecenas. ",
+            "isActive": "true",
+            "category": "Bebidas",
+            "subCategory": "Sin alcohol",
+            "price": 195
+        },
+        {
+            "name": "Malbec del mercado",
+            "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec justo risus, pretium vitae ligula sit amet, sollicitudin efficitur felis. Maecenas. ",
+            "isActive": "true",
+            "category": "Bebidas",
+            "subCategory": "Vinos",
+            "price": 700
+        },
+        {
+            "name": "Santa Julia Malbec",
+            "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec justo risus, pretium vitae ligula sit amet, sollicitudin efficitur felis. Maecenas. ",
+            "isActive": "true",
+            "category": "Bebidas",
+            "subCategory": "Vinos",
+            "price": 900
+        },
+        {
+            "name": "Santa Julia Chardonnay",
+            "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec justo risus, pretium vitae ligula sit amet, sollicitudin efficitur felis. Maecenas. ",
+            "isActive": "true",
+            "category": "Bebidas",
+            "subCategory": "Vinos",
+            "price": 950
+        },
+        {
+            "name": "Hamburguesa Texana",
+            "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec justo risus, pretium vitae ligula sit amet, sollicitudin efficitur felis. Maecenas. ",
+            "isActive": "true",
+            "category": "Cocina",
+            "subCategory": "Hamburguesas",
+            "price": 650
+        },
+        {
+            "name": "Hamburguesa Criolla",
+            "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec justo risus, pretium vitae ligula sit amet, sollicitudin efficitur felis. Maecenas. ",
+            "isActive": "true",
+            "category": "Cocina",
+            "subCategory": "Hamburguesas",
+            "price": 650
+        },
+        {
+            "name": "Hamburguesa Portobello",
+            "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec justo risus, pretium vitae ligula sit amet, sollicitudin efficitur felis. Maecenas. ",
+            "isActive": "true",
+            "category": "Cocina",
+            "subCategory": "Hamburguesas",
+            "price": 650
+        },
+        {
+            "name": "Hamburguesa Americana",
+            "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec justo risus, pretium vitae ligula sit amet, sollicitudin efficitur felis. Maecenas. ",
+            "isActive": "true",
+            "category": "Cocina",
+            "subCategory": "Hamburguesas",
+            "price": 700
+        },
+        {
+            "name": "Pizza especial",
+            "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec justo risus, pretium vitae ligula sit amet, sollicitudin efficitur felis. Maecenas. ",
+            "isActive": "true",
+            "category": "Cocina",
+            "subCategory": "Pizzas",
+            "price": 600
+        },
+        {
+            "name": "Pizza Napolitana",
+            "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec justo risus, pretium vitae ligula sit amet, sollicitudin efficitur felis. Maecenas. ",
+            "isActive": "true",
+            "category": "Cocina",
+            "subCategory": "Pizzas",
+            "price": 600
+        },
+        {
+            "name": "Pizza Vegetales",
+            "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec justo risus, pretium vitae ligula sit amet, sollicitudin efficitur felis. Maecenas. ",
+            "isActive": "true",
+            "category": "Cocina",
+            "subCategory": "Pizzas",
+            "price": 650
+        },
+        {
+            "name": "Tabla Pamepana",
+            "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec justo risus, pretium vitae ligula sit amet, sollicitudin efficitur felis. Maecenas. ",
+            "isActive": "true",
+            "category": "Cocina",
+            "subCategory": "Tablas",
+            "price": 700
+        },
+        {
+            "name": "Tabla Cervecera",
+            "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec justo risus, pretium vitae ligula sit amet, sollicitudin efficitur felis. Maecenas. ",
+            "isActive": "true",
+            "category": "Cocina",
+            "subCategory": "Tablas",
+            "price": 850
+        },
+        {
+            "name": "Ensalada Mediterranea",
+            "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec justo risus, pretium vitae ligula sit amet, sollicitudin efficitur felis. Maecenas. ",
+            "isActive": "true",
+            "category": "Cocina",
+            "subCategory": "Ensaladas",
+            "price": 550
+        },
+        {
+            "name": "Ensalada Ranchera",
+            "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec justo risus, pretium vitae ligula sit amet, sollicitudin efficitur felis. Maecenas. ",
+            "isActive": "true",
+            "category": "Cocina",
+            "subCategory": "Ensaladas",
+            "price": 600
+        },
+        {
+            "name": "Tapa individual",
+            "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec justo risus, pretium vitae ligula sit amet, sollicitudin efficitur felis. Maecenas. ",
+            "isActive": "true",
+            "category": "Cocina",
+            "subCategory": "Tapas",
+            "price": 400
+        },
+        {
+            "name": "Vaso Cervecero",
+            "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec justo risus, pretium vitae ligula sit amet, sollicitudin efficitur felis. Maecenas. ",
+            "isActive": "true",
+            "category": "Productos",
+            "subCategory": "_null",
+            "price": 600
+        },
+        {
+            "name": "Vaso Shotero",
+            "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec justo risus, pretium vitae ligula sit amet, sollicitudin efficitur felis. Maecenas. ",
+            "isActive": "true",
+            "category": "Productos",
+            "subCategory": "_null",
+            "price": 300
+        }
+    ]
+}
