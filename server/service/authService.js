@@ -1,4 +1,5 @@
-const admin = require('firebase-admin');
+const admin = require("firebase-admin");
+const joi = require("../config/joi");
 const {
     getAuth,
     setPersistence,
@@ -6,33 +7,41 @@ const {
     browserSessionPersistence,
     createUserWithEmailAndPassword,
     GoogleAuthProvider,
-} = require('firebase/auth');
+} = require("firebase/auth");
 
-const User = require('../models/User');
+const User = require("../models/User");
 
 class AuthService {
-    static async register(body) {
+    static async register({ firstName, lastName, email, password, telephone, role, restaurantId }) {
         try {
-            const auth = getAuth();
-            const fire_user = await createUserWithEmailAndPassword(auth, body.email, body.password);
+            const { error, value } = joi.validate({ firstName, lastName, email, password });
 
-            const {
-                _tokenResponse: { idToken, email, localId },
-            } = fire_user;
+            if (!error) {
+                const auth = getAuth();
+                const fire_user = await createUserWithEmailAndPassword(auth, email, password);
 
-            const user = await new User({
-                _id: localId,
-                firstname: body.firstname,
-                lastname: body.lastname,
-                email: email,
-                role: body.role || 'admin',
-                telephone: body.telephone,
-            }).save();
+                const {
+                    _tokenResponse: { idToken, email: user_email, localId },
+                } = fire_user;
 
-            const expiresIn = 60 * 60 * 24 * 3 * 3600;
-            const sessionCokie = await admin.auth().createSessionCookie(idToken, { expiresIn });
+                const user = await new User({
+                    _id: localId,
+                    firstName,
+                    lastName,
+                    email: user_email,
+                    role: role || "admin",
+                    telephone,
+                    restaurantId,
+                }).save();
 
-            return { user, sessionCokie, expiresIn };
+                const expiresIn = 60 * 60 * 24 * 3 * 3600;
+
+                const sessionCokie = await admin.auth().createSessionCookie(idToken, { expiresIn });
+
+                return { user, sessionCokie, expiresIn };
+            }
+
+            return { error: true, data: error };
         } catch (error) {
             return { error: true, data: error.message };
         }

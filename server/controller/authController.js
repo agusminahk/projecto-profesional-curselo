@@ -1,5 +1,6 @@
 const AuthService = require('../service/authService');
 
+
 class AuthController {
     static async register(req, res) {
         try {

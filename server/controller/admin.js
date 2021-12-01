@@ -1,4 +1,4 @@
-const AdminService = require('../service/admin');
+const AdminService = require("../service/admin");
 
 class AdminController {
     static async search(req, res) {
@@ -34,7 +34,7 @@ class AdminController {
     }
 
     static async createRestaurant(req, res) {
-        const { error, data } = await AdminService.createRestaurant(req.body);
+        const { error, data } = await AdminService.createRestaurant(req.body, req.cookies.user);
 
         return error ? res.status(data.status || 500).send({ message: data }) : res.json(data);
     }
@@ -51,8 +51,8 @@ class AdminController {
         return error ? res.status(data.status || 500).send({ message: data }) : res.json(data);
     }
 
-    static async createStaff(req, res) {
-        const { error, data } = await AdminService.createStaff(req.body);
+    static async createSubCategory(req, res) {
+        const { error, data } = await AdminService.createSubCategory(req.body);
 
         return error ? res.status(data.status || 500).send({ message: data }) : res.json(data);
     }
@@ -75,6 +75,14 @@ class AdminController {
         return error ? res.status(data.status || 500).send({ message: data }) : res.json(data);
     }
 
+    static async updateSubCategory(req, res) {
+        const { id, name } = req.params;
+
+        const { error, data } = await AdminService.updateSubCategory(id, name, req.body);
+
+        return error ? res.status(data.status || 500).send({ message: data }) : res.json(data);
+    }
+
     static async updateUser(req, res) {
         const { error, data } = await AdminService.updateUser(req.params.id, req.body);
 
@@ -84,17 +92,25 @@ class AdminController {
     static async uploadImage(req, res) {
         const { filename, destination } = req.file;
 
-        return !filename ? res.status(500).send('Upload Error') : res.json({ filename, destination });
+        return !filename ? res.status(500).send("Upload Error") : res.json({ filename, destination });
     }
 
     static async deleteProduct(req, res) {
-        const { error, data } = await AdminService.deleteProduct(req.params.id);
+        const { error, data } = await AdminService.deleteProduct(req.params.id, req.cookies.user);
 
         return error ? res.status(data.status || 500).send({ message: data }) : res.json(data);
     }
 
     static async deleteCategory(req, res) {
-        const { error, data } = await AdminService.deleteCategory(req.params.id);
+        const { error, data } = await AdminService.deleteCategory(req.params.id, req.cookies.user);
+
+        return error ? res.status(data.status || 500).send({ message: data }) : res.json(data);
+    }
+
+    static async deleteSubCategory(req, res) {
+        const { id, name } = req.params;
+
+        const { error, data } = await AdminService.deleteSubCategory(id, name);
 
         return error ? res.status(data.status || 500).send({ message: data }) : res.json(data);
     }

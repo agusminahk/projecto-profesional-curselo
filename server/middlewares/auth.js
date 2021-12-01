@@ -1,7 +1,7 @@
 const admin = require('firebase-admin');
 
 const verify = (req, res, next) => {
-    const sessionCookie = req.cookie.session || '';
+    const sessionCookie = req.cookies.session || '';
     admin
         .auth()
         .verifySessionCookie(sessionCookie, true)
@@ -9,4 +9,10 @@ const verify = (req, res, next) => {
         .catch((e) => res.status(401).send('UNAUTHORIZED'));
 };
 
-module.exports = verify;
+const checkAuthAdmin = (req, res, next) =>
+    req.cookies.user.role === 'admin' ? next() : res.status(401).send('unauthorized');
+
+const checkAuthSuperAdmin = (req, res, next) =>
+    req.cookies.user.role === 'superAdmin' ? next() : res.status(401).send('unauthorized');
+
+module.exports = { verify, checkAuthAdmin, checkAuthSuperAdmin };

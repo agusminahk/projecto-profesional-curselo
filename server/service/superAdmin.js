@@ -3,18 +3,6 @@ const Restaurant = require('../models/Restaurant');
 const Metrics = require('../models/Metric');
 
 class SuperAdminService {
-    static async createClient(body) {
-        try {
-            const user = new User(body);
-
-            const resp = await user.save();
-
-            return { error: false, data: resp };
-        } catch (error) {
-            return { error: true, data: error.message };
-        }
-    }
-
     static async enableClient(id) {
         try {
             const resp = await Restaurant.findByIdAndUpdate(id, { $set: { state: true } }, { new: true });
