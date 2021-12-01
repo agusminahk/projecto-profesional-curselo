@@ -29,6 +29,7 @@ export const HeaderMenu = () => {
     heigt: 2,
     width: 1,
   };
+  const categorias = ["Cafeteria", "Dulces", "Sandwiches", "Postres", "Licuados", "Tortas"];
   return (
     <Box>
       <Flex
@@ -69,7 +70,7 @@ export const HeaderMenu = () => {
           src="https://blogdestinia.com/wp-content/uploads/2020/10/restaurantes-singulares-curiosos-portada-1170x550.jpg"
         />
         <Box w="full" borderWidth="1px" borderRadius="md" boxShadow="md" px={0} py={0} color={color}>
-          <CarrouselCategorias />
+          <CarrouselCategorias categorias={categorias} />
         </Box>
       </Flex>
       {/* Modal */}

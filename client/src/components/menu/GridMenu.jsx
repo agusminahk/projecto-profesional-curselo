@@ -6,6 +6,7 @@ import {
   Image,
   Button,
   useDisclosure,
+  Text,
   Modal,
   ModalOverlay,
   ModalContent,
@@ -30,13 +31,21 @@ export const GridMenu = () => {
   return (
     <Box>
       {/* si esta en celi */}
-      <Stack display={["flex", "none"]} m="25px">
+      <Stack display={["flex", "none"]} m="25px" flexDirection="column">
+        <Box color={color} display="flex" justifyContent="flex-end">
+          <Text>Ver todo</Text>
+        </Box>
+
         <Heading color={color} as="h4" size="lg">
           Cafeteria
         </Heading>
         <CarrouselB cards={data} />
         <Heading color={color} as="h4" size="lg">
           Postres
+        </Heading>
+        <CarrouselB cards={data} />
+        <Heading color={color} as="h4" size="lg">
+          Sandwicheria
         </Heading>
         <CarrouselB cards={data} />
       </Stack>
@@ -53,8 +62,6 @@ export const GridMenu = () => {
           })}
         </SimpleGrid>
       </Stack>
-
-      <Box></Box>
     </Box>
   );
 };

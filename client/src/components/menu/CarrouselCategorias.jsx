@@ -5,22 +5,21 @@ import Slider from "react-slick";
 
 import { Link } from "react-router-dom";
 
-export const CarrouselCategorias = (categorias) => {
-  categorias = ["Cafeteria", "Dulces", "Sandwiches", "Postres", "Licuados", "Tortas"];
-
+export const CarrouselCategorias = ({ categorias }) => {
   const settings = {
     infinite: true,
-    dots: true,
-    slidesToShow: 4,
-    arrows: true,
-    slidesToScroll: 1,
-    lazyLoad: true,
+    slidesToShow: 3,
+    slidesToScroll: 3,
+    arrows: false,
   };
+
   return (
-    <Box w="92%" h="60px">
+    <Box w="full" h="50px">
       <Slider {...settings}>
         {categorias.map((item) => (
-          <Box>{item}</Box>
+          <Box textOverflow="clip" fontSize="150%">
+            {item}
+          </Box>
         ))}
       </Slider>
     </Box>

@@ -14,8 +14,6 @@ import { PresentMenu } from "./PresentMenu";
 import { Box } from "@chakra-ui/layout";
 import { ProductsList } from "../components/menu/ProductsList";
 import { Carrito } from "./Carrito";
-import { CarrouselB } from "../components/menu/CarrouselB";
-import { CarrouselCategorias } from "../components/menu/CarrouselCategorias";
 
 const App = () => {
   const location = useLocation();

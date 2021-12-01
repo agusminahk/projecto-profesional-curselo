@@ -34,6 +34,7 @@ import { PhoneIcon, AddIcon, WarningIcon, Search2Icon } from "@chakra-ui/icons";
 import { CardMenu } from "../components/menu/CardMenu";
 import { GridMenu } from "../components/menu/GridMenu";
 import { HeaderMenu } from "../components/menu/HeaderMenu";
+import { Footer } from "../components/menu/Footer";
 
 export function PresentMenu() {
   const bg = useColorModeValue("gray.800", "white");
@@ -42,6 +43,7 @@ export function PresentMenu() {
     <Box bg={bg}>
       <HeaderMenu />
       <GridMenu />
+      <Footer />
     </Box>
   );
 }
