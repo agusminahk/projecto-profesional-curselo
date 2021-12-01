@@ -5,6 +5,7 @@ import {
     useLocation
   } from "react-router-dom";
 import { AdminHome } from "./admin/AdminHome"
+  import ActivateRestaurant from '../components/ActivateRestaurant';
 import { NavbarAdmin } from '../components/admin/NavbarAdmin';
 import { ClientsView } from "./admin/ClientsView"
 import { NewClient } from './admin/NewClient';
@@ -59,13 +60,13 @@ const App = () => {
                 <Route exact path="/login" element={<Login />} />
                 <Route exact path="/register" element={<Register />} />
                 <Route exact path="/217/cereveza-script/present" element={<PresentMenu />} />
+                <Route path="/superadmin" element={<ActivateRestaurant />} />
             </Routes>
         </Box>
     )
+
 };
-<<<<<<< HEAD
+
 
 export default App;
-=======
-export default App;
->>>>>>> fae2374fff0072fb6e84bddd7db4d8b419f8cd61
+
