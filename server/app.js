@@ -1,19 +1,20 @@
-const express = require('express');
-const session = require('express-session');
-const volleyball = require('volleyball');
-const cors = require('cors');
-const router = require('./routes/');
-const client = require('./config/db');
-const cookieParser = require('cookie-parser');
-const admin = require('firebase-admin');
-require('dotenv').config();
+const express = require("express");
+const session = require("express-session");
+const volleyball = require("volleyball");
+const cors = require("cors");
+const router = require("./routes/");
+const client = require("./config/db");
+const cookieParser = require("cookie-parser");
+const admin = require("firebase-admin");
+require("dotenv").config();
 
 // metricas superadmin solo los altas y bajas de usuarios
 
-const serviceAccount = require('./serviceAccountKey.json');
-require('./config/firebase-config');
+const serviceAccount = require("./serviceAccountKey.json");
+require("./config/firebase-config");
 
 const app = express();
+let server;
 
 app.use(cors());
 app.use(express.json());
@@ -34,13 +35,15 @@ app.use(
 
 admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
-    databaseURL: 'https://curselo-7d35c.firebaseio.com',
+    databaseURL: "https://curselo-7d35c.firebaseio.com",
 });
 
-app.use('/api', router);
+app.use("/api", router);
 
 client.then(() => {
-    app.listen(process.env.PORT || 8080, () => {
-        console.log('Backend server is running on http://localhost:8080');
+    server = app.listen(process.env.PORT || 8080, () => {
+        console.log("Backend server is running on http://localhost:8080");
     });
 });
+
+module.exports = { app, server };

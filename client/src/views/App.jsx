@@ -5,6 +5,7 @@ import {
     useLocation
   } from "react-router-dom";
 import { AdminHome } from "./admin/AdminHome"
+  import ActivateRestaurant from '../components/ActivateRestaurant';
 import { NavbarAdmin } from '../components/admin/NavbarAdmin';
 import { ClientsView } from "./admin/ClientsView"
 import { NewClient } from './admin/NewClient';
@@ -61,8 +62,13 @@ const App = () => {
                 <Route exact path="/217/cereveza-script/present" element={<PresentMenu />} />
                 <Route exact path="/edit-restaurant" element={<EditRestaurant />} />
                 <Route exact path="/product-stock" element={<StockProd />} />
+                <Route path="/superadmin" element={<ActivateRestaurant />} />
             </Routes>
         </Box>
     )
+
 };
+
+
 export default App;
+

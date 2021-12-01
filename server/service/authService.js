@@ -12,26 +12,34 @@ const {
 const User = require("../models/User");
 
 class AuthService {
-    static async register({ firstName, lastName, email, password, telephone, role, restaurantId }) {
+    static async register(body) {
+        
         try {
-            const { error, value } = joi.validate({ firstName, lastName, email, password });
+            const { error, value } = joi.validate({
+                firstname: body.firstname,
+                lastname: body.lastname,
+                email: body.email,
+                password: body.password,
+            });
 
             if (!error) {
-                const auth = getAuth();
-                const fire_user = await createUserWithEmailAndPassword(auth, email, password);
 
+                const auth = getAuth();
+                const fire_user = await createUserWithEmailAndPassword(auth, body.email, body.password);
+                
+                
                 const {
-                    _tokenResponse: { idToken, email: user_email, localId },
+                    _tokenResponse: { idToken, email, localId },
                 } = fire_user;
 
                 const user = await new User({
                     _id: localId,
-                    firstName,
-                    lastName,
-                    email: user_email,
-                    role: role || "admin",
-                    telephone,
-                    restaurantId,
+                    firstname: body.firstname,
+                    lastname: body.lastname,
+                    email: email,
+                    role: body.role || "admin",
+                    telephone: body.telephone,
+                    restaurantId: body.restaurantId,
                 }).save();
 
                 const expiresIn = 60 * 60 * 24 * 3 * 3600;
