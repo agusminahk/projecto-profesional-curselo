@@ -1,14 +1,13 @@
-const { Schema, model } = require('mongoose');
-const User = require('./User');
-const Metrics = require('./Metric');
-const Category = require('./Category');
-const Product = require('./Product');
+const { Schema, model } = require("mongoose");
+const User = require("./User");
+const Metrics = require("./Metric");
+const Category = require("./Category");
+const Product = require("./Product");
 
 const RestaurantSchema = new Schema({
     name: { type: String, required: true },
-    email: { type: String, required: true },
-    productsId: [{ type: Schema.Types.ObjectId, required: true, ref: 'Product' }],
-    categoriesId: [{ type: Schema.Types.ObjectId, required: true, ref: 'Category' }],
+    productsId: [{ type: Schema.Types.ObjectId, required: true, ref: "Product" }],
+    categoriesId: [{ type: Schema.Types.ObjectId, required: true, ref: "Category" }],
     state: { type: Boolean, default: false },
     orders: [
         {
@@ -17,11 +16,11 @@ const RestaurantSchema = new Schema({
                 {
                     name: { type: String, required: true },
                     units: { type: Number, required: true },
-                    _id: { type: Schema.Types.ObjectId, required: true, ref: 'Product' },
+                    _id: { type: Schema.Types.ObjectId, required: true, ref: "Product" },
                 },
             ],
             total: { type: Number, required: true },
-            state: { type: String, default: 'Unprepared' },
+            state: { type: String, default: "Unprepared" },
             confirmed: { type: Boolean, default: false },
             date: { type: Date, default: Date.now },
         },
@@ -31,7 +30,7 @@ const RestaurantSchema = new Schema({
             total: { type: Number, required: true },
             products: [
                 {
-                    _id: { type: Schema.Types.ObjectId, required: true, ref: 'Product' },
+                    _id: { type: Schema.Types.ObjectId, required: true, ref: "Product" },
                     units: { type: Number, required: true },
                 },
             ],
@@ -39,12 +38,12 @@ const RestaurantSchema = new Schema({
             date: { type: Date },
         },
     ],
-    metrics: [{ type: Schema.Types.ObjectId, ref: 'Metric' }],
+    metrics: [{ type: Schema.Types.ObjectId, ref: "Metric" }],
     URL: { type: String, required: true },
     contact: {
         email: { type: String },
         webpage: { type: String },
-        telephone: { type: Number },
+        telephone: { type: String },
         instagram: { type: String },
     },
     location: {
@@ -57,7 +56,7 @@ const RestaurantSchema = new Schema({
     banner: { data: Buffer, contentType: String },
 });
 
-RestaurantSchema.pre('remove', async (next) => {
+RestaurantSchema.pre("remove", async (next) => {
     await User.deleteMany({ restaurantId: this._id });
     await Category.deleteMany({ restaurantId: this._id });
     await Product.deleteMany({ restaurantId: this._id });
@@ -65,4 +64,4 @@ RestaurantSchema.pre('remove', async (next) => {
     next();
 });
 
-module.exports = model('Restaurant', RestaurantSchema);
+module.exports = model("Restaurant", RestaurantSchema);

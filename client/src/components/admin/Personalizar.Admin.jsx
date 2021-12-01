@@ -27,7 +27,7 @@ export function PersonalizarAdmin() {
           <chakra.p
             mb={5}
             textAlign={{ base: "center", sm: "left" }}
-            color={useColorModeValue("black", "black")}
+            // color={useColorModeValue("black", "black")}
             fontSize={{ md: "lg" }}
           >
             En este Modo vas a tener todo Lorem ipsum dolor sit, amet consectetur adipisicing elit. Atque
@@ -36,9 +36,9 @@ export function PersonalizarAdmin() {
           <Button
             w={{ base: "full", sm: "auto" }}
             size="lg"
-            bg={useColorModeValue("gray.900", "gray.700")}
-            _hover={{ bg: useColorModeValue("gray.700", "gray.600") }}
-            color={useColorModeValue("gray.100", "gray.200")}
+            // bg={useColorModeValue("gray.900", "gray.700")}
+            // _hover={{ bg: useColorModeValue("gray.700", "gray.600") }}
+            // color={useColorModeValue("gray.100", "gray.200")}
             as="a"
           >
             Elegir Modo
@@ -69,7 +69,7 @@ export function PersonalizarAdmin() {
             fontWeight="extrabold"
             letterSpacing="tight"
             textAlign={{ base: "center", md: "left" }}
-            color={useColorModeValue("white", "black")}
+            
             lineHeight={{ md: "shorter" }}
           >
             Modo Dos
@@ -77,7 +77,7 @@ export function PersonalizarAdmin() {
           <chakra.p
             mb={5}
             textAlign={{ base: "center", sm: "left" }}
-            color={useColorModeValue("white", "black")}
+            
             fontSize={{ md: "lg" }}
           >
             Gracias a es modo se podran destacar ...Next to our ready-made and free plugins you can use our
@@ -87,9 +87,9 @@ export function PersonalizarAdmin() {
           <Button
             w={{ base: "full", sm: "auto" }}
             size="lg"
-            bg={useColorModeValue("white", "black")}
-            _hover={{ bg: useColorModeValue("gray.700", "gray.600") }}
-            color={useColorModeValue("gray.100", "gray.200")}
+            // bg={useColorModeValue("white", "black")}
+            // _hover={{ bg: useColorModeValue("gray.700", "gray.600") }}
+            // color={useColorModeValue("gray.100", "gray.200")}
             as="a"
           >
             Elegir Modo
@@ -121,7 +121,7 @@ export function PersonalizarAdmin() {
             fontWeight="extrabold"
             letterSpacing="tight"
             textAlign={{ base: "center", md: "left" }}
-            color={useColorModeValue("white", "black")}
+            // color={useColorModeValue("white", "black")}
             lineHeight={{ md: "shorter" }}
           >
             Modo Tres
@@ -129,7 +129,7 @@ export function PersonalizarAdmin() {
           <chakra.p
             mb={5}
             textAlign={{ base: "center", sm: "left" }}
-            color={useColorModeValue("white", "black")}
+            // color={useColorModeValue("white", "black")}
             fontSize={{ md: "lg" }}
           >
             En este modo tu menu va a resaltar handle your subscriptions and transactions efficiently with the
@@ -139,9 +139,9 @@ export function PersonalizarAdmin() {
           <Button
             w={{ base: "full", sm: "auto" }}
             size="lg"
-            bg={useColorModeValue("gray.900", "gray.700")}
-            _hover={{ bg: useColorModeValue("gray.700", "gray.600") }}
-            color={useColorModeValue("gray.100", "gray.200")}
+            // bg={useColorModeValue("gray.900", "gray.700")}
+            // _hover={{ bg: useColorModeValue("gray.700", "gray.600") }}
+            // color={useColorModeValue("gray.100", "gray.200")}
             as="a"
           >
             Elegir Modo

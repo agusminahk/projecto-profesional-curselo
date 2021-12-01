@@ -5,7 +5,10 @@ import { ChakraProvider } from '@chakra-ui/react';
 import { Provider } from 'react-redux';
 import { store } from './state/store';
 
-import './components/firebase/firebase-config'
+<<<<<<< HEAD
+/* import './components/firebase/firebase-config' */
+=======
+>>>>>>> a4af373465d0b306e1bd6a59e8475d8c5c2f0177
 import App from './views/App.jsx';
 
 ReactDOM.render(
