@@ -121,6 +121,8 @@ class AdminService {
                 { new: true }
             );
 
+            await Category.findByIdAndUpdate(body.restaurantId, { $push: { productId: resp._id } }, { new: true });
+
             return { error: false, data: restaurant };
         } catch (error) {
             return { error: true, data: error.message };
@@ -154,7 +156,6 @@ class AdminService {
         }
     }
 
-    // preguntar q vamos a updatear de cada schema y despues hacerlo
     static async updateRestaurant(id, body) {
         try {
             const resp = await Restaurant.findByIdAndUpdate(
@@ -186,7 +187,22 @@ class AdminService {
 
     static async updateProduct(id, body) {
         try {
-            const resp = await Product.findByIdAndUpdate(id, body, { new: true });
+            const resp = await Product.findByIdAndUpdate(
+                id,
+                {
+                    $set: {
+                        name: body.name,
+                        description: body.description,
+                        state: body.state,
+                        category: body.category,
+                        subcategory: body.subcategory,
+                        price: body.price,
+                        "onSale.state": body.onSale.state,
+                        "onSale.description": body.onSale.description,
+                    },
+                },
+                { new: true }
+            );
 
             return { error: false, data: resp };
         } catch (error) {
@@ -196,7 +212,7 @@ class AdminService {
 
     static async updateCategory(id, body) {
         try {
-            const resp = await Category.findByIdAndUpdate(id, body, { new: true });
+            const resp = await Category.findByIdAndUpdate(id, { $set: { name: body.name } }, { new: true });
 
             return { error: false, data: resp };
         } catch (error) {
@@ -224,8 +240,6 @@ class AdminService {
                 { arrayFilters: [{ name: name }], new: true }
             );
 
-            console.log(products);
-
             return { error: false, data: resp };
         } catch (error) {
             return { error: true, data: error.message };
@@ -234,7 +248,19 @@ class AdminService {
 
     static async updateUser(id, body) {
         try {
-            const resp = await User.findByIdAndUpdate(id, body, { new: true });
+            const resp = await User.findByIdAndUpdate(
+                id,
+                {
+                    $set: {
+                        firstname: body.firstname,
+                        lastname: body.lastname,
+                        email: body.email,
+                        role: body.role,
+                        telephone: body.telephone,
+                    },
+                },
+                { new: true }
+            );
 
             return { error: false, data: resp };
         } catch (error) {
@@ -256,6 +282,18 @@ class AdminService {
                 { new: true }
             );
 
+            const category = await Category.updateMany(
+                { productId: id },
+                {
+                    $pull: {
+                        productId: id,
+                    },
+                },
+                { new: true }
+            );
+
+            console.log(category);
+
             return { error: false, data: restaurant };
         } catch (error) {
             return { error: true, data: error.message };
@@ -265,12 +303,11 @@ class AdminService {
     static async deleteCategory(id, user) {
         try {
             const category = await Category.deleteOne({ _id: id });
-            
+
             if (category.deletedCount === 0) return { error: true, data: { message: "Not Found", status: 404 } };
 
             const categoryOtros = await Category.find({ name: "Otros" });
 
-          
             await Product.updateMany(
                 { category: id },
                 {

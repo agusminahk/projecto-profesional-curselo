@@ -6,7 +6,7 @@ class ClientController {
 
         const { error, data } = await ClientService.search(req.params.id, type, name);
 
-        error ? res.status(data.status || 500).send({ message: data.message }) : res.json(data);
+        error ? res.status(data.status || 404).send({ message: data.message }) : res.json(data);
     }
 
     static async postOrder(req, res) {
