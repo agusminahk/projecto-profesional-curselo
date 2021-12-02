@@ -1,6 +1,5 @@
 const crearRestaurant = {
     "name": "El restaurante",
-    "password": "admin123",
     "URL": "http://google.com",
     "location": {
         "country": "Argentina",

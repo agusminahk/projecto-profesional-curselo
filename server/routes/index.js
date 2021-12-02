@@ -12,7 +12,7 @@ const { checkAuthAdmin, checkAuthSuperAdmin } = require('../middlewares/auth');
 router.use('/client', clientRoutes);
 
 // Super Admin
-router.use('/superAdmin', checkAuthSuperAdmin, superAdminRoutes);
+router.use('/superAdmin', superAdminRoutes);
 
 // Admin
 router.use('/admin', checkAuthAdmin, adminRoutes);

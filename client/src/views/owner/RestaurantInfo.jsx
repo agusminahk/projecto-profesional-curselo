@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useSelector, useDispatch } from "react-redux";
+import { setUser } from "../../state/userSlice";
+import { setRestaurant } from "../../state/restaurantSlice";
 import {
-  chakra,
   Box,
   useColorModeValue,
-  FormHelperText,
   SimpleGrid,
   GridItem,
   Heading,
@@ -15,96 +15,70 @@ import {
   Input,
   Button,
   Select,
+  FormErrorMessage
 } from "@chakra-ui/react";
 import { useFormik } from "formik";
 
-export const RestaurantInfo = () => {
-   // const user = useSelector((state) => state.user);
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [country, setCountry] = useState("");
-  const [direction, setDirection] = useState("");
-  const [city, setCity] = useState("");
-  const [province, setProvince] = useState("");
-/* 
-  useEffect (() => {
-    axios
-    .get(`api/admin/search?type=restaurant&id=${user.restaurantId}`)
-    .then(res => res.data)
-    .then(data => {
-      setName(data.name)
-      setEmail(data.email)
-      setCountry(data.location.country)
-      setDirection(data.location.direction)
-      setCity(data.location.city)
-      setProvince(data.location.province)
-    })
-  }) */
-  const validate = (values) => {
+export const RestaurantInfo = ({ restaurant }) => {
+  // const restaurant = useSelector((state) => state.restaurant.restaurant);
+  const user = useSelector((state) => state.user.user);
+  const dispatch = useDispatch()
+  
+    const validate = (values) => {
     const errors = {};
-    if (!values.name || values.name.length > 1) {
-      errors.name = "Campo requerido";
-    }
-    if (!values.email) {
-      errors.email = "Required";
-    } else if (
-      !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)
-    ) {
-      errors.email = "Email invalido";
-    }
-    if (!values.country) {
-      errors.country = "Campo requerido";
-    }
-    if (!values.direction) {
-      errors.direction = "Campo requerido";
-    }
-    if (!values.city) {
-      errors.city = "Campo requerido";
-    }
-    if (!values.province) {
-      errors.province = "Campo requerido";
-    }
-    if (!values.codigo) {
-      errors.codigo = "Campo requerido";
-    }
+    if (!values.name) errors.name = "Campo requerido";
+    else if (/[!"#$%&'()+,-./:;<=>?@[\]^_`{|}~]/.test(values.name)) errors.name = "Ingrese solo letras y números";
+    if (!values.country) errors.country = "Campo requerido";
+    if (!values.direction) errors.direction = "Campo requerido";
+    else if (/[!"#$%&'()+,-./:;<=>?@[\]^_`{|}~]/.test(values.direction)) errors.direction = "Ingrese solo letras y números";
+    if (!values.city) errors.city = "Campo requerido";
+    else if (/[!"#$%&'()+,-./:;<=>?@[\]^_`{|}~]/.test(values.city)) errors.city = "Ingrese solo letras y números";
+    if (!values.province) errors.province = "Campo requerido";
+    else if (/[!"#$%&'()+,-./:;<=>?@[\]^_`{|}~]/.test(values.province)) errors.province = "Ingrese solo letras y números";
     return errors;
   };
+  
 
   const formik = useFormik({
     initialValues: {
-      name: name,
-      email: email,
-      country: country,
-      direction: direction,
-      city: city,
-      province: province,
+      name: restaurant?.name || "",
+      country: restaurant?.location?.country || "",
+      direction: restaurant?.location?.direction || "",
+      city: restaurant?.location?.city || "",
+      province: restaurant?.location?.province || "",
     },
     validate,
     onSubmit: (values) => {
-      /*   axios
-        .put(`api/admin/restaurant/${user.restaurantId}`, values)
-        .then(()=>{
-           toast({
-        title: `Guardado`,
-        status: "success",
-        isClosable: true,
-      });
-        }) */
+        axios({
+          method: `${user.restaurantId ? "put" : "post"}`,
+          url: `/api/admin/restaurant${user.restaurantId ? `/${user.restaurantId}` : null}`,
+          data: {
+            "name": values.name,
+            "location": {
+                "country": values.country,
+                "province": values.province,
+                "city": values.city,
+                "direction": values.direction,
+            },
+          }
+        })
+        .then(({data}) => {
+          // updatear user
+          axios({
+            method: "get",
+            url: "/api/auth/me"
+          }).then(({data}) => dispatch(setUser(data)))
+          .catch(console.log)
+          // updatear restaurant
+          dispatch(setRestaurant(data))
+        })
+        .catch(console.log)
     },
   });
 
-  const noValUser = /[!"#$%&'()+,-./:;<=>?@[\]^_`{|}~]/;
-  const valEmail =
-    /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-
-
     return (
         <Box mt={[10, 0]}>
-        <SimpleGrid
-          display={{ base: "initial", md: "grid" }}
-          columns={{ md: 3 }}
-          spacing={{ md: 6 }}
-        >
+        <SimpleGrid display={{ base: "initial", md: "grid" }} columns={{ md: 3 }} spacing={{ md: 6 }}>
           <GridItem colSpan={{ md: 1 }}>
             <Box px={[4, 0]}>
               <Heading fontSize="lg" fontWeight="medium" lineHeight="6">
@@ -113,31 +87,17 @@ export const RestaurantInfo = () => {
             </Box>
           </GridItem>
           <GridItem mt={[5, null, 0]} colSpan={{ md: 2 }}>
-            <chakra.form
+            <form
               onSubmit={formik.handleSubmit}
               shadow="base"
               rounded={[null, "md"]}
               overflow={{ sm: "hidden" }}
             >
               <Stack
-                px={4}
-                py={5}
-                p={[null, 6]}
-                bg={useColorModeValue("white", "gray.700")}
-                spacing={6}
-              >
+                px={4} py={5} p={[null, 6]} bg={useColorModeValue("white", "gray.700")} spacing={6}>
                 <SimpleGrid columns={6} spacing={6}>
-                  <FormControl
-                    as={GridItem}
-                    colSpan={[6, 3]}
-                    isInvalid={noValUser.test(formik.values.name)}
-                  >
-                    <FormLabel
-                      htmlFor="name"
-                      fontSize="sm"
-                      fontWeight="md"
-                      color={useColorModeValue("gray.700", "gray.50")}
-                    >
+                  <FormControl as={GridItem} colSpan={[6, 3]} isInvalid={formik.errors.name && formik.touched.name}>
+                    <FormLabel htmlFor="name" fontSize="sm" fontWeight="md" color={useColorModeValue("gray.700", "gray.50")} >
                       Nombre del restaurante
                     </FormLabel>
                     <Input
@@ -154,51 +114,12 @@ export const RestaurantInfo = () => {
                       value={formik.values.name}
                       onChange={formik.handleChange}
                     />
-                    <FormHelperText color="red">
-                      {noValUser.test(formik.values.name)
-                        ? "Solo se permiten letras y numeros"
-                        : null}
-                    </FormHelperText>
+                    <FormErrorMessage>{formik.errors.name}</FormErrorMessage>
                   </FormControl>
-
-                  <FormControl
-                    as={GridItem}
-                    colSpan={[6, 4]}
-                    isInvalid={!valEmail.test(formik.values.email) && formik.values.email.length > 2}
-                  >
-                    <FormLabel
-                      htmlFor="email"
-                      fontSize="sm"
-                      fontWeight="md"
-                      color={useColorModeValue("gray.700", "gray.50")}
-                    >
-                      Email
-                    </FormLabel>
-                    <Input
-                      type="text"
-                      name="email"
-                      id="email"
-                      autoComplete="email"
-                      mt={1}
-                      focusBorderColor="brand.400"
-                      shadow="sm"
-                      size="sm"
-                      w="full"
-                      rounded="md"
-                      value={formik.values.email}
-                      onChange={formik.handleChange}
-                    />
-                    <FormHelperText color="red">
-                      {!valEmail.test(formik.values.email) && formik.values.email.length > 2
-                        ? "Email invalido"
-                        : null}
-                    </FormHelperText>
-                  </FormControl>
-
                   <FormControl
                     as={GridItem}
                     colSpan={[6, 3]}
-                    isInvalid={formik.values.country === ""}
+                    isInvalid={formik.errors.country && formik.touched.country}
                   >
                     <FormLabel
                       htmlFor="country"
@@ -224,15 +145,13 @@ export const RestaurantInfo = () => {
                     >
                       <option>Argentina</option>
                     </Select>
-                    <FormHelperText color="red">
-                      {formik.values.country === "" ? "Campo requerido" : null}
-                    </FormHelperText>
+                    <FormErrorMessage>{formik.errors.country}</FormErrorMessage>
                   </FormControl>
 
                   <FormControl
                     as={GridItem}
                     colSpan={6}
-                    isInvalid={noValUser.test(formik.values.direction)}
+                    isInvalid={formik.errors.direction && formik.touched.direction}
                   >
                     <FormLabel
                       htmlFor="direction"
@@ -256,17 +175,13 @@ export const RestaurantInfo = () => {
                       value={formik.values.direction}
                       onChange={formik.handleChange}
                     />
-                    <FormHelperText color="red">
-                      {noValUser.test(formik.values.direction)
-                        ? "Solo se permiten letras y numeros"
-                        : null}
-                    </FormHelperText>
+                    <FormErrorMessage>{formik.errors.direction}</FormErrorMessage>
                   </FormControl>
 
                   <FormControl
                     as={GridItem}
                     colSpan={[6, 6, null, 2]}
-                    isInvalid={noValUser.test(formik.values.city)}
+                    isInvalid={formik.errors.city && formik.touched.city}
                   >
                     <FormLabel
                       htmlFor="city"
@@ -290,17 +205,12 @@ export const RestaurantInfo = () => {
                       value={formik.values.city}
                       onChange={formik.handleChange}
                     />
-                    <FormHelperText color="red">
-                      {noValUser.test(formik.values.city)
-                        ? "city invalida"
-                        : null}
-                    </FormHelperText>
+                    <FormErrorMessage>{formik.errors.city}</FormErrorMessage>
                   </FormControl>
-
                   <FormControl
                     as={GridItem}
                     colSpan={[6, 3, null, 2]}
-                    isInvalid={noValUser.test(formik.values.province)}
+                    isInvalid={formik.errors.province && formik.touched.province}
                   >
                     <FormLabel
                       htmlFor="province"
@@ -324,11 +234,7 @@ export const RestaurantInfo = () => {
                       value={formik.values.province}
                       onChange={formik.handleChange}
                     />
-                    <FormHelperText color="red">
-                      {noValUser.test(formik.values.province)
-                        ? "Solo se permiten letras y numeros"
-                        : null}
-                    </FormHelperText>
+                    <FormErrorMessage>{formik.errors.province}</FormErrorMessage>
                   </FormControl>
                 </SimpleGrid>
               </Stack>
@@ -343,12 +249,12 @@ export const RestaurantInfo = () => {
                   colorScheme="brand"
                   _focus={{ shadow: "" }}
                   fontWeight="md"
-                  bgColor="gray.300"
+                  bgColor={formik.isValid ? "green.300" : "gray.300"}
                 >
-                  Guardar
+                  {user.restaurantId ? "Guardar" : "Crear"}
                 </Button>
               </Box>
-            </chakra.form>
+            </form>
           </GridItem>
         </SimpleGrid>
       </Box>
