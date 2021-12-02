@@ -1,3 +1,4 @@
+import React from "react";
 import {
   Avatar,
   Box,
@@ -24,7 +25,6 @@ import { BsGearFill } from "react-icons/bs";
 import { FiMenu, FiSearch } from "react-icons/fi";
 import { HiCode, HiCollection } from "react-icons/hi";
 import { MdHome } from "react-icons/md";
-import { React } from "react";
 import { Link } from "react-router-dom";
 
 import { PersonalizarAdmin } from "../../components/admin/Personalizar.Admin";

@@ -18,44 +18,14 @@ import {
   } from "@chakra-ui/react";
 import React from 'react';
 import { useFormik } from 'formik';
+import axios from "axios"
+import { useDispatch } from "react-redux"
+import { setUser } from "../state/userSlice"
+import { useNavigate } from "react-router";
+import useRegisterFormik from "../validators/register.validator";
 
 export const Register = () => {
-
-    const formik = useFormik({
-        initialValues: {
-            firstName: '',
-            lastName: '',
-            phone: '',
-            email: '',
-            password: ''
-        },
-        validate: values => {
-            const errors = {}
-            if (!values.email) errors.email = 'Campo requerido'
-            else if (!/^(([^<>()\[\]\.,;:\s@\”]+(\.[^<>()\[\]\.,;:\s@\”]+)*)|(\”.+\”))@(([^<>()[\]\.,;:\s@\”]+\.)+[^<>()[\]\.,;:\s@\”]{2,})$/i.test(values.email)) {
-                errors.email = 'Direccion de email no valida';
-            }
-            if (!values.firstName) errors.firstName = 'Campo requerido';
-            else if (!/^[A-Za-z ]*$/.test(values.firstName)) errors.firstName = "Ingrese solo letras y espacios"
-            if (!values.lastName) errors.lastName = 'Campo requerido';
-            else if (!/^[A-Za-z ]*$/.test(values.lastName)) errors.lastName = "Ingrese solo letras y espacios"
-            if (!values.password) errors.password = 'Campo requerido';
-            else {
-                if (!/^.{8,}$/.test(values.password)) errors.password = "Debe ser de 8 de largo"
-                else if (!/[a-zA-Z]/.test(values.password)) errors.password = "Debe contener al menos una letra"
-                else if (!/\d/.test(values.password)) errors.password = "Debe contener al menos un número"
-            }
-            if (values.phone !== "" 
-                && (
-                    !/\(?\+{0,1}[0-9]{1,3}\)? ?-?[0-9]{1,3} ?-?[0-9]{3,5} ?-?[0-9]{4}( ?-?[0-9]{3})?$/.test(values.phone)
-                    || values.phone.length > 18)
-                ) errors.phone = "Número de telefono no valido"
-            return errors
-        },
-        onSubmit: values => {
-                        
-        }
-    })
+    const formik = useRegisterFormik()
 
     return <>
     <Flex minH={"100vh"} bg={useColorModeValue("gray.50", "gray.800")}>
@@ -70,45 +40,47 @@ export const Register = () => {
             >
                 <FormControl id="email" isInvalid={formik.errors.email && formik.touched.email} isRequired>
                     <FormLabel>Email</FormLabel>
-                    <Input 
+                    <Input
+                        
                         id="email"
                         {...formik.getFieldProps("email")}
                         type="email" />
                     <FormErrorMessage>{formik.errors.email}</FormErrorMessage>
                 </FormControl>
-                <FormControl id="firstName" isInvalid={formik.errors.firstName && formik.touched.firstName} isRequired>
+                <FormControl id="firstname" isInvalid={formik.errors.firstname && formik.touched.firstname} isRequired>
                     <FormLabel>First Name</FormLabel>
                     <Input 
-                        id="firstName"
-                        {...formik.getFieldProps("firstName")}
+                        id="firstname"
+                        {...formik.getFieldProps("firstname")}
                         type="text" />
-                    <FormErrorMessage>{formik.errors.firstName}</FormErrorMessage>
+                    <FormErrorMessage>{formik.errors.firstname}</FormErrorMessage>
                 </FormControl>
-                <FormControl id="lastName" isInvalid={formik.errors.lastName && formik.touched.lastName} isRequired>
+                <FormControl id="lastname" isInvalid={formik.errors.lastname && formik.touched.lastname} isRequired>
                     <FormLabel>Last Name</FormLabel>
                     <Input 
-                        id="lastName"
-                        name="lastName"
-                        {...formik.getFieldProps("lastName")}
+                        id="lastname"
+                        name="lastname"
+                        {...formik.getFieldProps("lastname")}
                         type="text" />
-                    <FormErrorMessage>{formik.errors.lastName}</FormErrorMessage>
+                    <FormErrorMessage>{formik.errors.lastname}</FormErrorMessage>
                 </FormControl>
-                <FormControl id="phone" isInvalid={formik.errors.phone && formik.touched.phone}>
+                <FormControl id="telephone" isInvalid={formik.errors.telephone && formik.touched.telephone}>
                     <FormLabel>Número de telefono</FormLabel>
                     <InputGroup>
                         <InputLeftAddon children='+' />
                         <Input 
-                            id="phone"
-                            name="phone"
-                            type="number"
-                            {...formik.getFieldProps("phone")}
+                            id="telephone"
+                            name="telephone"
+                            type="text"
+                            {...formik.getFieldProps("telephone")}
                             />
                     </InputGroup>
-                    <FormErrorMessage>{formik.errors.phone}</FormErrorMessage>
+                    <FormErrorMessage>{formik.errors.telephone}</FormErrorMessage>
                 </FormControl>
                 <FormControl id="password" isInvalid={formik.errors.password && formik.touched.password} isRequired>
                     <FormLabel>Contraseña</FormLabel>
                     <Input 
+                        autoComplete="new-password"
                         id="password"
                         type="password"
                         {...formik.getFieldProps("password")}
