@@ -11,8 +11,8 @@ import { ClientsView } from "./admin/ClientsView"
 import { NewClient } from './admin/NewClient';
 import { Profile } from './Profile';
 import { Settings } from "./admin/Settings";
-import { Employees } from './owner/Employees';
-import { OwnerHome } from './owner/OwnerHome';
+import { Employees } from "./owner/Employees";
+import { OwnerHome } from "./owner/OwnerHome";
 import { EditDatos } from "./admin/EditDatos";
 import { Personalizar } from "./admin/Personalizar";
 import { PresentMenu } from "./PresentMenu";
@@ -94,11 +94,14 @@ const App = () => {
                 <Route exact path="/clientes" element={<ClientsView />} />
                 <Route exact path="/register" element={<Register />} />
                 <Route exact path="/217/cereveza-script/present" element={<PresentMenu />} />
+                <Route exact path="/edit-restaurant" element={<EditRestaurant />} />
+                <Route exact path="/product-stock" element={<StockProd />} />
+                <Route exact path="/present" element={<PresentMenu />} />
+                <Route exact path="/checkout" element={<Carrito />} />
                 <Route path="/superadmin" element={<ActivateRestaurant />} />
             </Routes> */}
         </Box>
-    )
-
+    );
 };
 
 export default App;
