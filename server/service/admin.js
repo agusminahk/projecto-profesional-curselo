@@ -104,7 +104,7 @@ class AdminService {
 
             const userUpdate = await User.findByIdAndUpdate(user._id, { $set: { restaurantId: resp._id } }, { new: true });
 
-            return { error: false, data: resp };
+            return { error: false, data: resp, user: userUpdate };
         } catch (error) {
             return { error: true, data: error.message };
         }
