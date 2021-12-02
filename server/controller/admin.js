@@ -34,7 +34,11 @@ class AdminController {
     }
 
     static async createRestaurant(req, res) {
-        const { error, data } = await AdminService.createRestaurant(req.body, req.cookies.user);
+        const { error, data, user } = await AdminService.createRestaurant(req.body, req.cookies.user);
+        const expiresIn = 60 * 60 * 24 * 3 * 3600;
+        const options = { maxAge: expiresIn, httpOnly: true };
+
+        user._id && res.cookie("user", user, options);
 
         return error ? res.status(400).send({ message: data }) : res.status(201).json(data);
     }

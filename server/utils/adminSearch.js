@@ -6,7 +6,7 @@ const Product = require("../models/Product");
 
 const adminSearch = {
     category: (id) => Category.find({ restaurantId: id }),
-    product: (id) => Product.find({ restaurantId: id }),
+    product: (id) => Product.find({ restaurantId: id }).populate('category'),
     metrics: (id) => Metrics.find({ restaurantId: id }),
     user: (id) => User.find({ restaurantId: id }),
     restaurant: (id) => Restaurant.findById(id),
