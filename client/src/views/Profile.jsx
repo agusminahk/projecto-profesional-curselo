@@ -12,6 +12,7 @@ import {
   UnorderedList,
 } from "@chakra-ui/react";
 import { CheckIcon } from "@chakra-ui/icons";
+import React from "react"
 
 export function Profile() {
   const user = {
