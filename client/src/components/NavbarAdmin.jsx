@@ -14,10 +14,23 @@ import {
   CloseButton,
 } from "@chakra-ui/react";
 import { AiOutlineMenu } from "react-icons/ai";
+import { useDispatch } from "react-redux";
+import { logoutUser } from "../state/userSlice";
+import axios from "axios";
 
 export const NavbarAdmin = () => {
   const bg = useColorModeValue("white", "gray.800");
   const mobileNav = useDisclosure();
+
+  const dispatch = useDispatch()
+  const logout = () => {
+    axios({
+      method: "get",
+      url: "/api/auth/logout"
+    })
+    .then(() => dispatch(logoutUser()))
+    .catch(() => {})
+  }
 
   return (
     <React.Fragment>
@@ -35,7 +48,7 @@ export const NavbarAdmin = () => {
             <chakra.a href="/" title="Choc Home Page" display="flex" alignItems="center">
               <VisuallyHidden>Choc</VisuallyHidden>
             </chakra.a>
-            <Link to="/">
+            <Link to="/admin/">
               <chakra.h1 fontSize="xl" fontWeight="medium" ml="2">
                 Admin
               </chakra.h1>
@@ -49,7 +62,7 @@ export const NavbarAdmin = () => {
               <Link to="/alcance">
                 <Button variant="ghost">Alcance</Button>
               </Link>
-              <Button variant="ghost">Cerrar sesión</Button>
+              <Button onClick={logout} variant="ghost">Cerrar sesión</Button>
             </HStack>
             <Box display={{ base: "inline-flex", md: "none" }}>
               <IconButton
@@ -62,7 +75,6 @@ export const NavbarAdmin = () => {
                 icon={<AiOutlineMenu />}
                 onClick={mobileNav.onOpen}
               />
-
               <VStack
                 pos="absolute"
                 top={0}
@@ -91,7 +103,7 @@ export const NavbarAdmin = () => {
                     Alcance
                   </Button>
                 </Link>
-                <Button w="full" variant="ghost" onClick={mobileNav.onClose}>
+                <Button onClick={logout} w="full" variant="ghost" onClick={mobileNav.onClose}>
                   Cerrar sesión
                 </Button>
               </VStack>

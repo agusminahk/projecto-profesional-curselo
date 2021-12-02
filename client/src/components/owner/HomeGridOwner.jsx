@@ -1,3 +1,4 @@
+import React from "react"
 import { SimpleGrid, GridItem, Box } from "@chakra-ui/react";
 import { HomeCard } from "../HomeCard";
 import { GraphCard } from "../GraphCard";
