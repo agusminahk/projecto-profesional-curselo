@@ -66,8 +66,8 @@ export const NavbarAdmin = () => {
             <Link to="/admin/">
               <chakra.h1 fontSize="xl" fontWeight="medium" ml="2">
                 {console.log(restaurant)}
-                {user?.role === "superadmin" ? "SuperAdmin " : patiado.name}
-                {patiado.state ? "" : "(demo)"}
+                {user?.role === "superadmin" ? "SuperAdmin" : patiado.name}
+                {user?.role === "superadmin" || patiado.state ? "" : " (demo)"}
               </chakra.h1>
             </Link>
           </Flex>

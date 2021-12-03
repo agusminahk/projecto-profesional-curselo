@@ -47,7 +47,7 @@ const useRegisterFormik = () => {
                     ...values
                 }
             }).then(({ data }) => {
-                dispatch(setUser(data))
+                dispatch(setUser(data.user))
                 navigate("/admin")
             })
             .catch(console.error)

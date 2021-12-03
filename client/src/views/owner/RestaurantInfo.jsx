@@ -51,7 +51,7 @@ export const RestaurantInfo = ({ restaurant }) => {
     onSubmit: (values) => {
         axios({
           method: `${user.restaurantId ? "put" : "post"}`,
-          url: `/api/admin/restaurant${user.restaurantId ? `/${user.restaurantId}` : null}`,
+          url: `/api/admin/restaurant${user.restaurantId ? `/${user.restaurantId}` : ""}`,
           data: {
             "name": values.name,
             "location": {
