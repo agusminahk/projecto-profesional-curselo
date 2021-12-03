@@ -13,23 +13,20 @@ const User = require("../models/User");
 
 class AuthService {
     static async register(body) {
-        
         try {
             const { error, value } = joi.validate({
                 firstname: body.firstname,
                 lastname: body.lastname,
                 email: body.email,
-                password: body.password,
+                password: body.password
             });
 
             if (!error) {
-
                 const auth = getAuth();
                 const fire_user = await createUserWithEmailAndPassword(auth, body.email, body.password);
-                
-                
+
                 const {
-                    _tokenResponse: { idToken, email, localId },
+                    _tokenResponse: { idToken, error, email, localId },
                 } = fire_user;
 
                 const user = await new User({

@@ -112,6 +112,7 @@ class AdminService {
 
     static async createProduct(body) {
         try {
+            console.log(body)
             const product = new Product(body);
             const resp = await product.save();
 
@@ -215,7 +216,7 @@ class AdminService {
             );
 
             const products = await Product.updateMany(
-                { subcategory: name },
+                { $and: [{ category: id }, { subcategory: name }] },
                 {
                     $set: {
                         "subcategory.$[name]": body.name,
@@ -244,9 +245,7 @@ class AdminService {
 
     static async deleteProduct(id, user) {
         try {
-            console.log(user);
-
-            await Product.find(id, { $set: { state: true } }, { new: true });
+            await Product.deleteOne({ _id: id });
 
             const restaurant = await Restaurant.findByIdAndUpdate(
                 user.restaurantId,
@@ -266,13 +265,18 @@ class AdminService {
 
     static async deleteCategory(id, user) {
         try {
-            await Category.deleteOne({ _id: id });
+            const category = await Category.deleteOne({ _id: id });
+            
+            if (category.deletedCount === 0) return { error: true, data: { message: "Not Found", status: 404 } };
 
+            const categoryOtros = await Category.find({ name: "Otros" });
+
+          
             await Product.updateMany(
-                { $and: [{ restaurantId: user.restaurantId }, { category: id }] },
+                { category: id },
                 {
                     $set: {
-                        category: "Otros",
+                        category: categoryOtros[0]._id,
                         subcategory: [],
                     },
                 }
@@ -290,13 +294,13 @@ class AdminService {
 
             return { error: false, data: restaurant };
         } catch (error) {
-            return { error: true, data: error.message };
+            return { error: true, data: error };
         }
     }
 
     static async deleteSubCategory(id, name) {
         try {
-            const category = await Category.findByIdAndUpdate(id, { $pull: { subcategory: name } });
+            const category = await Category.findByIdAndUpdate(id, { $pull: { subcategory: name } }, { new: true });
 
             await Product.updateMany({ subcategory: name }, { $pull: { subcategory: name } });
 

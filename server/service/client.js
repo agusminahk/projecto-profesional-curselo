@@ -2,9 +2,9 @@ const Restaurant = require("../models/Restaurant");
 const clientSearch = require("../utils/clientSearch");
 
 class ClientService {
-    static async search(type, name) {
+    static async search(id, type, name) {
         try {
-            const resp = await clientSearch[type](name);
+            const resp = await clientSearch[type](name, id);
 
             return { error: false, data: resp };
         } catch (error) {
