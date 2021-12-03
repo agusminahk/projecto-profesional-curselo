@@ -112,6 +112,7 @@ class AdminService {
 
     static async createProduct(body) {
         try {
+            console.log(body)
             const product = new Product(body);
             const resp = await product.save();
 
