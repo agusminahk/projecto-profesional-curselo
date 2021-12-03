@@ -82,7 +82,7 @@ export const RestaurantInfo = ({ restaurant }) => {
           <GridItem colSpan={{ md: 1 }}>
             <Box px={[4, 0]}>
               <Heading fontSize="lg" fontWeight="medium" lineHeight="6">
-                Informacion Personal
+                Informacion Restaurant
               </Heading>
             </Box>
           </GridItem>
