@@ -1,3 +1,4 @@
+import React from "react"
 import {
   Button,
   Checkbox,
@@ -13,6 +14,7 @@ import {
   Divider,
 } from "@chakra-ui/react";
 import "./editUser.css";
+
 export function EditUser() {
   return (
     <Stack className="mobile" color="black" w="70vw" direction={{ base: "column", md: "row" }}>
