@@ -17,11 +17,6 @@ import {
     InputGroup
   } from "@chakra-ui/react";
 import React from 'react';
-import { useFormik } from 'formik';
-import axios from "axios"
-import { useDispatch } from "react-redux"
-import { setUser } from "../state/userSlice"
-import { useNavigate } from "react-router";
 import useRegisterFormik from "../validators/register.validator";
 
 export const Register = () => {

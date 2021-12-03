@@ -1,5 +1,5 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import {
   chakra,
   Box,
@@ -14,23 +14,38 @@ import {
   CloseButton,
 } from "@chakra-ui/react";
 import { AiOutlineMenu } from "react-icons/ai";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { logoutUser } from "../state/userSlice";
+import { deleteRestaurant } from "../state/restaurantSlice";
 import axios from "axios";
 
 export const NavbarAdmin = () => {
   const bg = useColorModeValue("white", "gray.800");
   const mobileNav = useDisclosure();
+  const navigate = useNavigate()
+
+  const restaurant = useSelector(state => state.restaurant.restaurant)
+  const user = useSelector(state => state.user.user)
+
+  const [patiado, setPatiado] = useState({})
 
   const dispatch = useDispatch()
+
   const logout = () => {
     axios({
       method: "get",
       url: "/api/auth/logout"
     })
     .then(() => dispatch(logoutUser()))
+    .then(() => dispatch(deleteRestaurant()))
+    .then(() => navigate("/admin/login"))
     .catch(() => {})
   }
+
+  useEffect(() => {
+    console.log(restaurant)
+    setPatiado(restaurant)
+  }, [restaurant])
 
   return (
     <React.Fragment>
@@ -50,7 +65,9 @@ export const NavbarAdmin = () => {
             </chakra.a>
             <Link to="/admin/">
               <chakra.h1 fontSize="xl" fontWeight="medium" ml="2">
-                Admin
+                {console.log(restaurant)}
+                {user?.role === "superadmin" ? "SuperAdmin" : patiado.name}
+                {user?.role === "superadmin" || patiado.state ? "" : " (demo)"}
               </chakra.h1>
             </Link>
           </Flex>
