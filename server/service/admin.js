@@ -292,7 +292,6 @@ class AdminService {
                 { new: true }
             );
 
-            console.log(category);
 
             return { error: false, data: restaurant };
         } catch (error) {
