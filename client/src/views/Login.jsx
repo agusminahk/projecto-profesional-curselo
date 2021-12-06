@@ -6,43 +6,26 @@ import {
     Input,
     Checkbox,
     Stack,
-    Link,
     Button,
     Heading,
     Text,
+    Link as ChakraLink,
     useColorModeValue,
     useToast,
     FormErrorMessage
   } from "@chakra-ui/react";
-import React from 'react';
-import { useFormik } from 'formik';
+import React, { useState } from 'react';
+import { Link } from "react-router-dom";
+import useLoginFormik from "../validators/login.validator";
 
 export const Login = () => {
+    const [error, setError] = useState("")
 
-    const formik = useFormik({
-        initialValues: {
-            email: '',
-            password: ''
-        },
-        validate: values => {
-            const errors = {}
-            if (!values.email) {
-                errors.email = 'Required';
-            } else if (!/^(([^<>()\[\]\.,;:\s@\”]+(\.[^<>()\[\]\.,;:\s@\”]+)*)|(\”.+\”))@(([^<>()[\]\.,;:\s@\”]+\.)+[^<>()[\]\.,;:\s@\”]{2,})$/i.test(values.email)) {
-                errors.email = 'Invalid email address';
-            }
-            if (!values.password) {
-                errors.password = 'Required';
-            }
-            return errors
-        },
-        onSubmit: values => console.log(values)
-    })
-
+    const formik = useLoginFormik(setError)
     return <>
     <Flex minH={"100vh"} bg={useColorModeValue("gray.50", "gray.800")}>
       <Stack spacing={8} mx={"auto"} maxW={"lg"} py={6} px={6}>
-        <Stack align={"center"}>
+        <Stack align={"center"} justify="center">
           <Heading fontSize={"4xl"}>Login</Heading>
         </Stack>
         <Box rounded={"lg"} bg={useColorModeValue("white", "gray.700")} boxShadow={"lg"} p={8}>
@@ -50,23 +33,22 @@ export const Login = () => {
             <form
                 onSubmit={formik.handleSubmit}
             >
-                <FormControl id="email" isInvalid={formik.errors.email && formik.touched.email}>
+                <FormControl id="email" isInvalid={(formik.errors.email && formik.touched.email) || error} isRequired>
                     <FormLabel>Email </FormLabel>
                     <Input 
                         id="email"
                         name="email"
                         {...formik.getFieldProps("email")}
                         type="email" />
-                    <FormErrorMessage>{formik.errors.email}</FormErrorMessage>
                 </FormControl>
-                <FormControl id="password" isInvalid={formik.errors.password && formik.touched.password}>
+                <FormControl id="password" isInvalid={(formik.errors.password && formik.touched.password) || error} isRequired>
                     <FormLabel>Contraseña</FormLabel>
                     <Input 
                         id="password"
                         type="password"
                         {...formik.getFieldProps("password")}
                         />
-                    <FormErrorMessage>{formik.errors.password}</FormErrorMessage>
+                    <FormErrorMessage>{error}</FormErrorMessage>
                 </FormControl>
                 <Stack spacing={10}>
                     <br />
@@ -82,10 +64,10 @@ export const Login = () => {
                     </Button>
                 </Stack>
             </form>
+            <Box>Nuevo? <Link to="/admin/register"><ChakraLink color="teal.500">Registrate</ChakraLink></Link></Box>
           </Stack>
         </Box>
       </Stack>
     </Flex>
-    );
   </>
 }

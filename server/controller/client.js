@@ -4,9 +4,9 @@ class ClientController {
     static async search(req, res) {
         const { type, name } = req.query;
 
-        const { error, data } = await ClientService.search(type, name);
+        const { error, data } = await ClientService.search(req.params.id, type, name);
 
-        error ? res.status(data.status || 500).send({ message: data.message }) : res.json(data);
+        error ? res.status(data.status || 404).send({ message: data.message }) : res.json(data);
     }
 
     static async postOrder(req, res) {

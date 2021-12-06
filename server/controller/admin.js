@@ -6,7 +6,7 @@ class AdminController {
 
         const { error, data } = await AdminService.search(type, id);
 
-        return error ? res.status(data.status || 500).send({ message: data }) : res.json(data);
+        return error ? res.status(404).send({ message: data }) : res.json(data);
     }
 
     static async confirmPurchase(req, res) {
@@ -14,7 +14,7 @@ class AdminController {
 
         const { error, data } = await AdminService.confirmPurchase(id, table, req.body);
 
-        return error ? res.status(data.status || 500).send({ message: data }) : res.json(data);
+        return error ? res.status(400).send({ message: data }) : res.json(data);
     }
 
     static async confirmOrder(req, res) {
@@ -34,45 +34,49 @@ class AdminController {
     }
 
     static async createRestaurant(req, res) {
-        const { error, data } = await AdminService.createRestaurant(req.body, req.cookies.user);
+        const { error, data, user } = await AdminService.createRestaurant(req.body, req.cookies.user);
+        const expiresIn = 60 * 60 * 24 * 3 * 3600;
+        const options = { maxAge: expiresIn, httpOnly: true };
 
-        return error ? res.status(data.status || 500).send({ message: data }) : res.json(data);
+        user._id && res.cookie("user", user, options);
+
+        return error ? res.status(400).send({ message: data }) : res.status(201).json(data);
     }
 
     static async createProduct(req, res) {
         const { error, data } = await AdminService.createProduct(req.body);
 
-        return error ? res.status(data.status || 500).send({ message: data }) : res.json(data);
+        return error ? res.status(400).send({ message: data }) : res.status(201).json(data);
     }
 
     static async createCategory(req, res) {
         const { error, data } = await AdminService.createCategory(req.body);
 
-        return error ? res.status(data.status || 500).send({ message: data }) : res.json(data);
+        return error ? res.status(400).send({ message: data }) : res.status(201).json(data);
     }
 
     static async createSubCategory(req, res) {
         const { error, data } = await AdminService.createSubCategory(req.body);
 
-        return error ? res.status(data.status || 500).send({ message: data }) : res.json(data);
+        return error ? res.status(400).send({ message: data }) : res.status(201).json(data);
     }
 
     static async updateRestaurant(req, res) {
         const { error, data } = await AdminService.updateRestaurant(req.params.id, req.body);
 
-        return error ? res.status(data.status || 500).send({ message: data }) : res.json(data);
+        return error ? res.status(400).send({ message: data }) : res.json(data);
     }
 
     static async updateProduct(req, res) {
         const { error, data } = await AdminService.updateProduct(req.params.id, req.body);
 
-        return error ? res.status(data.status || 500).send({ message: data }) : res.json(data);
+        return error ? res.status(400).send({ message: data }) : res.json(data);
     }
 
     static async updateCategory(req, res) {
         const { error, data } = await AdminService.updateCategory(req.params.id, req.body);
 
-        return error ? res.status(data.status || 500).send({ message: data }) : res.json(data);
+        return error ? res.status(400).send({ message: data }) : res.json(data);
     }
 
     static async updateSubCategory(req, res) {
@@ -80,13 +84,13 @@ class AdminController {
 
         const { error, data } = await AdminService.updateSubCategory(id, name, req.body);
 
-        return error ? res.status(data.status || 500).send({ message: data }) : res.json(data);
+        return error ? res.status(400).send({ message: data }) : res.json(data);
     }
 
     static async updateUser(req, res) {
         const { error, data } = await AdminService.updateUser(req.params.id, req.body);
 
-        return error ? res.status(data.status || 500).send({ message: data }) : res.json(data);
+        return error ? res.status(400).send({ message: data }) : res.json(data);
     }
 
     static async uploadImage(req, res) {
@@ -104,7 +108,7 @@ class AdminController {
     static async deleteCategory(req, res) {
         const { error, data } = await AdminService.deleteCategory(req.params.id, req.cookies.user);
 
-        return error ? res.status(data.status || 500).send({ message: data }) : res.json(data);
+        return error ? res.status(data.status || 500).send({ message: data.message }) : res.json(data);
     }
 
     static async deleteSubCategory(req, res) {

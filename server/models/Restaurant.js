@@ -39,7 +39,7 @@ const RestaurantSchema = new Schema({
         },
     ],
     metrics: [{ type: Schema.Types.ObjectId, ref: "Metric" }],
-    URL: { type: String, required: true },
+    URL: { type: String },
     contact: {
         email: { type: String },
         webpage: { type: String },

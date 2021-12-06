@@ -151,7 +151,7 @@ const ActivateCard = ({ resto: { name, URL, location, _id }, restaurants, setRes
                                                     _handleActivate(_id, name);
                                                     setTimeout(() => {
                                                         window.location.reload();
-                                                    }, 1700);
+                                                    }, 1000);
                                                 }}
                                             >
                                                 Activar
@@ -187,7 +187,7 @@ const ActivateCard = ({ resto: { name, URL, location, _id }, restaurants, setRes
                                                     _handleReject(_id, name);
                                                     setTimeout(() => {
                                                         window.location.reload();
-                                                    }, 1700);
+                                                    }, 1000);
                                                 }}
                                             >
                                                 Denegar

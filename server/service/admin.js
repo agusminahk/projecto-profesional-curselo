@@ -104,7 +104,7 @@ class AdminService {
 
             const userUpdate = await User.findByIdAndUpdate(user._id, { $set: { restaurantId: resp._id } }, { new: true });
 
-            return { error: false, data: resp };
+            return { error: false, data: resp, user: userUpdate };
         } catch (error) {
             return { error: true, data: error.message };
         }
@@ -112,6 +112,7 @@ class AdminService {
 
     static async createProduct(body) {
         try {
+            console.log(body)
             const product = new Product(body);
             const resp = await product.save();
 
@@ -120,6 +121,8 @@ class AdminService {
                 { $push: { productsId: resp._id } },
                 { new: true }
             );
+
+            await Category.findByIdAndUpdate(body.restaurantId, { $push: { productId: resp._id } }, { new: true });
 
             return { error: false, data: restaurant };
         } catch (error) {
@@ -154,7 +157,6 @@ class AdminService {
         }
     }
 
-    // preguntar q vamos a updatear de cada schema y despues hacerlo
     static async updateRestaurant(id, body) {
         try {
             const resp = await Restaurant.findByIdAndUpdate(
@@ -186,7 +188,22 @@ class AdminService {
 
     static async updateProduct(id, body) {
         try {
-            const resp = await Product.findByIdAndUpdate(id, body, { new: true });
+            const resp = await Product.findByIdAndUpdate(
+                id,
+                {
+                    $set: {
+                        name: body.name,
+                        description: body.description,
+                        state: body.state,
+                        category: body.category,
+                        subcategory: body.subcategory,
+                        price: body.price,
+                        "onSale.state": body.onSale.state,
+                        "onSale.description": body.onSale.description,
+                    },
+                },
+                { new: true }
+            );
 
             return { error: false, data: resp };
         } catch (error) {
@@ -196,7 +213,7 @@ class AdminService {
 
     static async updateCategory(id, body) {
         try {
-            const resp = await Category.findByIdAndUpdate(id, body, { new: true });
+            const resp = await Category.findByIdAndUpdate(id, { $set: { name: body.name } }, { new: true });
 
             return { error: false, data: resp };
         } catch (error) {
@@ -215,7 +232,7 @@ class AdminService {
             );
 
             const products = await Product.updateMany(
-                { subcategory: name },
+                { $and: [{ category: id }, { subcategory: name }] },
                 {
                     $set: {
                         "subcategory.$[name]": body.name,
@@ -223,8 +240,6 @@ class AdminService {
                 },
                 { arrayFilters: [{ name: name }], new: true }
             );
-
-            console.log(products);
 
             return { error: false, data: resp };
         } catch (error) {
@@ -234,7 +249,19 @@ class AdminService {
 
     static async updateUser(id, body) {
         try {
-            const resp = await User.findByIdAndUpdate(id, body, { new: true });
+            const resp = await User.findByIdAndUpdate(
+                id,
+                {
+                    $set: {
+                        firstname: body.firstname,
+                        lastname: body.lastname,
+                        email: body.email,
+                        role: body.role,
+                        telephone: body.telephone,
+                    },
+                },
+                { new: true }
+            );
 
             return { error: false, data: resp };
         } catch (error) {
@@ -244,9 +271,7 @@ class AdminService {
 
     static async deleteProduct(id, user) {
         try {
-            console.log(user);
-
-            await Product.find(id, { $set: { state: true } }, { new: true });
+            await Product.deleteOne({ _id: id });
 
             const restaurant = await Restaurant.findByIdAndUpdate(
                 user.restaurantId,
@@ -258,6 +283,18 @@ class AdminService {
                 { new: true }
             );
 
+            const category = await Category.updateMany(
+                { productId: id },
+                {
+                    $pull: {
+                        productId: id,
+                    },
+                },
+                { new: true }
+            );
+
+            console.log(category);
+
             return { error: false, data: restaurant };
         } catch (error) {
             return { error: true, data: error.message };
@@ -266,13 +303,17 @@ class AdminService {
 
     static async deleteCategory(id, user) {
         try {
-            await Category.deleteOne({ _id: id });
+            const category = await Category.deleteOne({ _id: id });
+
+            if (category.deletedCount === 0) return { error: true, data: { message: "Not Found", status: 404 } };
+
+            const categoryOtros = await Category.find({ name: "Otros" });
 
             await Product.updateMany(
-                { $and: [{ restaurantId: user.restaurantId }, { category: id }] },
+                { category: id },
                 {
                     $set: {
-                        category: "Otros",
+                        category: categoryOtros[0]._id,
                         subcategory: [],
                     },
                 }
@@ -290,13 +331,13 @@ class AdminService {
 
             return { error: false, data: restaurant };
         } catch (error) {
-            return { error: true, data: error.message };
+            return { error: true, data: error };
         }
     }
 
     static async deleteSubCategory(id, name) {
         try {
-            const category = await Category.findByIdAndUpdate(id, { $pull: { subcategory: name } });
+            const category = await Category.findByIdAndUpdate(id, { $pull: { subcategory: name } }, { new: true });
 
             await Product.updateMany({ subcategory: name }, { $pull: { subcategory: name } });
 
