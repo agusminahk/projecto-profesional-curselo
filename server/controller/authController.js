@@ -6,7 +6,7 @@ class AuthController {
 
         if (!error) {
             const options = { maxAge: expiresIn, httpOnly: true };
-
+            
             if (user.email) {
                 res.cookie("session", sessionCokie, options);
                 res.cookie("user", user, options);

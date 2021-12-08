@@ -29,8 +29,10 @@ import { useFormik } from "formik";
 import validateImage from "../../hook/validateHook"
 
 export const EditRestaurant = () => {
-  //const user = useSelector((state) => state.user);
+  const restaurant = useSelector((state) => state.restaurant.restaurant);
+  console.log(restaurant)
 
+/*
   const [webpage, setWebpage] = useState("");
   const [email, setEmail] = useState("");
   const [telephone, setTelephone] = useState("");
@@ -38,11 +40,12 @@ export const EditRestaurant = () => {
   const [logo, setLogo] = useState("");
   const [banner, setBanner] = useState(""); 
   const [suscrip, setSuscrip] = useState("");
-  const [search, setSearch] = useState("");
+  const [search, setSearch] = useState("");*/
   const toast = useToast();
 
  
-  /*  useEffect (() => {
+  useEffect (() => {
+    /*
     axios
     .get(`api/admin/search?type=restaurant&id=${user.restaurantId}`)
     .then(res => res.data)
@@ -53,20 +56,20 @@ export const EditRestaurant = () => {
       setTelephone(data.contact.telephone)
       setLogo(data.logo)
       setBanner(data.banner)
-    })
-  }, [search]) */
+    })*/
+  }, [])
 
 let errors
 
   const formik = useFormik({
     initialValues: {
-      webpage: webpage,
-      email: email,
-      telephone: telephone,
-      instagram: instagram,
-      logo: logo,
-      banner: banner,
-      suscrip: suscrip,
+      webpage: restaurant?.contact?.webpage || "",
+      email: restaurant?.contact?.email || "",
+      telephone: restaurant?.contact?.instagram || "",
+      instagram: restaurant?.contact?.telephone || "",
+      logo: restaurant?.logo || "",
+      banner: restaurant?.banner || "",
+      suscrip: "",
     },
     validate:  values =>{
       const errors = {};
@@ -111,7 +114,7 @@ let errors
       w={{ base: "full", md: "78%", xl: "82%" }}
       ml={{ base: "0", md: "22%", xl: "18%" }}
     >
-      <RestaurantInfo />
+      <RestaurantInfo restaurant={restaurant}/>
       <Box visibility={{ base: "hidden", sm: "visible" }} aria-hidden="true">
         <Box py={5}>
           <Box
@@ -149,7 +152,7 @@ let errors
                 p={{ sm: 6 }}
               >
                 <SimpleGrid columns={3} spacing={6}>
-                  <FormControl as={GridItem} colSpan={[3, 2]}>
+                  <FormControl as={GridItem} colSpan={[3, 2]} isInvalid={formik.errors.webpage && formik.touched.webpage}>
                     <FormLabel
                       fontSize="sm"
                       fontWeight="md"
@@ -255,10 +258,10 @@ let errors
                     Logo
                   </FormLabel>
                   <Flex alignItems="center" mt={1}>
-                    {logo?
+                    {formik.values.logo ?
                     <Avatar
                     boxSize={12}
-                    bg={logo}
+                    bg={formik.values.logo}
                     mt={3}
                     rounded="full"
                     />
@@ -315,9 +318,9 @@ let errors
                     borderStyle="dashed"
                     rounded="md"
                   >
-                    {banner?
+                    {formik.values.banner ?
                     <>
-                    <Stack bgImage={banner}/>
+                    <Stack bgImage={formik.values.banner}/>
                     <Input
                       id="file-upload"
                       name="file-upload"

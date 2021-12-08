@@ -22,7 +22,6 @@ export const Login = () => {
     const [error, setError] = useState("")
 
     const formik = useLoginFormik(setError)
-
     return <>
     <Flex minH={"100vh"} bg={useColorModeValue("gray.50", "gray.800")}>
       <Stack spacing={8} mx={"auto"} maxW={"lg"} py={6} px={6}>

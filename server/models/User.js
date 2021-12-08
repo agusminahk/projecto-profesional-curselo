@@ -8,13 +8,12 @@ const UserSchema = new Schema({
     email: { type: String, required: true },
     role: { type: String, default: "admin" },
     restaurantId: { type: Schema.Types.ObjectId, ref: "Restaurant" },
-    telephone: { type: String, default: '' },
+    telephone: { type: String, default: "" },
 });
 
 UserSchema.set("toJSON", {
     transform: (document, returnedObject) => {
         delete returnedObject.__v;
-        // delete returnedObject.password;
     },
 });
 

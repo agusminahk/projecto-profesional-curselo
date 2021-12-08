@@ -11,21 +11,21 @@ const setImage = async (req, res, next) => {
     const multerStorage = multer.diskStorage({
         destination: `upload/${name}_${_id}`,
         filename: (req, file, cb) => {
-            cb(null, `${type || ""}_${file.originalname}`);
+            cb(null, `${type || ''}_${file.originalname}`);
         },
     });
 
     const upload = multer({
         storage: multerStorage,
-    }).single("image");
+    }).single('image');
 
     upload(req, res, (err) => {
-        if (type === "logo") {
+        if (type === 'logo') {
             Restaurant.findByIdAndUpdate(
                 id,
                 {
                     $set: {
-                        logo: { data: req.file.filename, contentType: "image/png" },
+                        logo: { data: req.file.filename, contentType: 'image/png' },
                     },
                 },
                 { new: true }
@@ -33,12 +33,12 @@ const setImage = async (req, res, next) => {
                 .then(() => next())
                 .catch((err) => console.log(err));
         }
-        if (type === "banner") {
+        if (type === 'banner') {
             Restaurant.findByIdAndUpdate(
                 id,
                 {
                     $set: {
-                        banner: { data: req.file.filename, contentType: "image/png" },
+                        banner: { data: req.file.filename, contentType: 'image/png' },
                     },
                 },
                 { new: true }
@@ -47,13 +47,12 @@ const setImage = async (req, res, next) => {
                 .catch((err) => console.log(err));
         }
 
-        if (type === "product") {
-
+        if (type === 'product') {
             Product.findOneAndUpdate(
                 { _id: key },
                 {
                     $set: {
-                        img: { data: req.file.filename, contentType: "image/png" },
+                        img: { data: req.file.filename, contentType: 'image/png' },
                     },
                 },
                 { new: true }
