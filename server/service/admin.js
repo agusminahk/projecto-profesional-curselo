@@ -198,8 +198,8 @@ class AdminService {
                         category: body.category,
                         subcategory: body.subcategory,
                         price: body.price,
-                        "onSale.state": body.onSale.state,
-                        "onSale.description": body.onSale.description,
+                        "onSale.state": body.onSale?.state,
+                        "onSale.description": body.onSale?.description,
                     },
                 },
                 { new: true }
