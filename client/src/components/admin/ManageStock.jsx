@@ -15,6 +15,7 @@ export const ManageStock = ({product}) => {
   const user = useSelector((state) => state.user);
     const [Ndata, setNData] = useState(product);
     const toast = useToast();
+    console.log(product);
 
     const handleSubmit = (id, state) => {
         axios.put(`/api/admin/product/${id}`, { state: !state }).then((res) =>{
@@ -28,40 +29,40 @@ export const ManageStock = ({product}) => {
       };
 
     return (
-        <Tr >
-                <Td display={["none", "table-cell"]}>
-                  <Image
+        <Tr>
+            <Td display={["none", "table-cell"]}>
+                <Image
                     w={10}
                     h={10}
                     fit="cover"
-                    src={`${Ndata.image}`}
+                    src={`data:image/jpeg;base64,${Buffer.from(product.img.data.data, " ").toString("base64")}`}
                     alt="logo"
-                  />
-                </Td>
-                <Td>{Ndata.name}</Td>
-                {Ndata.state ? (
-                  <>
+                />
+            </Td>
+            <Td>{Ndata.name}</Td>
+            {Ndata.state ? (
+                <>
                     <Td color="black" display={["none", "table-cell"]}>
-                      <Text> Hay Stock </Text>
+                        <Text> Hay Stock </Text>
                     </Td>
-                  </>
-                ) : (
-                  <>
+                </>
+            ) : (
+                <>
                     <Td color="black" display={["none", "table-cell"]}>
-                      <Text> Sin Stock</Text>
+                        <Text> Sin Stock</Text>
                     </Td>
-                  </>
-                )}
-                <Td>
-                  <Switch
+                </>
+            )}
+            <Td>
+                <Switch
                     onChange={() => handleSubmit(Ndata._id, Ndata.state)}
                     size="lg"
                     isChecked={Ndata.state === true || false}
-                  />
-                </Td>
-                <Td>
-                  <SeeProduct product={Ndata} />
-                </Td>
-              </Tr>
-    )
-}
+                />
+            </Td>
+            <Td>
+                <SeeProduct product={Ndata} />
+            </Td>
+        </Tr>
+    );
+};

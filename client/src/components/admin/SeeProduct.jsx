@@ -27,13 +27,13 @@ import FormData from "form-data";
 import { Buffer } from "buffer";
 
 export const SeeProduct = ({ product }) => {
+
   let prodd = product.img?.data
     ? `data:image/jpeg;base64,${Buffer.from(
         product.img.data.data,
         " "
       ).toString("base64")}`
     : "";
-  console.log(product);
 
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [name, setName] = useState("");
@@ -62,12 +62,6 @@ export const SeeProduct = ({ product }) => {
 
   const handleProductInfo = (product) => {
 
-    //new Binary(Buffer.from("70726f647563745f42697272612e6a7067", "hex")
-
-    //'upload/panchito_61aa415638f5e95efbd8fc18/product_Birra.jpg'
-
-    /*   let prodd = product.img?.data
-    ? readFileSync('upload/panchito_61aa415638f5e95efbd8fc18/product_Birra.jpg', {encoding:'utf8'}): "" */
     setActualImg(prodd);
     let cat = product.category ? product.category._id : "";
     setCategory(cat);
@@ -101,7 +95,7 @@ export const SeeProduct = ({ product }) => {
       subcategory: subcategories || null,
       price: parseInt(price),
     };
-console.log(data.values(), "IIIIIIIIIIIIIIIIIIIIIIIIIIII")
+
     axios.put(`api/admin/product/${product._id}`, obj).then(() => {
       axios
         .put(
