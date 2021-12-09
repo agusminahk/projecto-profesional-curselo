@@ -24,33 +24,17 @@ import validateImage from "../../hook/validateHook";
 import { useToast } from "@chakra-ui/react";
 import { IoMdClose } from "react-icons/io";
 import FormData from "form-data";
+import { Buffer } from "buffer";
 
 export const SeeProduct = ({ product }) => {
-let prod
-  if (product.img?.data){
-  const arrayBufferView = new Uint8Array( product.img.data.data );
-  const blob = new Blob( [ arrayBufferView ], { type: "image/jpeg" } );
-  const urlCreator = window.URL || window.webkitURL;
- prod = urlCreator.createObjectURL( blob )
-  } else {
-    prod = ""
-  }
-  
 
-  /* let prod = product.img?.data
-    ? `data:${product.img.contentType};base64, ${Buffer.from(
-        product.img.data.data
+  let prodd = product.img?.data
+    ? `data:image/jpeg;base64,${Buffer.from(
+        product.img.data.data,
+        " "
       ).toString("base64")}`
-    : ""; */
-    /* let prod = product.img?.data
-    ? `data:${product.img.contentType};base64, ${btoa(String.fromCharCode(...new Uint8Array(product.img.data.data)))}`
-    : ""; */
-/*     let prod = product.img?.data
-    ? `data:${product.img.contentType};base64,${JSON.stringify(product.img.data.data.toString("base64"))}}`
     : "";
-     */
-  /* let prod = product.img?.data ? Buffer.from(product.img.data, " ").toString('') : "" */
-  /* console.log(prod); */
+
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
@@ -58,31 +42,28 @@ let prod
   const [subcategories, setSubcategories] = useState([]);
   const [price, setPrice] = useState("");
   const [promocion, setPromocion] = useState("");
-  const [actualImg, setActualImg] = useState(prod);
+  const [actualImg, setActualImg] = useState("");
   const [image, setImage] = useState("");
   const toast = useToast();
-  /* const user = useSelector((state) => state.user); */
-  let user = { role: "admin" };
+  const user = useSelector((state) => state.user);
   const [settedCategories, setSettedCat] = useState([]);
   const [settedSubCateg, setSettedSubCat] = useState([]);
-  const [restaurantId, setRestId] = useState("61a57344c4f0675184e3e87d");
   const [preview, setPreview] = useState([]);
 
   const fileInputRef = useRef();
 
   useEffect(() => {
     axios
-      .get(`api/admin/search?type=category&id=${restaurantId}`)
+      .get(`api/admin/search?type=category&id=${user.user.restaurantId}`)
       .then((res) => {
         setSettedCat(res.data);
       });
-  }, []);
-
-   /*  console.log(product); */
+  }, [user]);
 
   const handleProductInfo = (product) => {
-    setActualImg(prod);
-    let cat = product.category ? product.category.name : "";
+
+    setActualImg(prodd);
+    let cat = product.category ? product.category._id : "";
     setCategory(cat);
     setName(product.name);
     setDescription(product.description);
@@ -108,18 +89,17 @@ let prod
     data.append("image", image);
     let obj = {
       name: name,
-      restaurantId: restaurantId,
+      restaurantId: user.user.restaurantId,
       description: description,
-      category: category,
-      subcategory: subcategories,
+      category: category || null,
+      subcategory: subcategories || null,
       price: parseInt(price),
     };
 
-    console.log(obj);
     axios.put(`api/admin/product/${product._id}`, obj).then(() => {
       axios
         .put(
-          `/api/admin/images/${restaurantId}?type=product&key=${product._id}`,
+          `/api/admin/images/${user.user.restaurantId}?type=product&key=${product._id}`,
           data,
           {
             headers: {
@@ -128,19 +108,20 @@ let prod
             },
           }
         )
-        .then(() =>
-          {toast({
+        .then(() => {
+          toast({
             title: `Producto editado correctamente`,
             status: "success",
             isClosable: true,
-          })
-          setPreview(null)}
-        );
+          });
+          setPreview(null);
+          onClose();
+        });
     });
   };
 
   const handleChange = (e, fn, img) => {
-    if (user.role !== "admin") return;
+    if (user.user.role !== "admin") return;
     if (
       typeof img === "string" &&
       e.target.files[0].type.substr(0, 5) === "image"
@@ -153,6 +134,7 @@ let prod
       setSettedSubCat(subc.subcategory);
       setSubcategories([]);
     }
+
     fn(e.target.value);
   };
 
@@ -190,7 +172,7 @@ let prod
             <FormControl onSubmit={() => handleSubmit}>
               <FormControl mt={4}>
                 <FormLabel>Imagen</FormLabel>
-                {/* {console.log("AAAAAAAAA", actualImg)} */}
+                {console.log("AAAAAAAAA", actualImg)}
                 {actualImg !== "" && (
                   <Image
                     src={actualImg}
@@ -205,7 +187,7 @@ let prod
                   float="left"
                   ml={{ base: "none", md: "15%" }}
                 />
-                {user.role === "admin" && (
+                {user.user.role === "admin" && (
                   <>
                     <Button
                       mr={{ base: "none", md: "15%" }}
@@ -243,10 +225,12 @@ let prod
             </FormControl>
             <FormControl>
               <FormLabel>Categoria</FormLabel>
-              {user.role === "admin" ? (
+              {user.user.role === "admin" ? (
                 <Select
                   placeholder={
-                    product.category?._id ? product.category.name : "Sin categoria"
+                    product.category?._id
+                      ? product.category.name
+                      : "Sin categoria"
                   }
                   onChange={(e) =>
                     handleChange(e, setCategory, setSettedSubCat)
@@ -260,10 +244,7 @@ let prod
                 </Select>
               ) : (
                 <Box>
-                  {" "}
-                  {product.category
-                    ? product.category.name
-                    : "Sin categoria"}{" "}
+                  {product.category ? product.category.name : "Sin categoria"}
                 </Box>
               )}
             </FormControl>
@@ -279,11 +260,11 @@ let prod
                     onClick={(e) => deleteCat(e)}
                   >
                     {cat}
-                    {user.role === "admin" && <IoMdClose />}
+                    {user.user.role === "admin" && <IoMdClose />}
                   </Button>
                 ))}
               </Box>
-              {user.role === "admin" && (
+              {user.user.role === "admin" && (
                 <Select
                   placeholder={
                     product.subcategory
@@ -318,7 +299,7 @@ let prod
           </ModalBody>
 
           <ModalFooter>
-            {user.role === "admin" && (
+            {user.user.role === "admin" && (
               <>
                 <Button mr={3} onClick={() => handleSubmit()}>
                   Guardar

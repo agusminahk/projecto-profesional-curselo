@@ -1,24 +1,32 @@
-import React, { useEffect, useState } from "react";
-import { Tr, Text, Td, Switch, Image } from "@chakra-ui/react";
+import React, { useState } from "react";
+import { useSelector } from "react-redux";
+import {
+  Tr,
+  Text,
+  Td,
+  Switch,
+  Image,
+} from "@chakra-ui/react";
 import axios from "axios";
 import { useToast } from "@chakra-ui/react";
 import { SeeProduct } from "../../components/admin/SeeProduct";
 
-export const ManageStock = ({ product }) => {
+export const ManageStock = ({product}) => {
+  const user = useSelector((state) => state.user);
     const [Ndata, setNData] = useState(product);
     const toast = useToast();
     console.log(product);
 
     const handleSubmit = (id, state) => {
-        axios.put(`api/admin/product/${id}`, { state: !state }).then((res) => {
-            setNData(res.data);
-            toast({
-                title: `Stock cambiado`,
-                status: "info",
-                isClosable: true,
-            });
-        });
-    };
+        axios.put(`/api/admin/product/${id}`, { state: !state }).then((res) =>{
+        setNData(res.data)
+        toast({
+            title: `Stock cambiado`,
+            status: "info",
+            isClosable: true,
+          })}
+        );
+      };
 
     return (
         <Tr>

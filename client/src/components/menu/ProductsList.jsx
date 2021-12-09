@@ -11,50 +11,64 @@ import {
   SimpleGrid,
   useColorModeValue,
   chakra,
+  Grid, GridItem,
   Image,
 } from "@chakra-ui/react";
+import {useSelector} from "react-redux"
 import { MdAddShoppingCart } from "react-icons/md";
-/* import {data as datas} from "./data.json" */
 
 export const ProductsList = ({categor, subCategor}) => {
+  const user = useSelector((state) => state.user);
   const [data, setData] = useState([])
+  const [newData, setNewData] = useState([])
+  const [searchVal, setSearchVal] = useState("")
+  
   let dataPorCategorias = {};
   let categorias;
   let newD;
 
  useEffect(()=>{
     axios
-    .get(`/api/admin/search?type=product&id=61a57344c4f0675184e3e87d`)
-    .then(res => setData(res.data))
-  }, []) 
+    .get(`/api/admin/search?type=product&id=${user.user.restaurantId}`)
+    .then(res => {setData(res.data); setNewData(res.data)})
+  }, [user]) 
 
-  if (!subCategor && !categor) {newD = data 
-  } else if (subCategor && categor) {newD = data.filter(dato => dato.subCategory.includes(subCategor))
-  } else newD = data.filter(dato => dato.category === categor)
+
+
+  const handleSearch = (value) => {
+    setSearchVal(value)
+    if(value === "" || value === " ") setNewData(data)
+    const searched = data.filter(el => el.name.toLowerCase().includes(value.toLowerCase()))
+    setNewData(searched)
+  }
+ 
+
+  if (!subCategor && !categor) {newD = newData 
+  } else if (subCategor && categor) {newD = newData.filter(dato => dato.subCategory.includes(subCategor))
+  } else newD = newData.filter(dato => dato.category === categor)
 
 if (newD.length)  {for (let dato of newD) {
     // Si existe la categoria
-    if (dataPorCategorias[dato.category]) {
+    if (dataPorCategorias[dato.category?.name]) {
       // Si existe la subCategoria
-      if (dataPorCategorias[dato.category][dato.subCategory]) {
-        dataPorCategorias[dato.category][dato.subCategory] = [
-          ...dataPorCategorias[dato.category][dato.subCategory],
+      if (dataPorCategorias[dato.category.name][dato.subcategory]) {
+        dataPorCategorias[dato.category.name][dato.subcategory] = [
+          ...dataPorCategorias[dato.category.name][dato.subcategory],
           dato,
         ];
       } else {
         // Existe la categoria pero no la sub
-        dataPorCategorias[dato.category][dato.subCategory] = [dato];
+        dataPorCategorias[dato.category.name][dato.subcategory] = [dato];
       }
     } else {
       // No existe ni la categoria ni la sub
-      dataPorCategorias[dato.category] = { [dato.subCategory]: [dato] };
+      dataPorCategorias[dato.category?.name] = { [dato.subcategory[0]]: [dato] };
     }
   } }
   
   categorias = Object.keys(dataPorCategorias);
 
-  return (
-        
+  return (   
     <>
       <Box
         w="full"
@@ -62,9 +76,8 @@ if (newD.length)  {for (let dato of newD) {
         pos="fixed"
         zIndex="2"
         backgroundColor={useColorModeValue("blue.600", "gray.900")}
-        mt="56px"
       >
-        <Input type="text" mt="10px" w="70%" placeholder="Buscar" bgColor="blue.50"/>
+        <Input type="text" mt="10px" w="70%" placeholder="Buscar" mb={2} value={searchVal} bgColor="blue.50" onChange={(e) => handleSearch(e.target.value)}/>
         <Flex
           pos="fixed"
           justify="space-between"
@@ -80,12 +93,12 @@ if (newD.length)  {for (let dato of newD) {
           ))}
         </Flex>
       </Box>
-      <Box  ml={{ base: "0", md: "22%" }} h={{base:"77vh", md:"75vh"}} mt={{base:"30vh", md:"25vh"}} position="absolute" overflowY={"scroll"} >
+      <Box  w="full" h={{base:"75vh", md:"75vh"}} mt={{base:"30vh", md:"25vh", lg:"20hv"}} position="absolute" overflowY={"scroll"} >
         <List p={4} >
           {categorias.map((categoria, i) => {
             const subCategorias = Object.keys(dataPorCategorias[categoria]);
             return (
-              <Box ml={{ base: 4, md: 8 }} mr={{ base: 4, md: 8 }}   >
+              <Box ml={{ base: 4, md: 6, lg: 8 }} mr={{ base: 4, md: 6, lg: 8 }}   >
                 <Text fontSize="3xl" id={categoria} >
                   {categoria}
                 </Text>
@@ -97,11 +110,12 @@ if (newD.length)  {for (let dato of newD) {
                         {subCategoria === "_null" ? null : subCategoria}
                       </Text>
                       <Divider />
+                      <Grid mt={2} templateColumns={{base:'repeat(1, 1fr)', md:'repeat(3, 1fr)', lg:'repeat(5, 1fr)'}} >
                       {dataPorCategorias[categoria][subCategoria].map(
                         (item, i) => (
-                          <>
+                          <GridItem colSpan={1} >
                             <Flex
-                              w={{ base: "full", md: "80%" }}
+                              w="full"
                               bg="gray.200"
                               key={i}
                               borderRadius="10px"
@@ -118,6 +132,7 @@ if (newD.length)  {for (let dato of newD) {
                                 align="center"
                                 ml="4"
                               >
+                                
                                 <chakra.span>{item.name} </chakra.span>
                                 <Text fontSize="xs">{item.description}</Text>
                                 <chakra.p> $ {item.price} </chakra.p>
@@ -134,7 +149,7 @@ if (newD.length)  {for (let dato of newD) {
                                 </Box>
                               </SimpleGrid>
 
-                              <SimpleGrid w={{ base: 100, md: "30%" }}>
+                              <SimpleGrid w={{ base: 100, md: "40%" }}>
                                 <Image
                                   src={item.image}
                                   fit="cover"
@@ -144,10 +159,12 @@ if (newD.length)  {for (let dato of newD) {
                                   }} /* onClick={handleCart} */
                                 />
                               </SimpleGrid>
+                            
                             </Flex>
-                          </>
+                          </GridItem>
                         )
                       )}
+                        </Grid>
                     </>
                   );
                 })}

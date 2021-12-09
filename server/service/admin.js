@@ -11,7 +11,7 @@ class AdminService {
     static async search(type, id) {
         try {
             const resp = await adminSearch[type](id);
-
+         
             return { error: false, data: resp };
         } catch (error) {
             return { error: true, data: error.message };
@@ -112,7 +112,6 @@ class AdminService {
 
     static async createProduct(body) {
         try {
-            console.log(body)
             const product = new Product(body);
             const resp = await product.save();
 
@@ -139,7 +138,7 @@ class AdminService {
                 body.restaurantId,
                 { $push: { categoriesId: resp._id } },
                 { new: true }
-            );
+            ).populate("categoriesId")
 
             return { error: false, data: restaurant };
         } catch (error) {
@@ -293,8 +292,6 @@ class AdminService {
                 { new: true }
             );
 
-            console.log(category);
-
             return { error: false, data: restaurant };
         } catch (error) {
             return { error: true, data: error.message };
@@ -327,7 +324,7 @@ class AdminService {
                     },
                 },
                 { new: true }
-            );
+            ).populate("categoriesId")
 
             return { error: false, data: restaurant };
         } catch (error) {

@@ -6,6 +6,7 @@ const router = require("./routes/");
 const client = require("./config/db");
 const cookieParser = require("cookie-parser");
 const admin = require("firebase-admin");
+
 require("dotenv").config();
 
 // metricas superadmin solo los altas y bajas de usuarios

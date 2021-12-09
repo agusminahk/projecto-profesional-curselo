@@ -4,6 +4,7 @@ const Restaurant = require("../models/Restaurant");
 const Product = require("../models/Product");
 
 const setImage = async (req, res, next) => {
+
     const { id } = req.params;
     const { type, key } = req.query;
 
@@ -14,7 +15,7 @@ const setImage = async (req, res, next) => {
             cb(null, `${type || ""}_${file.originalname}`);
         },
     });
-
+    
     const upload = multer({
         storage: multerStorage,
     }).single("image");
