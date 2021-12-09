@@ -1,7 +1,7 @@
 import React from "react";
 import { Box, Flex, Heading, Text, useColorModeValue } from "@chakra-ui/react";
 import { ArrowLeftIcon, ChevronLeftIcon, CheckIcon } from "@chakra-ui/icons";
-import { useSpring, a } from "react-spring";
+import { useSpring } from "react-spring";
 //components
 import { ListCarrito } from "../components/ListCarrito";
 
@@ -11,15 +11,15 @@ export const Carrito = () => {
 
   return (
     <Box h="100vh ">
-      {/* con celular */}
+
       <Flex
         bg={bg}
         h="full"
         color={color}
-        display={["flex", "none"]}
-        alignItems="center"
+        display={["flex"]}
+        alignItems={{base:"center", md:"left"}}
         flexDirection="column"
-        position="relative"
+        position="relative" 
       >
         <Box
           color={color}
@@ -27,11 +27,10 @@ export const Carrito = () => {
           h="50px"
           display="flex"
           justifyContent="space-between"
-          alignItems="center"
+          alignItems={{base:"center", md:"left"}}
           borderBottom="1px"
         >
           <a href="javascript:history.back()">
-            {" "}
             <ChevronLeftIcon w={8} h={8} />
           </a>
 
@@ -52,8 +51,6 @@ export const Carrito = () => {
           <CheckIcon ml="5px" mb="4px" />
         </Box>
       </Flex>
-
-      {/* con web */}
       <Flex display={["none", "flex"]}></Flex>
     </Box>
   );

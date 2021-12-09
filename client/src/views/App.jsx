@@ -23,6 +23,8 @@ import { StockProd } from './admin/StockProd';
 import { useSelector, useDispatch } from 'react-redux';
 import { setUser } from '../state/userSlice';
 import { setRestaurant } from '../state/restaurantSlice';
+import { ManageCategories } from '../views/admin/ManageCategories';
+import { CreateQR } from '../views/admin/CreateQR'
 import axios from 'axios';
 
 const App = () => {
@@ -120,6 +122,8 @@ const App = () => {
                 <Route exact path="/present" element={<PresentMenu />} />
                 <Route exact path="/checkout" element={<Carrito />} />
                 <Route path="/superadmin" element={<ActivateRestaurant />} />
+                <Route exact path="/admin/categories" element={ <ManageCategories /> }/>
+                <Route exact path="/admin/createQR" element={ <CreateQR /> }/>
             </Routes>
         </Box>
     );

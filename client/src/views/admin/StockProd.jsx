@@ -7,11 +7,7 @@ import {
   Box,
   Tr,
   Th,
-  Text,
-  Td,
-  Switch,
   TableCaption,
-  Image,
   InputGroup,
   InputLeftElement,
   Input,
@@ -20,32 +16,27 @@ import axios from "axios";
 import { FiSearch } from "react-icons/fi";
 import { useDisclosure } from "@chakra-ui/hooks";
 import { useSelector } from "react-redux";
-import { data } from "../../components/menu/data.json";
 import { AddProduct } from "../../components/admin/AddProduct";
-import validateImage from "../../hook/validateHook";
-import { useToast } from "@chakra-ui/react";
-import { SeeProduct } from "../../components/admin/SeeProduct";
 import { ManageStock } from "../../components/admin/ManageStock"
 
 export const StockProd = () => {
   const [Ndata, setNData] = useState([]);
   const [data, setData] = useState([]);
-  const [isActive, setIsActive] = useState([data.isActive]);
-  const toast = useToast();
+  const [searchVal, setSearchVal] = useState("")
   const user = useSelector((state) => state.user);
-  //user.restaurantId
+  //61a57344c4f0675184e3e87d
   useEffect(() => {
     axios
-      .get(`/api/admin/search?type=product&id=61a57344c4f0675184e3e87d`)
+      .get(`/api/admin/search?type=product&id=${user.user.restaurantId}`)
       .then((res) => {setData(res.data); setNData(res.data)});
-  }, []);
+  }, [user]);
   
 
   const handleSearch = (value) => {
-    if(value === "") setNData(data)
-    let newData = data.filter((prod) =>
-      prod.name.toLowerCase().includes(value.toLowerCase())
-    );
+    setSearchVal(value)
+    if(searchVal === "" || searchVal === " ") setNData(data)
+    let newData = data.filter(el => el.name.toLowerCase().includes(searchVal.toLowerCase()))
+    
     setNData(newData);
   };
 
@@ -55,6 +46,7 @@ export const StockProd = () => {
         <InputLeftElement color="gray.500" children={<FiSearch />} />
         <Input
           placeholder="Search for articles..."
+          value={searchVal}
           onChange={(e) => handleSearch(e.target.value)}
         />
       </InputGroup>
@@ -71,7 +63,7 @@ export const StockProd = () => {
           </Tr>
         </Thead>
         <Tbody fontWeight="bold">
-          {Ndata.length &&
+          {Ndata.length > 0 &&
             Ndata.map((product, i) => (
               <ManageStock product={product} key={i}/>
             ))}
@@ -89,3 +81,4 @@ export const StockProd = () => {
     </Box>
   );
 };
+

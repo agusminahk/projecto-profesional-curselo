@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import { useSelector } from "react-redux"
 import {
   Box,
   Button,
@@ -30,7 +31,7 @@ export const AddProduct = () => {
   const [subcategories, setSubcategories] = useState([]);
   const [price, setPrice] = useState("");
   const [image, setImage] = useState("");
-  const [restaurantId, setRestId] = useState("61a57344c4f0675184e3e87d");
+  const user = useSelector((state) => state.user);
   const toast = useToast();
   const [settedCategories, setSettedCat] = useState([]);
   const [settedSubCateg, setSettedSubCat] = useState([]);
@@ -40,7 +41,7 @@ const fileInputRef = useRef()
 
   useEffect(() => {
     axios
-      .get(`api/admin/search?type=category&id=${restaurantId}`)
+      .get(`/api/admin/search?type=category&id=${user.user.restaurantId}`)
       .then((res) => {
         setSettedCat(res.data);
       });
@@ -61,10 +62,10 @@ const fileInputRef = useRef()
   const handleSubmit = () => {
     const obj = {
       name: name,
-      restaurantId: restaurantId,
+      restaurantId: user.user.restaurantId,
       description: description,
-      category: category,
-      subcategory: subcategories,
+      category: category || null,
+      subcategory: subcategories || null,
       price: parseInt(price),
     };
 
@@ -74,10 +75,11 @@ const fileInputRef = useRef()
     axios
       .post(`/api/admin/product`, obj)
       .then((res) => {
+        if(preview){
         const prodId = res.data.productsId.pop();
         axios
           .put(
-            `/api/admin/images/${restaurantId}?type=product&key=${prodId}`,
+            `/api/admin/images/${user.user.restaurantId}?type=product&key=${prodId}`,
             data,
             {
               headers: {
@@ -85,7 +87,7 @@ const fileInputRef = useRef()
                 "Content-Type": "multipart/form-data",
               },
             }
-          )
+          )}})
           .then(() =>{
             toast({
               title: `Producto agregado exitosamente`,
@@ -98,8 +100,10 @@ const fileInputRef = useRef()
             setCategory("")
             setSubcategories([])
             setPrice("")
+            setTimeout(() => {
+              onClose()
+            }, 1500);
           })
-      })
       .catch((err) => err);
   };
   const handleChange = (e, fn, img) => {
@@ -128,7 +132,7 @@ const fileInputRef = useRef()
   return (
     <>
       <Box align="center" mb="20px">
-        <Button onClick={onOpen}> Agregar Producto </Button>
+        <Button label="New" icon="pi pi-plus" className="p-button-success p-mr-2" onClick={onOpen}> Agregar Producto </Button>
       </Box>
       <Modal isOpen={isOpen} onClose={onClose} size="xl">
         <ModalOverlay />
@@ -139,8 +143,7 @@ const fileInputRef = useRef()
             <FormControl>
               <FormControl mt={4}>
                 <FormLabel>Imagen</FormLabel>
-                <Image src={preview} float="left"
-                    ml={{ base: "none", md: "15%" }}/>
+                <Image src={preview} float="left"/>
                  <Button onClick={(e)=> {e.preventDefault(); fileInputRef.current.click()}} float="right"
                     ml={{ base: "none", md: "15%" }}> Agregar imagen </Button>
                 <Input

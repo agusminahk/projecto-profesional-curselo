@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useSelector } from "react-redux";
 import {
   Tr,
   Text,
@@ -11,11 +12,12 @@ import { useToast } from "@chakra-ui/react";
 import { SeeProduct } from "../../components/admin/SeeProduct";
 
 export const ManageStock = ({product}) => {
+  const user = useSelector((state) => state.user);
     const [Ndata, setNData] = useState(product);
     const toast = useToast();
 
     const handleSubmit = (id, state) => {
-        axios.put(`api/admin/product/${id}`, { state: !state }).then((res) =>{
+        axios.put(`/api/admin/product/${id}`, { state: !state }).then((res) =>{
         setNData(res.data)
         toast({
             title: `Stock cambiado`,
