@@ -14,6 +14,10 @@ const clientSearch = {
     productId: (id) => Product.findOneById(id),
     restaurant: (id) =>
         Restaurant.findOneById(id).populate("productsId categoriesId").select({ orders: 0, history: 0, state: 0, metrics: 0 }),
+    allProducts: (name, id) => {
+        console.log(name, id)
+        Product.find({ restaurantId: id }).populate("category")
+    },
 };
 
 module.exports = clientSearch;
