@@ -2,9 +2,9 @@ const multer = require("multer");
 const fs = require("fs");
 const Restaurant = require("../models/Restaurant");
 const Product = require("../models/Product");
+const sharp = require("sharp");
 
 const setImage = async (req, res, next) => {
-
     const { id } = req.params;
     const { type, key } = req.query;
 
@@ -15,13 +15,19 @@ const setImage = async (req, res, next) => {
             cb(null, `${type || ""}_${file.originalname}`);
         },
     });
-    
+
     const upload = multer({
         storage: multerStorage,
     }).single("image");
 
-    upload(req, res, (err) => {
-        const img = fs.readFileSync(req.file.path);
+    const helperImg = (filePath, fileName, size = 300) => {
+        return sharp(filePath).resize(size, size).toFile(`upload/resize-${fileName}`);
+    };
+
+    upload(req, res, async (err) => {
+        await helperImg(req.file.path, req.file.filename, 200);
+
+        const img = fs.readFileSync(`upload/resize-${req.file.filename}`);
         const encode_image = img.toString("base64");
 
         const finalImg = { contentType: req.file.mimetype, image: new Buffer(encode_image, "base64") };

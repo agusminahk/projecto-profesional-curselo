@@ -57,7 +57,7 @@ class AdminController {
 
     static async createSubCategory(req, res) {
         const { error, data } = await AdminService.createSubCategory(req.body);
-        
+
         return error ? res.status(400).send({ message: data }) : res.status(201).json(data);
     }
 
@@ -93,9 +93,9 @@ class AdminController {
         return error ? res.status(400).send({ message: data }) : res.json(data);
     }
 
-    static async uploadImage(req, res) {
+    static async uploadImage(req, res) { 
         const { filename, destination } = req.file;
-        
+
         return !filename ? res.status(500).send("Upload Error") : res.json({ filename, destination });
     }
 
