@@ -23,7 +23,7 @@ import { useDisclosure } from "@chakra-ui/hooks";
 import { IoMdClose } from "react-icons/io";
 import FormData from "form-data";
 
-export const AddProduct = () => {
+export const AddProduct = ({ setNData, setData }) => {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [name, setName] = useState("");
     const [description, setDescription] = useState("");
@@ -59,6 +59,8 @@ export const AddProduct = () => {
     }, [image]);
 
     const handleSubmit = () => {
+        let data = new FormData();
+        data.append("image", image);
 
         const obj = {
             name: name,
@@ -69,20 +71,24 @@ export const AddProduct = () => {
             price: parseInt(price),
         };
 
-        let data = new FormData();
-        data.append("image", image);
-
         axios
             .post(`/api/admin/product`, obj)
             .then((res) => {
                 if (preview) {
                     const prodId = res.data.productsId.pop();
-                    axios.put(`/api/admin/images/${user.user.restaurantId}?type=product&key=${prodId}`, data, {
-                        headers: {
-                            "Accept-Language": "en-US,en;q=0.8",
-                            "Content-Type": "multipart/form-data",
-                        },
-                    });
+                    axios
+                        .put(`/api/admin/images/${user.user.restaurantId}?type=product&key=${prodId}`, data, {
+                            headers: {
+                                "Accept-Language": "en-US,en;q=0.8",
+                                "Content-Type": "multipart/form-data",
+                            },
+                        })
+                        .then(() => {
+                            axios.get(`/api/admin/search?type=product&id=${user.user.restaurantId}`).then((res) => {
+                                setData(res.data);
+                                setNData(res.data);
+                            });
+                        });
                 }
             })
             .then(() => {
