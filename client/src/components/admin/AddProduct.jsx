@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { useSelector } from "react-redux"
+import { useSelector, useDispatch } from "react-redux";
 import {
   Box,
   Button,
@@ -22,9 +22,11 @@ import { useToast } from "@chakra-ui/react";
 import { useDisclosure } from "@chakra-ui/hooks";
 import { IoMdClose } from "react-icons/io";
 import FormData from "form-data";
+import { setProducts } from "../../state/productsSlice";
 
 export const AddProduct = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const dispatch = useDispatch();
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [category, setCategory] = useState("");
@@ -33,39 +35,30 @@ export const AddProduct = () => {
   const [image, setImage] = useState("");
   const user = useSelector((state) => state.user);
   const toast = useToast();
-  const [settedCategories, setSettedCat] = useState([]);
   const [settedSubCateg, setSettedSubCat] = useState([]);
   const [preview, setPreview] = useState([]);
-
-const fileInputRef = useRef()
-
-  useEffect(() => {
-    axios
-      .get(`/api/admin/search?type=category&id=${user.user.restaurantId}`)
-      .then((res) => {
-        setSettedCat(res.data);
-      });
-  }, []);
+  const settedCatt = useSelector((state) => state.category.category);
+  const fileInputRef = useRef();
 
   useEffect(() => {
-    if(image){
-    const reader = new FileReader()
+    if (image) {
+      const reader = new FileReader();
       reader.onloadend = () => {
-        setPreview(reader.result)
-      }
-    reader.readAsDataURL(image);
-  } else {
-    setPreview(null);
-  }
-  }, [image])
-  
+        setPreview(reader.result);
+      };
+      reader.readAsDataURL(image);
+    } else {
+      setPreview(null);
+    }
+  }, [image]);
+
   const handleSubmit = () => {
     const obj = {
       name: name,
       restaurantId: user.user.restaurantId,
       description: description,
-      category: category || null,
-      subcategory: subcategories || null,
+      category: category,
+      subcategory: subcategories,
       price: parseInt(price),
     };
 
@@ -75,46 +68,55 @@ const fileInputRef = useRef()
     axios
       .post(`/api/admin/product`, obj)
       .then((res) => {
-        if(preview){
-        const prodId = res.data.productsId.pop();
-        axios
-          .put(
-            `/api/admin/images/${user.user.restaurantId}?type=product&key=${prodId}`,
-            data,
-            {
-              headers: {
-                "Accept-Language": "en-US,en;q=0.8",
-                "Content-Type": "multipart/form-data",
-              },
-            }
-          )}})
-          .then(() =>{
-            toast({
-              title: `Producto agregado exitosamente`,
-              status: "success",
-              isClosable: true,
-            })
-            setImage("")
-            setName("")
-            setDescription("")
-            setCategory("")
-            setSubcategories([])
-            setPrice("")
-            setTimeout(() => {
-              onClose()
-            }, 1500);
-          })
+
+          const prodId = res.data.productsId.pop();
+          axios
+            .put(
+              `/api/admin/images/${user.user.restaurantId}?type=product&key=${prodId}`,
+              data,
+              {
+                headers: {
+                  "Accept-Language": "en-US,en;q=0.8",
+                  "Content-Type": "multipart/form-data",
+                },
+              }
+            )
+            .then(() => {
+              axios
+                .get(
+                  `/api/admin/search?type=product&id=${user.user.restaurantId}`
+                )
+                .then((res) => {
+                  dispatch(setProducts(res.data));
+                  toast({
+                    title: `Producto agregado exitosamente`,
+                    status: "success",
+                    isClosable: true,
+                  });
+                  setImage("");
+                  setName("");
+                  setDescription("");
+                  setCategory("");
+                  setSubcategories([]);
+                  setPrice("");
+                  onClose();
+
+                });
+            });
+        
+      })
       .catch((err) => err);
   };
   const handleChange = (e, fn, img) => {
-    if (typeof img === "string" && e.target.files[0].type.substr(0,5) === "image") {
+    if (
+      typeof img === "string" &&
+      e.target.files[0].type.substr(0, 5) === "image"
+    ) {
       validateImage(img, toast);
       return fn(e.target.files[0]);
     }
     if (typeof img === "function") {
-      const [subc] = settedCategories.filter(
-        (el) => el._id === e.target.value
-      );
+      const [subc] = settedCatt.filter((el) => el._id === e.target.value);
       setSettedSubCat(subc.subcategory);
       setSubcategories([]);
     }
@@ -132,7 +134,14 @@ const fileInputRef = useRef()
   return (
     <>
       <Box align="center" mb="20px">
-        <Button label="New" icon="pi pi-plus" className="p-button-success p-mr-2" onClick={onOpen}> Agregar Producto </Button>
+        <Button
+          label="New"
+          icon="pi pi-plus"
+          className="p-button-success p-mr-2"
+          onClick={onOpen}
+        >
+          Agregar Producto
+        </Button>
       </Box>
       <Modal isOpen={isOpen} onClose={onClose} size="xl">
         <ModalOverlay />
@@ -143,13 +152,21 @@ const fileInputRef = useRef()
             <FormControl>
               <FormControl mt={4}>
                 <FormLabel>Imagen</FormLabel>
-                <Image src={preview} float="left"/>
-                 <Button onClick={(e)=> {e.preventDefault(); fileInputRef.current.click()}} float="right"
-                    ml={{ base: "none", md: "15%" }}> Agregar imagen </Button>
+                <Image src={preview} float="left" />
+                <Button
+                  onClick={(e) => {
+                    e.preventDefault();
+                    fileInputRef.current.click();
+                  }}
+                  float="right"
+                  ml={{ base: "none", md: "15%" }}
+                >
+                  Agregar imagen
+                </Button>
                 <Input
-                style={{display: "none"}}
-                ref={fileInputRef}
-                accept="image/*"
+                  style={{ display: "none" }}
+                  ref={fileInputRef}
+                  accept="image/*"
                   name="productImage"
                   type="file"
                   id="addImage"
@@ -173,8 +190,7 @@ const fileInputRef = useRef()
                 placeholder="Select option"
                 onChange={(e) => handleChange(e, setCategory, setSettedSubCat)}
               >
-                {settedCategories.map((cat, i) => (
-                  
+                {settedCatt.map((cat, i) => (
                   <option value={cat._id} key={i}>
                     {cat.name}
                   </option>
@@ -218,7 +234,7 @@ const fileInputRef = useRef()
           </ModalBody>
 
           <ModalFooter>
-            <Button mr={3} onClick={() => handleSubmit()}>
+            <Button mr={3} bgColor="green.300" onClick={() => handleSubmit()}>
               Guardar
             </Button>
             <Button onClick={onClose}>Cerrar</Button>

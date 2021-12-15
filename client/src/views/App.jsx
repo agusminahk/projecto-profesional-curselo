@@ -24,6 +24,11 @@ import { useSelector, useDispatch } from "react-redux";
 import { setUser } from "../state/userSlice";
 import { setRestaurant } from "../state/restaurantSlice";
 import { ManageCategories } from "../views/admin/ManageCategories"
+import { setCategory } from "../state/categorySlice";
+import { setProducts } from "../state/productsSlice";
+import {ProfileSuperAdmin} from "./admin/ProfileSuperAdmin";
+import { AdminMetrics } from "./admin/AdminMetrics";
+import { SuperadminMetrics } from "./admin/SuperadminMetrics";
 import axios from "axios";
 
 const App = () => {
@@ -63,6 +68,21 @@ const App = () => {
             }).then(({ data }) => dispatch(setRestaurant(data)));
     }, [location.key]);
 
+    useEffect(() => {
+          axios({
+              method: "get",
+              url: `/api/admin/search?type=category&id=${user.restaurantId}`,
+          }).then(({ data }) =>  dispatch(setCategory(data)));
+  }, [user || location.key]);
+
+    useEffect(() => {
+        axios({
+            method: "get",
+            url:`/api/admin/search?type=product&id=${user.restaurantId}`
+        }).then((res) =>  dispatch(setProducts(res.data)));
+      }, [user || location.key]);
+
+
     return (
         <Box>
             {}
@@ -75,6 +95,7 @@ const App = () => {
                         <Route exact path="/admin/editar" element={<EditDatos />} />
                         <Route exact path="/admin/ajustes" element={<Settings />} />
                         <Route path="/admin/restaurants" element={<ActivateRestaurant />} />
+                        < Route path="/admin/perfil" element={<ProfileSuperAdmin />} />
                     </>
                 ) : user.role === "admin" ? (
                     <>
@@ -122,6 +143,9 @@ const App = () => {
                 <Route exact path="/checkout" element={<Basket />} />
                 <Route path="/superadmin" element={<ActivateRestaurant />} />
                 <Route exact path="/admin/categories" element={ <ManageCategories /> }/>
+                <Route path="/admin/metricas" element={<AdminMetrics/>} />
+                <Route path="/superadmin/metricas" element={<SuperadminMetrics/>} />
+            
             </Routes>
         </Box>
     );

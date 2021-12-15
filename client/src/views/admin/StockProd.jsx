@@ -21,21 +21,18 @@ import { ManageStock } from "../../components/admin/ManageStock"
 
 export const StockProd = () => {
   const [Ndata, setNData] = useState([]);
-  const [data, setData] = useState([]);
   const [searchVal, setSearchVal] = useState("")
   const user = useSelector((state) => state.user);
-  //61a57344c4f0675184e3e87d
-  useEffect(() => {
-    axios
-      .get(`/api/admin/search?type=product&id=${user.user.restaurantId}`)
-      .then((res) => {setData(res.data); setNData(res.data)});
-  }, [user]);
-  
+  const products = useSelector((state) => state.products.products);
+
+useEffect( () => {
+  setNData(products)
+}, [products])
 
   const handleSearch = (value) => {
     setSearchVal(value)
-    if(searchVal === "" || searchVal === " ") setNData(data)
-    let newData = data.filter(el => el.name.toLowerCase().includes(searchVal.toLowerCase()))
+    if(searchVal === "" || searchVal === " ") setNData(products)
+    let newData = products.filter(el => el.name.toLowerCase().includes(searchVal.toLowerCase()))
     
     setNData(newData);
   };
@@ -63,8 +60,7 @@ export const StockProd = () => {
           </Tr>
         </Thead>
         <Tbody fontWeight="bold">
-          {Ndata.length > 0 &&
-            Ndata.map((product, i) => (
+          {products?.map((product, i) => (
               <ManageStock product={product} key={i}/>
             ))}
         </Tbody>

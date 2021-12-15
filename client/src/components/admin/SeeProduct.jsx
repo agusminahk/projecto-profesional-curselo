@@ -18,16 +18,17 @@ import {
 } from "@chakra-ui/react";
 import axios from "axios";
 import { useDisclosure } from "@chakra-ui/hooks";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { IoTrashOutline } from "react-icons/io5";
 import validateImage from "../../hook/validateHook";
 import { useToast } from "@chakra-ui/react";
 import { IoMdClose } from "react-icons/io";
 import FormData from "form-data";
 import { Buffer } from "buffer";
+import { setProducts } from "../../state/productsSlice";
 
 export const SeeProduct = ({ product }) => {
-
+  const dispatch = useDispatch();
   let prodd = product.img?.data
     ? `data:image/jpeg;base64,${Buffer.from(
         product.img.data.data,
@@ -46,22 +47,14 @@ export const SeeProduct = ({ product }) => {
   const [image, setImage] = useState("");
   const toast = useToast();
   const user = useSelector((state) => state.user);
-  const [settedCategories, setSettedCat] = useState([]);
   const [settedSubCateg, setSettedSubCat] = useState([]);
   const [preview, setPreview] = useState([]);
+  const settedCatt = useSelector((state) => state.category);
+  const products = useSelector((state) => state.products.products);
 
   const fileInputRef = useRef();
 
-  useEffect(() => {
-    axios
-      .get(`api/admin/search?type=category&id=${user.user.restaurantId}`)
-      .then((res) => {
-        setSettedCat(res.data);
-      });
-  }, [user]);
-
   const handleProductInfo = (product) => {
-
     setActualImg(prodd);
     let cat = product.category ? product.category._id : "";
     setCategory(cat);
@@ -96,28 +89,47 @@ export const SeeProduct = ({ product }) => {
       price: parseInt(price),
     };
 
-    axios.put(`api/admin/product/${product._id}`, obj).then(() => {
-      axios
-        .put(
-          `/api/admin/images/${user.user.restaurantId}?type=product&key=${product._id}`,
-          data,
-          {
-            headers: {
-              "Accept-Language": "en-US,en;q=0.8",
-              "Content-Type": "multipart/form-data",
-            },
-          }
-        )
-        .then(() => {
-          toast({
-            title: `Producto editado correctamente`,
-            status: "success",
-            isClosable: true,
+    let newSetProd;
+
+    axios
+      .put(`api/admin/product/${product._id}`, obj)
+      .then((res) => {
+        if (preview) {
+          axios
+            .put(
+              `/api/admin/images/${user.user.restaurantId}?type=product&key=${product._id}`,
+              data,
+              {
+                headers: {
+                  "Accept-Language": "en-US,en;q=0.8",
+                  "Content-Type": "multipart/form-data",
+                },
+              }
+            )
+            /* .then((res) => {
+              let dataImg = res.data.finalImg.data;
+              console.log((newSetProd.img.data.data = dataImg));
+              //newSetProd.img.data.data = dataImg
+            }); */
+        }
+      })
+      .then(() => {
+        axios
+          .get(`/api/admin/search?type=product&id=${user.user.restaurantId}`)
+          .then((res) => {
+            console.log("RESSS", res.data)
+            //dispatch(setProducts(res.data));
+            /* const newProdList = products.filter(el => el._id !== newSetProd._id)
+          dispatch(setProducts([...newProdList, newSetProd])) */
+            toast({
+              title: `Producto editado correctamente`,
+              status: "success",
+              isClosable: true,
+            });
+            setPreview(null);
+            onClose();
           });
-          setPreview(null);
-          onClose();
-        });
-    });
+      });
   };
 
   const handleChange = (e, fn, img) => {
@@ -130,7 +142,9 @@ export const SeeProduct = ({ product }) => {
       return fn(e.target.files[0]);
     }
     if (typeof img === "function") {
-      const [subc] = settedCategories.filter((el) => el._id === e.target.value);
+      const [subc] = settedCatt.category.filter(
+        (el) => el._id === e.target.value
+      );
       setSettedSubCat(subc.subcategory);
       setSubcategories([]);
     }
@@ -149,12 +163,15 @@ export const SeeProduct = ({ product }) => {
 
   const handleDeleteProduct = () => {
     axios.delete(`api/admin/product/${product._id}`).then(() => {
-      toast({
-        title: `Producto eliminado con exito`,
-        status: "success",
-        isClosable: true,
-      });
-    });
+      const newProdList = products.filter(el => el._id !== product._id)
+      dispatch(setProducts(newProdList))
+          toast({
+            title: `Producto eliminado con exito`,
+            status: "success",
+            isClosable: true,
+          });
+          onClose();
+        });
   };
 
   return (
@@ -172,13 +189,8 @@ export const SeeProduct = ({ product }) => {
             <FormControl onSubmit={() => handleSubmit}>
               <FormControl mt={4}>
                 <FormLabel>Imagen</FormLabel>
-                {console.log("AAAAAAAAA", actualImg)}
                 {actualImg !== "" && (
-                  <Image
-                    src={actualImg}
-                    float="left"
-                    ml={{ base: "none", md: "15%" }}
-                  />
+                  <Image src={actualImg} float="left" mb="10px" />
                 )}
                 <Image
                   maxW="130px"
@@ -192,7 +204,7 @@ export const SeeProduct = ({ product }) => {
                     <Button
                       mr={{ base: "none", md: "15%" }}
                       float="right"
-                      mt="10px"
+                      mb="10px"
                       onClick={(e) => {
                         e.preventDefault();
                         fileInputRef.current.click();
@@ -236,7 +248,7 @@ export const SeeProduct = ({ product }) => {
                     handleChange(e, setCategory, setSettedSubCat)
                   }
                 >
-                  {settedCategories.map((cat, i) => (
+                  {settedCatt?.category.map((cat, i) => (
                     <option value={cat._id} key={i}>
                       {cat.name}
                     </option>

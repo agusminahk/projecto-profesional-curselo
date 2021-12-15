@@ -24,7 +24,7 @@ const setImage = async (req, res, next) => {
         const img = fs.readFileSync(req.file.path);
         const encode_image = img.toString("base64");
 
-        const finalImg = { contentType: req.file.mimetype, image: new Buffer(encode_image, "base64") };
+        const finalImg = { contentType: req.file.mimetype, image: Buffer.from(encode_image, "base64") };
 
         if (type === "logo") {
             Restaurant.findByIdAndUpdate(

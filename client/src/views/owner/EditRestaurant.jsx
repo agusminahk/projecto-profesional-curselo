@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import { useSelector, useDispatch } from "react-redux";
 import { RestaurantInfo } from "./RestaurantInfo";
 import { useToast } from "@chakra-ui/react";
+import { ManageBanner } from "../../components/admin/ManageBanner";
 import {
   chakra,
   FormHelperText,
@@ -12,54 +13,63 @@ import {
   SimpleGrid,
   GridItem,
   Heading,
-  Text, 
   Stack,
   FormControl,
   FormLabel,
+  Image,
   Input,
   InputGroup,
   InputLeftAddon,
   Avatar,
   Icon,
   Button,
-  VisuallyHidden,
 } from "@chakra-ui/react";
 import { FaUser } from "react-icons/fa";
 import { useFormik } from "formik";
-import validateImage from "../../hook/validateHook"
+import validateImage from "../../hook/validateHook";
+import FormData from "form-data";
 
 export const EditRestaurant = () => {
   const restaurant = useSelector((state) => state.restaurant.restaurant);
-  console.log(restaurant)
 
-/*
-  const [webpage, setWebpage] = useState("");
-  const [email, setEmail] = useState("");
-  const [telephone, setTelephone] = useState("");
-  const [instagram, setInstagram] = useState("");
-  const [logo, setLogo] = useState("");
-  const [banner, setBanner] = useState(""); 
-  const [suscrip, setSuscrip] = useState("");
-  const [search, setSearch] = useState("");*/
+  let logo = restaurant.logo?.data
+    ? `data:image/jpeg;base64,${Buffer.from(
+        restaurant?.logo?.data.data,
+        " "
+      ).toString("base64")}`
+    : "";
+
+  const [previewLog, setPreviewLog] = useState("");
+  const [imgLogo, setImgLogo] = useState("");
+  const [actualLogo, setActualLogo] = useState("");
+  const fileInputRef = useRef();
   const toast = useToast();
 
- 
-  useEffect (() => {
-    /*
-    axios
-    .get(`api/admin/search?type=restaurant&id=${user.restaurantId}`)
-    .then(res => res.data)
-    .then(data => {
-      setWebpage(data.contact.webpage)
-      setEmail(data.contact.email)
-      setInstagram(data.contact.instagram)
-      setTelephone(data.contact.telephone)
-      setLogo(data.logo)
-      setBanner(data.banner)
-    })*/
-  }, [])
 
-let errors
+  useEffect(() => {
+    if (imgLogo) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setPreviewLog(reader.result);
+      };
+      reader.readAsDataURL(imgLogo);
+    } else {
+      setPreviewLog(null);
+    }
+    setActualLogo("");
+  }, [imgLogo]);
+
+  useEffect(() => {
+    setActualLogo(logo);
+  }, [restaurant]);
+
+  const handleChange = (e, fn, img) => {
+    e.target.files[0].type.substr(0, 5) === "image" &&
+      validateImage(img, toast);
+    fn(e.target.files[0]);
+  };
+
+  let errors;
 
   const formik = useFormik({
     initialValues: {
@@ -67,54 +77,58 @@ let errors
       email: restaurant?.contact?.email || "",
       telephone: restaurant?.contact?.instagram || "",
       instagram: restaurant?.contact?.telephone || "",
-      logo: restaurant?.logo || "",
-      banner: restaurant?.banner || "",
       suscrip: "",
     },
-    validate:  values =>{
+    validate: (values) => {
       const errors = {};
       if (!values.email) {
         errors.email = "Required";
       } else if (
         !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)
-        ) {
-          errors.email = "Email invalido";
-        }
-        if (!values.logo) {
-          errors.logo = "Required";
-        } else if (!validateImage("file-upload")) {
-          errors.logo = "Imagen muy grande";
-        }
-        if (!values.banner) {
-          errors.banner = "Required";
-        } else if (!validateImage("fileupload")) {
-          errors.banner = "Imagen muy grande";
-        }
-        return errors;
+      ) {
+        errors.email = "Email invalido";
+      }
+      return errors;
     },
     onSubmit: (values) => {
-      /* axios
-      .put(`api/admin/restaurant/${user.restaurantId}`, values)
-      .then(()=>{
-        toast({
-        title: `Guardado`,
-        status: "success",
-        isClosable: true,
-      });
-      setSearch("change")
-      }) */
+      axios
+        .put(`api/admin/restaurant/${restaurant._id}`, values)
+        .then(() => {
+          if (previewLog) {
+            let data = new FormData();
+            data.append("image", imgLogo);
+            axios.put(
+              `/api/admin/images/${restaurant._id}?type=logo&key=${imgLogo}`,
+              data,
+              {
+                headers: {
+                  "Accept-Language": "en-US,en;q=0.8",
+                  "Content-Type": "multipart/form-data",
+                },
+              }
+            );
+          }
+        })
+        .then(() => {
+          toast({
+            title: `Guardado`,
+            status: "success",
+            isClosable: true,
+          });
+          setPreviewLog("");
+        });
     },
   });
- 
-  
+
   return (
     <Box
       bg={useColorModeValue("gray.50", "inherit")}
       p={10}
-      w={{ base: "full", md: "78%", xl: "82%" }}
-      ml={{ base: "0", md: "22%", xl: "18%" }}
+      
+      
     >
-      <RestaurantInfo restaurant={restaurant}/>
+      <RestaurantInfo restaurant={restaurant} />
+
       <Box visibility={{ base: "hidden", sm: "visible" }} aria-hidden="true">
         <Box py={5}>
           <Box
@@ -152,7 +166,11 @@ let errors
                 p={{ sm: 6 }}
               >
                 <SimpleGrid columns={3} spacing={6}>
-                  <FormControl as={GridItem} colSpan={[3, 2]} isInvalid={formik.errors.webpage && formik.touched.webpage}>
+                  <FormControl
+                    as={GridItem}
+                    colSpan={[3, 2]}
+                    isInvalid={formik.errors.webpage && formik.touched.webpage}
+                  >
                     <FormLabel
                       fontSize="sm"
                       fontWeight="md"
@@ -178,7 +196,11 @@ let errors
                       />
                     </InputGroup>
                   </FormControl>
-                  <FormControl as={GridItem} colSpan={[3, 2]} isInvalid={errors?.email}>
+                  <FormControl
+                    as={GridItem}
+                    colSpan={[3, 2]}
+                    isInvalid={errors?.email}
+                  >
                     <FormLabel
                       fontSize="sm"
                       fontWeight="md"
@@ -257,15 +279,25 @@ let errors
                   >
                     Logo
                   </FormLabel>
+
                   <Flex alignItems="center" mt={1}>
-                    {formik.values.logo ?
-                    <Avatar
-                    boxSize={12}
-                    bg={formik.values.logo}
-                    mt={3}
-                    rounded="full"
-                    />
-                    :  
+                    {actualLogo && !previewLog && (
+                      <Image
+                        boxSize={12}
+                        src={actualLogo}
+                        mt={3}
+                        rounded="full"
+                      />
+                    )}
+                    {previewLog && (
+                      <Image
+                        boxSize={12}
+                        src={previewLog}
+                        mt={3}
+                        rounded="full"
+                      />
+                    )}
+                    {!previewLog && !actualLogo && (
                       <Avatar
                         boxSize={12}
                         bg="gray.100"
@@ -279,121 +311,27 @@ let errors
                           />
                         }
                       />
-                    }
+                    )}
+                    <Button
+                      onClick={(e) => {
+                        e.preventDefault();
+                        fileInputRef.current.click();
+                      }}
+                      ml={2}
+                    >
+                      Cambiar imagen
+                    </Button>
                     <Input
-                      id="file-upload"
-                      name="file-upload"
+                      style={{ display: "none" }}
+                      ref={fileInputRef}
+                      accept="image/*"
+                      name="productImage"
                       type="file"
-                      bgColor="gray.300"
-                      ml={5}
-                      variant="outline"
-                      size="sm"
-                      fontWeight="medium"
-                      _focus={{ shadow: "none" }}
-                      onChange={() => validateImage("file-upload", toast)}
+                      id="addImage"
+                      onChange={(e) => handleChange(e, setImgLogo, "addImage")}
                     />
-                    
                   </Flex>
-                  <FormHelperText>
-                        {false ? errors.logo : null}
-                      </FormHelperText>
-                </FormControl>
-
-                <FormControl>
-                  <FormLabel
-                    fontSize="sm"
-                    fontWeight="md"
-                    color={useColorModeValue("gray.700", "gray.50")}
-                  >
-                    Foto de portada
-                  </FormLabel>
-                  <Flex
-                    mt={1}
-                    justify="center"
-                    px={6}
-                    pt={5}
-                    pb={6}
-                    borderWidth={2}
-                    borderColor={useColorModeValue("gray.300", "gray.500")}
-                    borderStyle="dashed"
-                    rounded="md"
-                  >
-                    {formik.values.banner ?
-                    <>
-                    <Stack bgImage={formik.values.banner}/>
-                    <Input
-                      id="file-upload"
-                      name="file-upload"
-                      type="file"
-                      bgColor="gray.300"
-                      ml={5}
-                      variant="outline"
-                      size="sm"
-                      fontWeight="medium"
-                      _focus={{ shadow: "none" }}
-                      onChange={() => validateImage("file-upload", toast)}
-                    />
-                    </>
-                    :
-                    (<Stack spacing={1} textAlign="center">
-                      <Icon
-                        mx="auto"
-                        boxSize={12}
-                        color="gray.500"
-                        stroke="currentColor"
-                        fill="none"
-                        viewBox="0 0 48 48"
-                        aria-hidden="true"
-                      >
-                        <path
-                          d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        />
-                      </Icon>
-                      <Flex
-                        fontSize="sm"
-                        color="gray.600"
-                        alignItems="baseline"
-                      >
-                        <chakra.label
-                          htmlFor="file-upload"
-                          cursor="pointer"
-                          rounded="md"
-                          fontSize="md"
-                          color="brand.600"
-                          pos="relative"
-                          fontWeight="bold"
-                          _hover={{
-                            textDecoration: "underline",
-                          }}
-                        >
-                          Sube un archivo
-                          <VisuallyHidden>
-                            <input
-                              id="fileupload"
-                              name="file-upload"
-                              type="file"
-                              onChange={() =>
-                              validateImage("fileupload", toast)
-                              }
-                            />
-                          </VisuallyHidden>
-                        </chakra.label>
-                        <Text pl={1}>o arrastrar y soltar</Text>
-                      </Flex>
-                      <Text
-                        fontSize="xs"
-                        color="gray.500"
-                      >
-                        PNG, JPG, GIF hasta 10MB
-                      </Text>
-                    </Stack>)}
-                  </Flex>
-                  <FormHelperText>
-                    {errors?.banner ? errors.banner : null}
-                  </FormHelperText>
+                  <FormHelperText>{false ? errors.logo : null}</FormHelperText>
                 </FormControl>
               </Stack>
               <Box
@@ -407,22 +345,21 @@ let errors
                   colorScheme="brand"
                   _focus={{ shadow: "" }}
                   fontWeight="md"
-                  bgColor="gray.300"
+                  bgColor="green.300" 
                 >
                   Guardar
                 </Button>
               </Box>
             </chakra.form>
+                      <Box
+                      
+                       bg={useColorModeValue("white", "gray.700")}
+                      >
+                        <ManageBanner />
+                      </Box>
+            
           </GridItem>
         </SimpleGrid>
-      </Box>
-      <Box visibility={{ base: "hidden", sm: "visible" }} aria-hidden="true">
-        <Box py={5}>
-          <Box
-            borderTop="solid 1px"
-            borderTopColor={useColorModeValue("gray.200", "whiteAlpha.200")}
-          ></Box>
-        </Box>
       </Box>
     </Box>
   );
