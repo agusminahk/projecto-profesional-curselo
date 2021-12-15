@@ -54,6 +54,7 @@ const RestaurantSchema = new Schema({
     },
     logo: { data: Buffer, contentType: String },
     banner: { data: Buffer, contentType: String },
+    createdDate: { type: Date, default: Date.now },
 });
 
 RestaurantSchema.pre("remove", async (next) => {

@@ -95,8 +95,8 @@ class AdminController {
 
     static async uploadImage(req, res) { 
         const { filename, destination } = req.file;
-
-        return !filename ? res.status(500).send("Upload Error") : res.json({ filename, destination });
+        console.log(res.locals.data)
+        return !filename ? res.status(500).send("Upload Error") : res.json(res.locals.data);
     }
 
     static async deleteProduct(req, res) {

@@ -9,7 +9,6 @@ export const ManageStock = ({ product }) => {
     const user = useSelector((state) => state.user);
     const [Ndata, setNData] = useState(product);
     const toast = useToast();
-    console.log(product);
 
     const handleSubmit = (id, state) => {
         axios.put(`/api/admin/product/${id}`, { state: !state }).then((res) => {
@@ -57,7 +56,7 @@ export const ManageStock = ({ product }) => {
                 />
             </Td>
             <Td>
-                <SeeProduct product={Ndata} />
+                <SeeProduct product={Ndata} setNData={setNData} />
             </Td>
         </Tr>
     );
