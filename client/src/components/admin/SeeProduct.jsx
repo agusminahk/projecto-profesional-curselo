@@ -26,7 +26,7 @@ import { IoMdClose } from "react-icons/io";
 import FormData from "form-data";
 import { Buffer } from "buffer";
 
-export const SeeProduct = ({ product }) => {
+export const SeeProduct = ({ product, setNData }) => {
     let prodd = product.img?.data ? `data:image/jpeg;base64,${Buffer.from(product.img.data.data, " ").toString("base64")}` : "";
 
     const { isOpen, onOpen, onClose } = useDisclosure();
@@ -89,14 +89,20 @@ export const SeeProduct = ({ product }) => {
 
         axios
             .put(`api/admin/product/${product._id}`, obj)
-            .then(() => {
+            .then((res) => {
                 if (preview) {
-                    axios.put(`/api/admin/images/${user.user.restaurantId}?type=product&key=${product._id}`, data, {
-                        headers: {
-                            "Accept-Language": "en-US,en;q=0.8",
-                            "Content-Type": "multipart/form-data",
-                        },
-                    });
+                    axios
+                        .put(`/api/admin/images/${user.user.restaurantId}?type=productUpdate&key=${product._id}`, data, {
+                            headers: {
+                                "Accept-Language": "en-US,en;q=0.8",
+                                "Content-Type": "multipart/form-data",
+                            },
+                        })
+                        .then((resp) => {
+                            setNData(resp.data);
+                        });
+                } else {
+                    setNData(res.data);
                 }
             })
             .then(() => {

@@ -33,7 +33,7 @@ const setImage = async (req, res, next) => {
         const finalImg = { contentType: req.file.mimetype, image: new Buffer(encode_image, "base64") };
 
         if (type === "logo") {
-            Restaurant.findByIdAndUpdate(
+            res.locals.data = await Restaurant.findByIdAndUpdate(
                 id,
                 {
                     $set: {
@@ -41,12 +41,10 @@ const setImage = async (req, res, next) => {
                     },
                 },
                 { new: true }
-            )
-                .then(() => next())
-                .catch((err) => console.log(err));
+            );
         }
         if (type === "banner") {
-            Restaurant.findByIdAndUpdate(
+            res.locals.data = await Restaurant.findByIdAndUpdate(
                 id,
                 {
                     $set: {
@@ -54,13 +52,11 @@ const setImage = async (req, res, next) => {
                     },
                 },
                 { new: true }
-            )
-                .then(() => next())
-                .catch((err) => console.log(err));
+            );
         }
 
         if (type === "product") {
-            Product.findOneAndUpdate(
+            await Product.findOneAndUpdate(
                 { _id: key },
                 {
                     $set: {
@@ -68,9 +64,20 @@ const setImage = async (req, res, next) => {
                     },
                 },
                 { new: true }
-            )
-                .then(() => next())
-                .catch((err) => console.log(err));
+            );
+            res.locals.data = await Product.find({ restaurantId: id }).populate("category", { name: 1 });
+        }
+
+        if (type === "productUpdate") {
+            res.locals.data = await Product.findOneAndUpdate(
+                { _id: key },
+                {
+                    $set: {
+                        img: { data: finalImg.image, contentType: finalImg.contentType },
+                    },
+                },
+                { new: true }
+            );
         }
 
         return next();

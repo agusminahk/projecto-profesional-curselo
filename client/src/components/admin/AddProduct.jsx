@@ -83,11 +83,9 @@ export const AddProduct = ({ setNData, setData }) => {
                                 "Content-Type": "multipart/form-data",
                             },
                         })
-                        .then(() => {
-                            axios.get(`/api/admin/search?type=product&id=${user.user.restaurantId}`).then((res) => {
-                                setData(res.data);
-                                setNData(res.data);
-                            });
+                        .then((resp) => {
+                            setData(resp.data);
+                            setNData(resp.data);
                         });
                 }
             })
