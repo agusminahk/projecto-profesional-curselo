@@ -20,7 +20,6 @@ import { Basket } from "./Basket";
 import { EditRestaurant } from "./owner/EditRestaurant";
 import { CreateRestaurant } from "./owner/CreateRestaurant";
 import { StockProd } from "./admin/StockProd";
-import { Menu } from "./Menu"
 import { useSelector, useDispatch } from "react-redux";
 import { setUser } from "../state/userSlice";
 import { setRestaurant } from "../state/restaurantSlice";
@@ -96,7 +95,7 @@ const App = () => {
                             <>
                                 <Route exact path="/admin/register" element={<Register />} />
                                 <Route exact path="/admin/login" element={<Login />} />
-                                <Route path="/admin/*" element={<Navigate to="/admin/login" />} />
+                                <Route path="*" element={<Navigate to="/admin/login" />} />
                             </>
                         )}
                     </>
@@ -110,7 +109,7 @@ const App = () => {
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />
                 <Route path="/empleados" element={<Employees />} />
-                <Route exact path="/menu/:name" element={<Menu />} />
+                <Route path="/217/cerveza-script" element={<ProductsList />} />
                 <Route exact path="/editar" element={<EditDatos />} />
                 <Route exact path="/personalizar" element={<Personalizar />} />
                 <Route exact path="/login" element={<Login />} />
