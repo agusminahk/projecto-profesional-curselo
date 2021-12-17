@@ -22,8 +22,8 @@ import { useToast } from "@chakra-ui/react";
 import { useDisclosure } from "@chakra-ui/hooks";
 import { IoMdClose } from "react-icons/io";
 import FormData from "form-data";
-
-export const AddProduct = () => {
+ 
+export const AddProduct = ({ setNData, setData }) => {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [name, setName] = useState("");
     const [description, setDescription] = useState("");
@@ -33,18 +33,11 @@ export const AddProduct = () => {
     const [image, setImage] = useState("");
     const user = useSelector((state) => state.user);
     const toast = useToast();
-    const [settedCategories, setSettedCat] = useState([]);
+    const settedCategories = useSelector((state) => state.category.category)
     const [settedSubCateg, setSettedSubCat] = useState([]);
     const [preview, setPreview] = useState([]);
 
     const fileInputRef = useRef();
-
-    useEffect(() => {
-        axios.get(`/api/admin/search?type=category&id=${user.user.restaurantId}`).then((res) => {
-            console.log(res);
-            setSettedCat(res.data);
-        });
-    }, [isOpen]);
 
     useEffect(() => {
         if (image) {
@@ -59,6 +52,8 @@ export const AddProduct = () => {
     }, [image]);
 
     const handleSubmit = () => {
+        let data = new FormData();
+        data.append("image", image);
 
         const obj = {
             name: name,
@@ -69,20 +64,22 @@ export const AddProduct = () => {
             price: parseInt(price),
         };
 
-        let data = new FormData();
-        data.append("image", image);
-
         axios
             .post(`/api/admin/product`, obj)
             .then((res) => {
                 if (preview) {
                     const prodId = res.data.productsId.pop();
-                    axios.put(`/api/admin/images/${user.user.restaurantId}?type=product&key=${prodId}`, data, {
-                        headers: {
-                            "Accept-Language": "en-US,en;q=0.8",
-                            "Content-Type": "multipart/form-data",
-                        },
-                    });
+                    axios
+                        .put(`/api/admin/images/${user.user.restaurantId}?type=product&key=${prodId}`, data, {
+                            headers: {
+                                "Accept-Language": "en-US,en;q=0.8",
+                                "Content-Type": "multipart/form-data",
+                            },
+                        })
+                        .then((resp) => {
+                            setData(resp.data);
+                            setNData(resp.data);
+                        });
                 }
             })
             .then(() => {

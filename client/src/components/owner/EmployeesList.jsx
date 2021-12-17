@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useEffect } from "react"
 import {
     Tr,
     Th,
@@ -7,8 +7,10 @@ import {
     Tbody,
   } from "@chakra-ui/react";
 import { Employee } from "./Employee";
-
+import axios from "axios";
 import { createBreakpoints } from "@chakra-ui/theme-tools"
+import { useSelector, useDispatch } from "react-redux";
+import { setUsers } from "../../state/restaurantSlice";
 
 // This is the default breakpoint
 const breakpoints = createBreakpoints({
@@ -20,43 +22,14 @@ const breakpoints = createBreakpoints({
 })
 
 export const EmployeesList = () => {
-    const employees = [
-        {
-            firstName: "Patricio",
-            lastName: "Anastacio",
-            email: "patricioanastacio01@gmail.com",
-            rol: "Cocina",
-            telephone: "+54 381 579-6366"
-        },
-        {
-            firstName: "Mateo",
-            lastName: "Moreno",
-            email: "mateo@mail.com",
-            rol: "Salon",
-            telephone: "+54 381 123-4567"
-        },
-        {
-            firstName: "Maru",
-            lastName: "Guerrero",
-            email: "maru@mail.com",
-            rol: "Caja",
-            telephone: "+54 381 795-9842"
-        },
-        {
-            firstName: "Leandro",
-            lastName: "Caiguara",
-            email: "lean@mail.com",
-            rol: "Admin",
-            telephone: "+54 381 784-6748"
-        },
-        {
-            firstName: "Agustin",
-            lastName: "Minahk",
-            email: "agus@mail.com",
-            rol: "Cocina",
-            telephone: "+54 381 266-7794"
-        },
-    ]
+    const users = useSelector((state) => state.restaurant.users);
+    const restaurant = useSelector((state) => state.restaurant.restaurant);
+    const dispatch = useDispatch()
+
+    useEffect(()=>{
+        axios.get(`/api/admin/search?type=user&id=${restaurant._id}`)
+        .then((res)=> dispatch(setUsers(res.data)))
+    }, [restaurant]);
 
     return (
         <Table variant="striped" w="100%" m="auto" mt="50px" size="sm">
@@ -70,10 +43,8 @@ export const EmployeesList = () => {
                 </Tr>
             </Thead>
             <Tbody>
-                {
-                    employees.map((employee, index) => (
-                        <Employee key={index} employee={employee}/>
-                    ))
+                {users[0] && 
+                    users?.map((employee, index) =>   <Employee key={index} employee={employee}/>)
                 }
                 <Employee employee={{}} createRow={true}/>
             </Tbody>

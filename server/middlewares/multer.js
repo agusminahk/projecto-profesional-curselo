@@ -2,9 +2,9 @@ const multer = require("multer");
 const fs = require("fs");
 const Restaurant = require("../models/Restaurant");
 const Product = require("../models/Product");
+const sharp = require("sharp");
 
 const setImage = async (req, res, next) => {
-
     const { id } = req.params;
     const { type, key } = req.query;
 
@@ -15,19 +15,25 @@ const setImage = async (req, res, next) => {
             cb(null, `${type || ""}_${file.originalname}`);
         },
     });
-    
+
     const upload = multer({
         storage: multerStorage,
     }).single("image");
 
-    upload(req, res, (err) => {
-        const img = fs.readFileSync(req.file.path);
+    const helperImg = (filePath, fileName, size = 300) => {
+        return sharp(filePath).resize(size, size).toFile(`upload/resize-${fileName}`);
+    };
+
+    upload(req, res, async (err) => {
+        await helperImg(req.file.path, req.file.filename, 200);
+
+        const img = fs.readFileSync(`upload/resize-${req.file.filename}`);
         const encode_image = img.toString("base64");
 
-        const finalImg = { contentType: req.file.mimetype, image: new Buffer(encode_image, "base64") };
+        const finalImg = { contentType: req.file.mimetype, image: Buffer.from(encode_image, "base64") };
 
         if (type === "logo") {
-            Restaurant.findByIdAndUpdate(
+            res.locals.data = await Restaurant.findByIdAndUpdate(
                 id,
                 {
                     $set: {
@@ -35,12 +41,10 @@ const setImage = async (req, res, next) => {
                     },
                 },
                 { new: true }
-            )
-                .then(() => next())
-                .catch((err) => console.log(err));
+            );
         }
         if (type === "banner") {
-            Restaurant.findByIdAndUpdate(
+            res.locals.data = await Restaurant.findByIdAndUpdate(
                 id,
                 {
                     $set: {
@@ -48,13 +52,11 @@ const setImage = async (req, res, next) => {
                     },
                 },
                 { new: true }
-            )
-                .then(() => next())
-                .catch((err) => console.log(err));
+            );
         }
 
         if (type === "product") {
-            Product.findOneAndUpdate(
+            await Product.findOneAndUpdate(
                 { _id: key },
                 {
                     $set: {
@@ -62,9 +64,20 @@ const setImage = async (req, res, next) => {
                     },
                 },
                 { new: true }
-            )
-                .then(() => next())
-                .catch((err) => console.log(err));
+            );
+            res.locals.data = await Product.find({ restaurantId: id }).populate("category", { name: 1 });
+        }
+
+        if (type === "productUpdate") {
+            res.locals.data = await Product.findOneAndUpdate(
+                { _id: key },
+                {
+                    $set: {
+                        img: { data: finalImg.image, contentType: finalImg.contentType },
+                    },
+                },
+                { new: true }
+            );
         }
 
         return next();

@@ -13,7 +13,7 @@ class AdminController {
         const { id, table } = req.query;
 
         const { error, data } = await AdminService.confirmPurchase(id, table, req.body);
-
+        
         return error ? res.status(400).send({ message: data }) : res.json(data);
     }
 
@@ -21,7 +21,7 @@ class AdminController {
         const { id, table } = req.query;
 
         const { error, data } = await AdminService.confirmOrder(id, table);
-
+        
         return error ? res.status(data.status || 500).send({ message: data }) : res.json(data);
     }
 
@@ -57,7 +57,7 @@ class AdminController {
 
     static async createSubCategory(req, res) {
         const { error, data } = await AdminService.createSubCategory(req.body);
-        
+
         return error ? res.status(400).send({ message: data }) : res.status(201).json(data);
     }
 
@@ -93,10 +93,10 @@ class AdminController {
         return error ? res.status(400).send({ message: data }) : res.json(data);
     }
 
-    static async uploadImage(req, res) {
+    static async uploadImage(req, res) { 
         const { filename, destination } = req.file;
-        
-        return !filename ? res.status(500).send("Upload Error") : res.json({ filename, destination });
+        console.log(res.locals.data)
+        return !filename ? res.status(500).send("Upload Error") : res.json(res.locals.data);
     }
 
     static async deleteProduct(req, res) {

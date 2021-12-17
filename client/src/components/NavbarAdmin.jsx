@@ -110,7 +110,7 @@ export const NavbarAdmin = () => {
                 boxShadow="dark-lg"
               >
                 <CloseButton aria-label="Close menu" onClick={mobileNav.onClose} />
-                <Link to="/perfil">
+                <Link to="/admin/perfil">
                   <Button w="full" variant="ghost" onClick={mobileNav.onClose}>
                     Perfil
                   </Button>

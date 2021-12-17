@@ -12,11 +12,9 @@ const clientSearch = {
     product: (name, restId) => Product.find({ $and: [{ restaurantId: restId }, { name: { $regex: name, $options: "i" } }] }),
     sale: (boolean, restId) => Product.find({ $and: [{ restaurantId: restId }, { onSale: { state: boolean } }] }),
     productId: (id) => Product.findOneById(id),
+    allProducts: (name, id) => Product.find({ restaurantId: id }).populate("category"),
     restaurant: (id) =>
         Restaurant.findOneById(id).populate("productsId categoriesId").select({ orders: 0, history: 0, state: 0, metrics: 0 }),
-    allProducts: async (name, id) => {
-        return Product.find({ restaurantId: id }).populate("category")
-    }
 };
 
 module.exports = clientSearch;
