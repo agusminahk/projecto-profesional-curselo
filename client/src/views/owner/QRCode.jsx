@@ -22,6 +22,7 @@ export const CodigoQr = ({ restaurantId }) => {
             })
         doc.save("CodigoQR.pdf")
     };
+    // hola
 
     const saveTables = () => {
         const doc = new jsPDF();
