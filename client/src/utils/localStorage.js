@@ -28,10 +28,8 @@ export const updateProduct = (id, cant, table, setState) => {
 
 export const addProduct = (prod, table, setState) => {
     const carrito = JSON.parse(localStorage.getItem("basket")) || { table: table, products: [], total: 0 };
-    
-    const exists = carrito.products.filter((e) => e._id === prod._id);
 
-    if (exists.length === 0) {
+    if (carrito.products.length === 0) {
         carrito.products.push({
             name: prod.name,
             units: prod.units || 1,
@@ -40,6 +38,18 @@ export const addProduct = (prod, table, setState) => {
         });
         localStorage.setItem("basket", JSON.stringify(carrito));
         setState && setState(carrito.products);
+    } else {
+        const exists = carrito.products.filter((e) => e._id === prod._id);
+        if (exists.length === 0) {
+            carrito.products.push({
+                name: prod.name,
+                units: prod.units || 1,
+                _id: prod._id,
+                priceByUnit: prod.price,
+            });
+            localStorage.setItem("basket", JSON.stringify(carrito));
+            setState && setState(carrito.products);
+        }
     }
 
     return carrito;

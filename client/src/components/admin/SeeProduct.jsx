@@ -83,7 +83,7 @@ export const SeeProduct = ({ product, setNData }) => {
         };
 
         axios
-            .put(`api/admin/product/${product._id}`, obj)
+            .put(`/api/admin/product/${product._id}`, obj)
             .then((res) => {
                 if (preview) {
                     axios
@@ -135,7 +135,7 @@ export const SeeProduct = ({ product, setNData }) => {
     };
 
     const handleDeleteProduct = () => {
-        axios.delete(`api/admin/product/${product._id}`).then(() => {
+        axios.delete(`/api/admin/product/${product._id}`).then(() => {
             toast({
                 title: `Producto eliminado con exito`,
                 status: "success",
@@ -246,16 +246,16 @@ export const SeeProduct = ({ product, setNData }) => {
                     <ModalFooter>
                         {user.user.role === "admin" && (
                             <>
-                                <Button mr={3} onClick={() => handleSubmit()}>
+                                <Button colorScheme='green' mr={3} onClick={() => handleSubmit()}>
                                     Guardar
                                 </Button>
-                                <Button mr={3} bgColor="red" onClick={() => handleDeleteProduct()}>
+                                <Button mr={3} colorScheme="red" onClick={() => handleDeleteProduct()}>
                                     Eliminar <IoTrashOutline />
                                 </Button>
                             </>
                         )}
 
-                        <Button onClick={onClose}>Cerrar</Button>
+                        <Button colorScheme='blue' onClick={onClose}>Cerrar</Button>
                     </ModalFooter>
                 </ModalContent>
             </Modal>

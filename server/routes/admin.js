@@ -7,6 +7,7 @@ adminRoutes.get("/search", AdminController.search);
 
 adminRoutes.post("/confirm/purchase", AdminController.confirmPurchase);
 adminRoutes.post("/confirm/order", AdminController.confirmOrder);
+adminRoutes.delete("/reject/order", AdminController.rejectedOrder);
 adminRoutes.post("/confirm/dailyClosing", AdminController.dailyClosing);
 
 adminRoutes.post("/restaurant", AdminController.createRestaurant);

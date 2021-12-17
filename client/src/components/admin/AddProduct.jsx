@@ -207,10 +207,10 @@ export const AddProduct = ({ setNData, setData }) => {
                     </ModalBody>
 
                     <ModalFooter>
-                        <Button mr={3} onClick={() => handleSubmit()}>
+                        <Button colorScheme="green" mr={3} onClick={() => handleSubmit()}>
                             Guardar
                         </Button>
-                        <Button onClick={onClose}>Cerrar</Button>
+                        <Button colorScheme="blue" onClick={onClose}>Cerrar</Button>
                     </ModalFooter>
                 </ModalContent>
             </Modal>

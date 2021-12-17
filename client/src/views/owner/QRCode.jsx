@@ -5,14 +5,14 @@ import React from "react";
 import ReactDOMServer from "react-dom/server";
 import jsPDF from "jspdf";
 
-export const CodigoQr = ({ restaurantId }) => {
+export const CodigoQr = ({ restaurant }) => {
     const [numberOfTables, setNumberOfTables] = useState(1);
 
     const saveGeneral = () => {
         const doc = new jsPDF();
         doc.text("Codigo qr", 15, 15);
         doc.addImage({
-            imageData: `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=http://localhost:3000/menu/${restaurantId}`,
+            imageData: `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=http://localhost:3000/menu/${restaurant}`,
             x: 15,
             y: 20,
             width: 100,
@@ -29,7 +29,7 @@ export const CodigoQr = ({ restaurantId }) => {
             let offset = table % 2 === 1 ? 0 : 120;
             doc.text(`Mesa n${table}`, 15, 15 + offset);
             doc.addImage({
-                imageData: `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=http://localhost:3000/menu/${restaurantId}/++${table}`,
+                imageData: `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=http://localhost:3000/menu/${restaurant}/${table}`,
                 x: 15,
                 y: 20 + offset,
                 width: 100,

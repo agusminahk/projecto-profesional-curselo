@@ -13,7 +13,7 @@ class AdminController {
         const { id, table } = req.query;
 
         const { error, data } = await AdminService.confirmPurchase(id, table, req.body);
-        
+
         return error ? res.status(400).send({ message: data }) : res.json(data);
     }
 
@@ -21,7 +21,15 @@ class AdminController {
         const { id, table } = req.query;
 
         const { error, data } = await AdminService.confirmOrder(id, table);
-        
+
+        return error ? res.status(data.status || 500).send({ message: data }) : res.json(data);
+    }
+
+    static async rejectedOrder(req, res) {
+        const { id, table } = req.query;
+
+        const { error, data } = await AdminService.rejectedOrder(id, table);
+        console.log(error, data);
         return error ? res.status(data.status || 500).send({ message: data }) : res.json(data);
     }
 
@@ -95,7 +103,7 @@ class AdminController {
 
     static async uploadImage(req, res) {
         const { filename, destination } = req.file;
-        console.log(res.locals.data);
+
         return !filename ? res.status(500).send("Upload Error") : res.json(res.locals.data);
     }
 

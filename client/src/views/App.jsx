@@ -104,10 +104,12 @@ const App = () => {
                                 <Route exact path="/admin/personalizar" element={<StockProd />} />
                                 <Route exact path="/admin/ajustes" element={<EditRestaurant />} />
                                 <Route exact path="/admin/empleados" element={<Employees />} />
-                                <Route exact path="/admin/codigo" element={<CodigoQr />} />
+                                <Route exact path="/admin/codigo" element={<CodigoQr restaurant={user?.restaurantId} />} />
                                 <Route exact path="/admin/categories" element={<ManageCategories />} />
                                 <Route exact path="/admin/metricas" element={<AdminMetrics />} />
                                 <Route exact path="/admin/empleados" element={<Employees />} />
+                                <Route exact path="/admin/confirm-order" element={<ConfirmOrder />} />
+                                <Route exact path="/admin/cocina" element={<Cocina />} />
                             </>
                         ) : (
                             <Route exact path="/admin/*" element={<CreateRestaurant />} />
@@ -119,7 +121,7 @@ const App = () => {
                             <>
                                 <Route exact path="/admin/register" element={<Register />} />
                                 <Route exact path="/admin/login" element={<Login />} />
-                                <Route path="*" element={<Navigate to="/admin/login" />} />
+                                {/* <Route path="*" element={<Navigate to="/admin/login" />} /> */}
                             </>
                         )}
                     </>
@@ -149,8 +151,6 @@ const App = () => {
                 <Route exact path="/menu/contact/:id/:table" element={<Contacts />} />
                 <Route exact path="/menu/checkout/:id/:table" element={<Basket />} />
                 <Route exact path="/product-stock" element={<StockProd />} />
-                <Route exact path="/confirm-order" element={<ConfirmOrder />} />
-                <Route exact path="/cocina" element={<Cocina />} />
             </Routes>
         </Box>
     );

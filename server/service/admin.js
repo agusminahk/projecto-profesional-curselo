@@ -22,20 +22,20 @@ class AdminService {
         try {
             const restaurant = await Restaurant.findById(id);
             const arr = [];
-            
+
             const order = restaurant.orders.findIndex((e) => e.table == table);
 
-            if(order !== -1) {
-            const orden = restaurant.orders[order]
+            if (order !== -1) {
+                const orden = restaurant.orders[order];
 
-            restaurant.orders.splice(order, 1);
+                restaurant.orders.splice(order, 1);
 
-            restaurant.history.push(orden);
+                restaurant.history.push(orden);
 
-            const resp = await restaurant.save();
-            return { error: false, data: resp };
+                const resp = await restaurant.save();
+                return { error: false, data: resp };
             }
-            return { error: true, data: "Not Found"}
+            return { error: true, data: "Not Found" };
         } catch (error) {
             return { error: true, data: error.message };
         }
@@ -56,6 +56,25 @@ class AdminService {
                 }
             );
 
+            return { error: false, data: resp };
+        } catch (error) {
+            return { error: true, data: error.message };
+        }
+    }
+
+    static async rejectedOrder(id, table) {
+        try {
+            const resp = await Restaurant.findByIdAndUpdate(
+                id,
+                {
+                    $pull: {
+                        orders: { table: table },
+                    },
+                },
+                {
+                    new: true,
+                }
+            );
             return { error: false, data: resp };
         } catch (error) {
             return { error: true, data: error.message };
@@ -110,11 +129,7 @@ class AdminService {
                 { new: true }
             );
 
-            await Category.findOneAndUpdate(
-                { restaurantId: body.restaurantId },
-                { $push: { productId: resp._id } },
-                { new: true }
-            );
+            await Category.findByIdAndUpdate(body.category, { $push: { productId: resp._id } }, { new: true });
 
             return { error: false, data: restaurant };
         } catch (error) {

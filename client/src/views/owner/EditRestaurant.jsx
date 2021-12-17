@@ -92,7 +92,7 @@ export const EditRestaurant = () => {
     },
     onSubmit: (values) => {
       axios
-        .put(`api/admin/restaurant/${restaurant._id}`, values)
+        .put(`/api/admin/restaurant/${restaurant._id}`, values)
         .then(() => {
           if (previewLog) {
             let data = new FormData();
