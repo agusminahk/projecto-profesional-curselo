@@ -22,7 +22,7 @@ import { useToast } from "@chakra-ui/react";
 import { useDisclosure } from "@chakra-ui/hooks";
 import { IoMdClose } from "react-icons/io";
 import FormData from "form-data";
-
+ 
 export const AddProduct = ({ setNData, setData }) => {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [name, setName] = useState("");
@@ -33,18 +33,11 @@ export const AddProduct = ({ setNData, setData }) => {
     const [image, setImage] = useState("");
     const user = useSelector((state) => state.user);
     const toast = useToast();
-    const [settedCategories, setSettedCat] = useState([]);
+    const settedCategories = useSelector((state) => state.category.category)
     const [settedSubCateg, setSettedSubCat] = useState([]);
     const [preview, setPreview] = useState([]);
 
     const fileInputRef = useRef();
-
-    useEffect(() => {
-        axios.get(`/api/admin/search?type=category&id=${user.user.restaurantId}`).then((res) => {
-            console.log(res);
-            setSettedCat(res.data);
-        });
-    }, [isOpen]);
 
     useEffect(() => {
         if (image) {

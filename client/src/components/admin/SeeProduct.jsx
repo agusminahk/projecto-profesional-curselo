@@ -18,14 +18,14 @@ import {
 } from "@chakra-ui/react";
 import axios from "axios";
 import { useDisclosure } from "@chakra-ui/hooks";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { IoTrashOutline } from "react-icons/io5";
 import validateImage from "../../hook/validateHook";
 import { useToast } from "@chakra-ui/react";
 import { IoMdClose } from "react-icons/io";
 import FormData from "form-data";
 import { Buffer } from "buffer";
-
+ 
 export const SeeProduct = ({ product, setNData }) => {
     let prodd = product.img?.data ? `data:image/jpeg;base64,${Buffer.from(product.img.data.data, " ").toString("base64")}` : "";
 
@@ -40,17 +40,12 @@ export const SeeProduct = ({ product, setNData }) => {
     const [image, setImage] = useState("");
     const toast = useToast();
     const user = useSelector((state) => state.user);
-    const [settedCategories, setSettedCat] = useState([]);
+    const settedCategories = useSelector((state) => state.category.category)
     const [settedSubCateg, setSettedSubCat] = useState([]);
     const [preview, setPreview] = useState([]);
 
     const fileInputRef = useRef();
 
-    useEffect(() => {
-        axios.get(`api/admin/search?type=category&id=${user.user.restaurantId}`).then((res) => {
-            setSettedCat(res.data);
-        });
-    }, [user]);
 
     const handleProductInfo = (product) => {
         setActualImg(prodd);
@@ -146,6 +141,7 @@ export const SeeProduct = ({ product, setNData }) => {
                 status: "success",
                 isClosable: true,
             });
+            onClose()
         });
     };
 
@@ -170,7 +166,7 @@ export const SeeProduct = ({ product, setNData }) => {
                                     <>
                                         <Button
                                             mr={{ base: "none", md: "15%" }}
-                                            float="right"
+                                            float="right" 
                                             mt="10px"
                                             onClick={(e) => {
                                                 e.preventDefault();
