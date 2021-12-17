@@ -13,33 +13,46 @@ import {
 import { ChartAdmin } from "../../components/admin/ChartAdmin";
 import { TableAdmin } from "../../components/owner/TableAdmin";
 import { PieChartAdmin } from "../../components/owner/PieChartAdmin";
-import { setMetrics } from "../../state/restaurantSlice"
 
 export const AdminMetrics = () => {
-  const dispatch = useDispatch();
   const restaurant = useSelector((state) => state.restaurant.restaurant);
-  const metrics = useSelector((state) => state.restaurant.metrics)
+  const [metrics, setMetrics] = useState("")
+  const [obj, setObj] = useState({})
+  const [fin, setFin] = useState({})
+  const date = new Date()
 
 useEffect(()=>{
 axios.get(`/api/admin/search?type=metrics&id=${restaurant._id}`)
-.then((res)=> dispatch(setMetrics(res.data)))
+.then((res)=> {
+  setMetrics(res.data)
+  setObj({})
+  const lastYearData = res.data.filter(el => {
+    let elDate = new Date(el.date)
+    return (elDate - date > -31536000000)
+  })
+  lastYearData.forEach(el=>{
+    let elD = new Date(el.date)
+    let month = elD.toString().substring(4,7)
+    return obj[month] = (obj[month] || 0) + el.dailySale
+  })
+  setFin(obj)
+})
 }, [restaurant])
 
-console.log(metrics)
 
   return (
     <Box m={3}>
       <Heading fontWeight="normal" mb={4} letterSpacing="tight">
-        Metricas de
+        {`Metricas de    `}
         <Flex display="inline-flex" fontWeight="bold">
           {restaurant.name}
         </Flex>
       </Heading>
       <Text color="gray" fontSize="sm">
-        Ganancias del dia de ayer
+        Ganancias del dia
       </Text>
       <Text fontWeight="bold" fontSize="2xl">
-        $674565
+        {metrics[0]? metrics.pop().dailySale : null}
       </Text>
       <Divider mt={3} mb={3} />
       <Grid templateColumns={{ base: "repeat(1, 1fr)", md: "repeat(2, 1fr)" }}>
@@ -51,7 +64,7 @@ console.log(metrics)
             <Text color="gray" fontSize="sm">
               Ganancias
             </Text>
-            <ChartAdmin />
+            <ChartAdmin actualData={fin}/>
           </Flex>
           <Divider display={{ md: "none" }} mt={3} mb={3} />
         </GridItem>
@@ -60,16 +73,16 @@ console.log(metrics)
             <Text fontWeight="bold" fontSize="xl">
               Productos mas vendidos de este mes
             </Text>
-            <TableAdmin />
+            <TableAdmin/>
           </Flex>
           <Divider display={{ md: "none" }} mt={3} mb={3} />
         </GridItem>
         <GridItem w="100%">
           <Flex p="10%" flexDir="column" overflow="auto" display={"flex"}>
             <Text fontWeight="bold" fontSize="xl">
-              Metodos de pago mas utilizados
+              Clientes por semana
             </Text>
-            <PieChartAdmin />
+            <PieChartAdmin metrics={metrics}/>
           </Flex>
           <Divider display={{ md: "none" }} mt={3} mb={3} />
         </GridItem>

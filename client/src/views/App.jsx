@@ -20,15 +20,17 @@ import { Basket } from "./Basket";
 import { EditRestaurant } from "./owner/EditRestaurant";
 import { CreateRestaurant } from "./owner/CreateRestaurant";
 import { StockProd } from "./admin/StockProd";
+import { Menu } from "./Menu"
 import { useSelector, useDispatch } from "react-redux";
 import { setUser } from "../state/userSlice";
 import { setRestaurant } from "../state/restaurantSlice";
 import { ManageCategories } from "../views/admin/ManageCategories"
 import { setCategory } from "../state/categorySlice";
-import { setProducts } from "../state/productsSlice";
 import {ProfileSuperAdmin} from "./admin/ProfileSuperAdmin";
 import { AdminMetrics } from "./admin/AdminMetrics";
 import { SuperadminMetrics } from "./admin/SuperadminMetrics";
+import {ConfirmOrder} from "../views/admin/ConfirmOrder"
+import {Cocina} from "../views/admin/Cocina"
 import axios from "axios";
 
 const App = () => {
@@ -75,12 +77,7 @@ const App = () => {
           }).then(({ data }) =>  dispatch(setCategory(data)));
   }, [user || location.key]);
 
-    useEffect(() => {
-        axios({
-            method: "get",
-            url:`/api/admin/search?type=product&id=${user.restaurantId}`
-        }).then((res) =>  dispatch(setProducts(res.data)));
-      }, [user || location.key]);
+
 
 
     return (
@@ -96,6 +93,7 @@ const App = () => {
                         <Route exact path="/admin/ajustes" element={<Settings />} />
                         <Route path="/admin/restaurants" element={<ActivateRestaurant />} />
                         < Route path="/admin/perfil" element={<ProfileSuperAdmin />} />
+                        <Route exact path="/admin/metricas" element={<SuperadminMetrics/>} />
                     </>
                 ) : user.role === "admin" ? (
                     <>
@@ -105,6 +103,10 @@ const App = () => {
                                 <Route exact path="/admin/personalizar" element={<Personalizar />} />
                                 <Route exact path="/admin/ajustes" element={<EditRestaurant />} />
                                 <Route exact path="/admin/empleados" element={<Employees />} />
+                                <Route exact path="/admin/categories" element={ <ManageCategories /> }/>
+                                <Route exact path="/admin/metricas" element={<AdminMetrics/>} />
+                                <Route exact path="/admin/empleados" element={<Employees />} />
+
                             </>
                         ) : (
                             <Route exact path="/admin/*" element={<CreateRestaurant />} />
@@ -116,7 +118,7 @@ const App = () => {
                             <>
                                 <Route exact path="/admin/register" element={<Register />} />
                                 <Route exact path="/admin/login" element={<Login />} />
-                                <Route path="*" element={<Navigate to="/admin/login" />} />
+                                <Route path="/admin/*" element={<Navigate to="/admin/login" />} />
                             </>
                         )}
                     </>
@@ -129,8 +131,7 @@ const App = () => {
                 <Route path="/ajustes" element={<Settings />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />
-                <Route path="/empleados" element={<Employees />} />
-                <Route path="/217/cerveza-script" element={<ProductsList />} />
+                <Route exact path="/menu/:name" element={<Menu />} />
                 <Route exact path="/editar" element={<EditDatos />} />
                 <Route exact path="/personalizar" element={<Personalizar />} />
                 <Route exact path="/login" element={<Login />} />
@@ -138,14 +139,12 @@ const App = () => {
                 <Route exact path="/register" element={<Register />} />
                 <Route exact path="/217/cereveza-script/present" element={<PresentMenu />} />
                 <Route exact path="/edit-restaurant" element={<EditRestaurant />} />
-                <Route exact path="/product-stock" element={<StockProd />} />
                 <Route exact path="/present" element={<PresentMenu />} />
                 <Route exact path="/checkout" element={<Basket />} />
                 <Route path="/superadmin" element={<ActivateRestaurant />} />
-                <Route exact path="/admin/categories" element={ <ManageCategories /> }/>
-                <Route path="/admin/metricas" element={<AdminMetrics/>} />
-                <Route path="/superadmin/metricas" element={<SuperadminMetrics/>} />
-            
+                <Route exact path="/product-stock" element={<StockProd />} />
+                <Route exact path="/confirm-order" element={<ConfirmOrder />} />
+                <Route exact path="/cocina" element={<Cocina />} />
             </Routes>
         </Box>
     );

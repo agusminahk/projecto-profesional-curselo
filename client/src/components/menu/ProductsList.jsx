@@ -14,7 +14,7 @@ import {
   Grid, GridItem,
   Image,
 } from "@chakra-ui/react";
-import {useSelector} from "react-redux"
+import { useSelector } from "react-redux"
 import { MdAddShoppingCart } from "react-icons/md";
 
 export const ProductsList = ({categor, subCategor}) => {

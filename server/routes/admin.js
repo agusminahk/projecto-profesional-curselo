@@ -3,7 +3,6 @@ const AdminController = require("../controller/admin");
 const setImage = require("../middlewares/multer");
 
 // agregar una ruta para poder pedir de nuevo el servicio q fue dado de baja
-// agreagar una ruta para poder agregar subcategorias a un producto
 adminRoutes.get("/search", AdminController.search);
 
 adminRoutes.post("/confirm/purchase", AdminController.confirmPurchase);
@@ -11,7 +10,7 @@ adminRoutes.post("/confirm/order", AdminController.confirmOrder);
 adminRoutes.post("/confirm/dailyClosing", AdminController.dailyClosing);
 
 adminRoutes.post("/restaurant", AdminController.createRestaurant);
-adminRoutes.post("/product", AdminController.createProduct);
+adminRoutes.post("/product",  AdminController.createProduct);
 adminRoutes.post("/category", AdminController.createCategory);
 adminRoutes.post("/subcategory", AdminController.createSubCategory);
 

@@ -22,30 +22,20 @@ class AdminService {
         try {
             const restaurant = await Restaurant.findById(id);
             const arr = [];
+            
+            const order = restaurant.orders.findIndex((e) => e.table == table);
 
-            const order = restaurant.orders.filter((e, i) => {
-                if (e.table === table) {
-                    e["index"] = i;
-                    return e;
-                }
-            });
+            if(order !== -1) {
+            const orden = restaurant.orders[order]
 
-            restaurant.orders.splice(order[0].index, 1);
+            restaurant.orders.splice(order, 1);
 
-            order.map((e) =>
-                arr.push({
-                    total: e.total,
-                    products: e.products,
-                    date: e.date,
-                    paymentMethod: body.paymentMethod,
-                })
-            );
-
-            restaurant.history.push(arr[0]);
+            restaurant.history.push(orden);
 
             const resp = await restaurant.save();
-
             return { error: false, data: resp };
+            }
+            return { error: true, data: "Not Found"}
         } catch (error) {
             return { error: true, data: error.message };
         }
@@ -53,7 +43,7 @@ class AdminService {
 
     static async confirmOrder(id, table) {
         try {
-            const resp = await Restaurant.findOneByIdAndUpdate(
+            const resp = await Restaurant.findByIdAndUpdate(
                 id,
                 {
                     $set: {
@@ -77,7 +67,6 @@ class AdminService {
             const restaurant = await Restaurant.findById(id);
 
             const metrics = closeDay(restaurant.history); // me falta hacer lo mismo con las tarjetas y ver si lo hago con el date
-
             restaurant.history = [];
 
             await restaurant.save();

@@ -34,7 +34,7 @@ const RestaurantSchema = new Schema({
                     units: { type: Number, required: true },
                 },
             ],
-            paymentMethod: { type: String, required: true },
+            paymentMethod: { type: String },
             date: { type: Date },
         },
     ],
@@ -54,6 +54,7 @@ const RestaurantSchema = new Schema({
     },
     logo: { data: Buffer, contentType: String },
     banner: { data: Buffer, contentType: String },
+    createdDate: { type: Date, default: Date.now },
 });
 
 RestaurantSchema.pre("remove", async (next) => {

@@ -1,35 +1,38 @@
 import React, { useState, useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import axios from "axios";
 import {
   Heading,
   Text,
   Box,
-  Divider,
-  Flex,
   Grid,
   GridItem,
 } from "@chakra-ui/react";
 import { ChartSuperadmin } from "../../components/owner/ChartSuperadmin";
-import { setMetrics } from "../../state/userSlice";
 import { PieChartSuperadmin } from "../../components/admin/PieChartSuperadmin";
 
 export const SuperadminMetrics = () => {
-  const dispatch = useDispatch();
   const user = useSelector((state) => state.user.user);
-  const metrics = useSelector((state) => state.user.metrics);
+  const [obj, setObj] = useState({})
+  const [fin, setFin] = useState({})
+  const date = new Date()
+  let actualMonth = date.toString().substring(4,7)
 
   useEffect(() => {
-    axios
-      .get(`/api/superAdmin/metrics`)
-      .then((res) => dispatch(setMetrics(res.data)));
-  }, [user]);
-
-  console.log(metrics);
-
-  /* useEffect(() => {
-    axios.get(`/api/superAdmin/clients`).then((res) => console.log(res.data));
-  }, [user]); */
+    axios.get(`/api/superAdmin/clients`).then((res) => {
+      setObj({})
+      const lastYearData = res.data.filter(el => {
+        let elDate = new Date(el.createdDate)
+        return (elDate - date > -31536000000)
+      })
+      lastYearData.forEach(el=>{
+        let elD = new Date(el.createdDate)
+        let month = elD.toString().substring(4,7)
+        return obj[month] = (obj[month] || 1) +1
+      })
+      setFin(obj)
+    });
+  }, []);
 
   return (
     <Box m={3}>
@@ -38,7 +41,7 @@ export const SuperadminMetrics = () => {
         Numero de nuevos clientes este mes
       </Text>
       <Text fontWeight="bold" fontSize="2xl">
-        800
+        {fin[actualMonth]}
       </Text>
 
       <Grid templateColumns={{ base: "repeat(1, 1fr)", md: "repeat(2, 1fr)" }}>
@@ -46,15 +49,15 @@ export const SuperadminMetrics = () => {
           <Text color="gray" fontSize={{ base: "sm", md: "xl" }} mt="10px">
             Nuevos clientes
           </Text>
-          <Box display="rigth" w="90%">
-            <ChartSuperadmin />
+          <Box  w="90%">
+            <ChartSuperadmin actualData={fin}/>
           </Box>
         </GridItem>
-        <GridItem w="100%" mt="10px">
+        <GridItem w="100%" mt="10px" align="center" >
           <Text color="gray" fontSize={{ base: "sm", md: "xl" }} mt="10px">
-            Clientes activos
+            Clientes activos e inactivos del ultimo año
           </Text>
-          <Box display="rigth" w={["100%", "100%", "60%", "60%", "40%"]}>
+          <Box  w={["100%", "100%", "60%", "60%", "40%"]}>
             <PieChartSuperadmin />
           </Box>
         </GridItem>

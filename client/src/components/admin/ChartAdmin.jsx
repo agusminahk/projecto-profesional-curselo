@@ -1,4 +1,6 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
+import axios from "axios";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -41,26 +43,38 @@ export const options = {
   },
 };
 
-const months = [
-    "Ene",
-    "Feb",
-    "Mar",
-    "Abr",
-    "May",
-    "Jun",
-    "Jul",
-    "Ago",
-    "Sep",
-    "Oct",
-    "Nov",
-    "Dic",
-];
 const date = new Date()
 const actualMonth = date.getMonth()+1
-const labels = [...months.slice(actualMonth, 12), ...months.slice(0, actualMonth)]
 
-export const data = {
-  labels,
+export const ChartAdmin = ({actualData}) => {
+const months = {
+    "Ene": actualData.Jan || 0,
+    "Feb": actualData.Feb || 0, 
+    "Mar": actualData.Mar || 0,
+    "Abr": actualData.Apr || 0,
+    "May": actualData.May || 0,
+    "Jun": actualData.Jun || 0,
+    "Jul": actualData.Jul || 0,
+    "Ago": actualData.Aug || 0,
+    "Sep": actualData.Sep || 0,
+    "Oct": actualData.Oct || 0,
+    "Nov": actualData.Nov || 0,
+    "Dic": actualData.Dec || 0,
+  };
+  const date = new Date()
+const actualMonth = date.getMonth()+1
+const bro = Object.keys(months).slice(0,actualMonth).map(key => ({[key]:months[key]}))
+const atr = Object.keys(months).slice(actualMonth, 12).map(key => ({[key]:months[key]}))
+let final = {}
+bro.forEach(el => 
+  final = {...final, ...el}
+)
+atr.forEach(el => 
+  final = {...final, ...el}
+)
+
+const data = {
+  labels: Object.keys(final) ,
   datasets: [
     {
       label: "Ganancia mensual",
@@ -80,11 +94,11 @@ export const data = {
       pointHoverBorderWidth: 2,
       pointRadius: 1,
       pointHitRadius: 10,
-      data: [500, 300, 400, 500, 800, 650, 700, 690, 1000, 1200, 1050, 1300],
+      data: Object.values(final),
     },
   ],
 };
 
-export const ChartAdmin = () => {
+
   return <Line options={options} data={data} />;
 };
