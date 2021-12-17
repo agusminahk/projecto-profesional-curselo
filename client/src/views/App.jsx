@@ -13,6 +13,8 @@ import { PresentMenu } from "./PresentMenu";
 import { Login } from "./Login";
 import { Register } from "./Register";
 import { Box } from "@chakra-ui/layout";
+import { ProtectedRoutes } from "../components/ProtectedRoutes";
+import { CodigoQr } from "./owner/QRCode";
 import { Basket } from "./Basket";
 import { EditRestaurant } from "./owner/EditRestaurant";
 import { CreateRestaurant } from "./owner/CreateRestaurant";
@@ -25,6 +27,7 @@ import { ManageCategories } from "../views/admin/ManageCategories";
 import Categories from "../components/menu/Categories";
 import Search from "../components/menu/Search";
 import Contacts from "../components/menu/Contacts";
+import { superadminAuth, adminAuth, createRestaurant, notLogged } from "../utils/authMethods";
 import axios from "axios";
 
 const App = () => {
@@ -65,10 +68,11 @@ const App = () => {
 
     return (
         <Box>
-            {}
-            {user.role ? <NavbarAdmin /> : null}
             <Routes>
-                {user.role === "superadmin" ? (
+                <Route path="/admin" element={user.role ? <NavbarAdmin /> : null} />
+            </Routes>
+            <Routes>
+                {superadminAuth(user) ? (
                     <>
                         <Route exact path="/admin/" element={<AdminHome />} />
                         <Route exact path="/admin/clientes" element={<ClientsView />} />
@@ -76,14 +80,15 @@ const App = () => {
                         <Route exact path="/admin/ajustes" element={<Settings />} />
                         <Route path="/admin/restaurants" element={<ActivateRestaurant />} />
                     </>
-                ) : user.role === "admin" ? (
+                ) : adminAuth(user) ? (
                     <>
-                        {user.restaurantId ? (
+                        {!createRestaurant(user) ? (
                             <>
                                 <Route exact path="/admin/" element={<OwnerHome />} />
                                 <Route exact path="/admin/personalizar" element={<Personalizar />} />
                                 <Route exact path="/admin/ajustes" element={<EditRestaurant />} />
                                 <Route exact path="/admin/empleados" element={<Employees />} />
+                                <Route exact path="/admin/codigo" element={<CodigoQr />} />
                             </>
                         ) : (
                             <Route exact path="/admin/*" element={<CreateRestaurant />} />
@@ -108,11 +113,6 @@ const App = () => {
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />
                 <Route path="/empleados" element={<Employees />} />
-                <Route path="/menu/:id/:table" element={<Menu />} />
-                <Route path="/menu/search/:type/:name/:id/:table" element={<Search />} />
-                <Route path="/menu/category/:id/:table" element={<Categories />} />
-                <Route exact path="/menu/contact/:id/:table" element={<Contacts />} />
-                <Route exact path="/menu/checkout/:id/:table" element={<Basket />} />
                 <Route exact path="/editar" element={<EditDatos />} />
                 <Route exact path="/personalizar" element={<Personalizar />} />
                 <Route exact path="/login" element={<Login />} />
@@ -122,8 +122,14 @@ const App = () => {
                 <Route exact path="/edit-restaurant" element={<EditRestaurant />} />
                 <Route exact path="/product-stock" element={<StockProd />} />
                 <Route exact path="/present" element={<PresentMenu />} />
+                <Route exact path="/checkout" element={<Basket />} />
                 <Route path="/superadmin" element={<ActivateRestaurant />} />
                 <Route exact path="/admin/categories" element={<ManageCategories />} />
+                <Route path="/menu/:id/:table" element={<Menu />} />
+                <Route path="/menu/search/:type/:name/:id/:table" element={<Search />} />
+                <Route path="/menu/category/:id/:table" element={<Categories />} />
+                <Route exact path="/menu/contact/:id/:table" element={<Contacts />} />
+                <Route exact path="/menu/checkout/:id/:table" element={<Basket />} />
             </Routes>
         </Box>
     );
