@@ -63,7 +63,6 @@ export const StockProd = () => {
           </Tr>
         </Thead>
         <Tbody fontWeight="bold">
-          {console.log(Ndata)}
           {Ndata.length > 0 &&
             Ndata.map((product, i) => (
               <ManageStock product={product} key={i}/>
