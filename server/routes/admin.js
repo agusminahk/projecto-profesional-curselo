@@ -2,7 +2,7 @@ const adminRoutes = require("express").Router();
 const AdminController = require("../controller/admin");
 const setImage = require("../middlewares/multer");
 
-// agregar una ruta para poder pedir de nuevo el servicio q fue dado de baja
+
 adminRoutes.get("/search", AdminController.search);
 
 adminRoutes.post("/confirm/purchase", AdminController.confirmPurchase);

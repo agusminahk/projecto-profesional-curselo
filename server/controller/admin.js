@@ -29,7 +29,7 @@ class AdminController {
         const { id, table } = req.query;
 
         const { error, data } = await AdminService.rejectedOrder(id, table);
-        console.log(error, data);
+
         return error ? res.status(data.status || 500).send({ message: data }) : res.json(data);
     }
 

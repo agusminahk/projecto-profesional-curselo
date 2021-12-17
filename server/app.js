@@ -9,8 +9,6 @@ const admin = require("firebase-admin");
 
 require("dotenv").config();
 
-// metricas superadmin solo los altas y bajas de usuarios
-
 const serviceAccount = require("./serviceAccountKey.json");
 require("./config/firebase-config");
 

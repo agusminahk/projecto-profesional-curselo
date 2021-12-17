@@ -85,7 +85,8 @@ class AdminService {
         try {
             const restaurant = await Restaurant.findById(id);
 
-            const metrics = closeDay(restaurant.history); // me falta hacer lo mismo con las tarjetas y ver si lo hago con el date
+            const metrics = closeDay(restaurant.history); 
+
             restaurant.history = [];
 
             await restaurant.save();
@@ -238,7 +239,7 @@ class AdminService {
                 { arrayFilters: [{ name: name }], new: true }
             );
 
-            const products = await Product.updateMany(
+            await Product.updateMany(
                 { $and: [{ category: id }, { subcategory: name }] },
                 {
                     $set: {
@@ -290,7 +291,7 @@ class AdminService {
                 { new: true }
             );
 
-            const category = await Category.updateMany(
+            await Category.updateMany(
                 { productId: id },
                 {
                     $pull: {
