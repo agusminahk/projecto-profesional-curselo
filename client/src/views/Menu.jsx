@@ -46,13 +46,6 @@ export const Menu = () => {
         setProductsByCategory(tempProducts)
     }, [products])
 
-    
-    useEffect(() => {
-        
-    }, [])
-
-    useEffect(() => console.log("ASHE", products), [products])
-
 
     return (
         <>
