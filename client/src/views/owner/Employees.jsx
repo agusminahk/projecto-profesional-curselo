@@ -1,6 +1,5 @@
 import React from "react"
 import { EmployeesList } from "../../components/owner/EmployeesList"
-import { Text } from "@chakra-ui/layout"
 
 export const Employees = () => {
     return (

@@ -1,93 +1,56 @@
-import React from "react"
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import { useSelector } from "react-redux";
 import {
     Table,
-    TableCaption,
     Tr,
     Th,
     Thead,
-    Image,
-    Tbody
+    Tbody,
+    InputGroup, 
+    InputLeftElement,
+    Input,
   } from "@chakra-ui/react";
-import { Client } from "../../components/admin/Client"
+  import {AiOutlineSearch} from "react-icons/ai";
+import { Client } from "../../components/admin/Client";
 
 export const ClientsView = () => {
-    const clients = [
-        {
-            name: "Nombre bastante largo",
-            status: "active",
-            country: "Argentina",
-            provincia: "Tucuman",
-            email: "example@mail.com",
-            phone: "+54 381 579-6366",
-            direction: "Santafe 1980",
-            postalCode: "400"
-        },
-        {
-            name: "etcetcetc",
-            status: "active",
-            country: "Argentina",
-            provincia: "Tucuman",
-            email: "example@mail.com",
-            phone: "+54 381 579-6366",
-            direction: "Santafe 1980",
-            postalCode: "400"
-        },
-        {
-            name: "otr nombre",
-            status: "active",
-            country: "Argentina",
-            provincia: "Tucuman",
-            email: "example@mail.com",
-            phone: "+54 381 579-6366",
-            direction: "Santafe 1980",
-            postalCode: "400"
-        },
-        {
-            name: "burguer king",
-            status: "inactive",
-            country: "Argentina",
-            provincia: "Tucuman",
-            email: "example@mail.com",
-            phone: "+54 381 579-6366",
-            direction: "Santafe 1980",
-            postalCode: "400"
-        },
-        {
-            name: "taco bells",
-            status: "active",
-            country: "Argentina",
-            provincia: "Tucuman",
-            email: "example@mail.com",
-            phone: "+54 381 579-6366",
-            direction: "Santafe 1980",
-            postalCode: "400"
-        },
-        {
-            name: "KFC",
-            status: "inactive",
-            country: "Argentina",
-            provincia: "Tucuman",
-            email: "example@mail.com",
-            phone: "+54 381 579-6366",
-            direction: "Santafe 1980",
-            postalCode: "400"
-        },
-    ]
+    const user = useSelector((state) => state.user.user)
+    const [clients, setClients] = useState([])
+    const [searchVal, setSearchVal] = useState("")
+    const [newData, setNewData] = useState([])
 
+    useEffect(()=>{
+        axios.get(`/api/superAdmin/clients`).then((res)=> {setClients(res.data); setNewData(res.data)})
+    }, [user])
+
+    const handleSearch = (value) => {
+    setSearchVal(value)
+    if(value === "" || value === " ") setNewData(clients)
+    const searched = clients.filter(el => el.name.toLowerCase().includes(value.toLowerCase()))
+    setNewData(searched)
+    }
     return (<>
+     <InputGroup alignItems={"center"} w="full" m={4}>
+              <InputLeftElement
+                pointerEvents="none"
+                children={<AiOutlineSearch />}
+              />
+              <Input type="text" placeholder="Search..." w={{base: "90%", md:"60%"}} onChange={(e)=> handleSearch(e.target.value)}/>
+            </InputGroup>
         <Table>
             <Thead>
                 <Tr>
                     <Th>Image</Th>
                     <Th>Name</Th>
-                    <Th>Pais</Th>
+                    <Th display={["none", "table-cell", "table-cell"]}>Pais</Th>
                     <Th display={["none", "none", "table-cell"]}>Status</Th>
                 </Tr>
             </Thead>
             <Tbody>
                 {
-                    clients.map((client, index) => (
-                        <Client key={index} client={client}/>
+                    newData?.map((client, index) => (
+                        <Client key={index} client={client} setClients={setClients} clients={clients}/>
                     ))
                 }
             </Tbody>

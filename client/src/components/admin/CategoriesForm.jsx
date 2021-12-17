@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
 import { EditIcon, DeleteIcon, CheckIcon } from "@chakra-ui/icons";
 import {
@@ -13,17 +14,21 @@ import {
   ModalOverlay,
   ModalContent,
   ModalBody,
+  ModalHeader,
   ModalFooter,
   ModalCloseButton,
   IconButton,
 } from "@chakra-ui/react";
 import { useToast } from "@chakra-ui/react";
+import { setCategory } from "../../state/categorySlice";
 
 export const CategoriesForm = ({ title, id }) => {
   const toast = useToast();
+  const dispatch = useDispatch();
   const [editSub, setEditSub] = useState(title);
   const [editing, setEditing] = useState(false);
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const settedCatt = useSelector((state) => state.category);
 
   const submitSubcat = (str) => {
     axios({
@@ -32,7 +37,13 @@ export const CategoriesForm = ({ title, id }) => {
       data: {
         name: editSub,
       },
-    }).then(() => {
+    }).then((res) => {
+      if (str === "delete") {
+        let newCat = settedCatt.category.filter(
+          (el) => el._id !== res.data._id
+        );
+        dispatch(setCategory([...newCat, res.data]));
+      }
       toast({
         title: `${
           str === "delete"
@@ -77,10 +88,11 @@ export const CategoriesForm = ({ title, id }) => {
         <Box align="right" alignSelf="right">
           <IconButton
             m={1}
-            colorScheme="teal"
             w={{ base: "15px", md: "25px" }}
             h={{ base: "38px", md: "30px" }}
             icon={editing ? <CheckIcon /> : <EditIcon />}
+            color="white"
+            bgColor={editing ? "green.300" : "teal" }
             editing={editing}
             value={title}
             onClick={(e) => (editing ? submitSubcat("put") : setEditing(true))}
@@ -97,6 +109,7 @@ export const CategoriesForm = ({ title, id }) => {
           <Modal isOpen={isOpen} onClose={onClose}>
             <ModalOverlay />
             <ModalContent>
+            <ModalHeader></ModalHeader>
               <ModalBody>Seguro desea borrar esta subcategoria?</ModalBody>
               <ModalCloseButton />
               <ModalFooter>

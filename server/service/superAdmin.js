@@ -1,5 +1,5 @@
 const Restaurant = require("../models/Restaurant");
-const MetricsSA = require("../models/MetricsSA");
+const MetricsSA = require("../models/MetricSA");
 
 class SuperAdminService {
     static async enableClient(id) {

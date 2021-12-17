@@ -7,6 +7,9 @@ import { store } from './state/store';
 
 import App from './views/App.jsx';
 
+
+
+
 ReactDOM.render(
     <Provider store={store}>
         <BrowserRouter>
@@ -17,3 +20,4 @@ ReactDOM.render(
     </Provider>,
     document.getElementById('root')
 );
+

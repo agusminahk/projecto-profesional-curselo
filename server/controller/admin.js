@@ -13,7 +13,7 @@ class AdminController {
         const { id, table } = req.query;
 
         const { error, data } = await AdminService.confirmPurchase(id, table, req.body);
-
+        
         return error ? res.status(400).send({ message: data }) : res.json(data);
     }
 
@@ -21,7 +21,7 @@ class AdminController {
         const { id, table } = req.query;
 
         const { error, data } = await AdminService.confirmOrder(id, table);
-
+        
         return error ? res.status(data.status || 500).send({ message: data }) : res.json(data);
     }
 
