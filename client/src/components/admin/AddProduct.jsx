@@ -70,7 +70,7 @@ export const AddProduct = ({ setNData, setData }) => {
             subcategory: subcategories,
             price: parseInt(price),
         };
-
+        console.log(user);
         axios
             .post(`/api/admin/product`, obj)
             .then((res) => {
