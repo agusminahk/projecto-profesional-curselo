@@ -5,11 +5,7 @@ class ClientService {
     static async search(id, type, name) {
         try {
             const resp = await clientSearch[type](name, id);
-<<<<<<< HEAD
             
-=======
-
->>>>>>> b9a53755f3ec81cfa6d03b570bdfb03cc9147928
             return { error: false, data: resp };
         } catch (error) {
             return { error: true, data: error.message };
