@@ -93,9 +93,9 @@ class AdminController {
         return error ? res.status(400).send({ message: data }) : res.json(data);
     }
 
-    static async uploadImage(req, res) { 
+    static async uploadImage(req, res) {
         const { filename, destination } = req.file;
-        console.log(res.locals.data)
+        console.log(res.locals.data);
         return !filename ? res.status(500).send("Upload Error") : res.json(res.locals.data);
     }
 
