@@ -5,7 +5,7 @@ class ClientService {
     static async search(id, type, name) {
         try {
             const resp = await clientSearch[type](name, id);
-
+            
             return { error: false, data: resp };
         } catch (error) {
             return { error: true, data: error.message };

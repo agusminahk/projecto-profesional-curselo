@@ -53,7 +53,7 @@ class AdminService {
 
     static async confirmOrder(id, table) {
         try {
-            const resp = await Restaurant.findOneByIdAndUpdate(
+            const resp = await Restaurant.findByIdAndUpdate(
                 id,
                 {
                     $set: {
@@ -112,7 +112,6 @@ class AdminService {
 
     static async createProduct(body) {
         try {
-            console.log(body)
             const product = new Product(body);
             const resp = await product.save();
 
@@ -122,7 +121,11 @@ class AdminService {
                 { new: true }
             );
 
-            await Category.findByIdAndUpdate(body.restaurantId, { $push: { productId: resp._id } }, { new: true });
+            await Category.findOneAndUpdate(
+                { restaurantId: body.restaurantId },
+                { $push: { productId: resp._id } },
+                { new: true }
+            );
 
             return { error: false, data: restaurant };
         } catch (error) {
@@ -139,7 +142,7 @@ class AdminService {
                 body.restaurantId,
                 { $push: { categoriesId: resp._id } },
                 { new: true }
-            );
+            ).populate("categoriesId");
 
             return { error: false, data: restaurant };
         } catch (error) {
@@ -293,8 +296,6 @@ class AdminService {
                 { new: true }
             );
 
-            console.log(category);
-
             return { error: false, data: restaurant };
         } catch (error) {
             return { error: true, data: error.message };
@@ -327,7 +328,7 @@ class AdminService {
                     },
                 },
                 { new: true }
-            );
+            ).populate("categoriesId");
 
             return { error: false, data: restaurant };
         } catch (error) {
