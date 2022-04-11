@@ -15,7 +15,7 @@ router.use('/client', clientRoutes);
 router.use('/superAdmin', superAdminRoutes);
 
 // Admin
-router.use('/admin', checkAuthAdmin, adminRoutes);
+router.use('/admin', adminRoutes);
 
 // Staff hacer un checkout para el staff
 router.use('/staff', staffRoutes);

@@ -14,25 +14,25 @@ import {
   Image,
 } from "@chakra-ui/react";
 import { MdAddShoppingCart } from "react-icons/md";
-import {data as datas} from "./data.json"
+/* import {data as datas} from "./data.json" */
 
 export const ProductsList = ({categor, subCategor}) => {
-  const [data, setData] = useState(datas)
+  const [data, setData] = useState([])
   let dataPorCategorias = {};
   let categorias;
   let newD;
 
-  /* useEffect(()=>{
+ useEffect(()=>{
     axios
-    .get(`/api/user/search?type=product`)
+    .get(`/api/admin/search?type=product&id=61a57344c4f0675184e3e87d`)
     .then(res => setData(res.data))
-  }, []) */
+  }, []) 
 
   if (!subCategor && !categor) {newD = data 
   } else if (subCategor && categor) {newD = data.filter(dato => dato.subCategory.includes(subCategor))
   } else newD = data.filter(dato => dato.category === categor)
 
-  for (let dato of newD) {
+if (newD.length)  {for (let dato of newD) {
     // Si existe la categoria
     if (dataPorCategorias[dato.category]) {
       // Si existe la subCategoria
@@ -49,7 +49,7 @@ export const ProductsList = ({categor, subCategor}) => {
       // No existe ni la categoria ni la sub
       dataPorCategorias[dato.category] = { [dato.subCategory]: [dato] };
     }
-  } 
+  } }
   
   categorias = Object.keys(dataPorCategorias);
 
@@ -74,7 +74,7 @@ export const ProductsList = ({categor, subCategor}) => {
           backgroundColor={useColorModeValue("blue.600", "gray.900")}
         >
           {categorias.map((categoria, i) => (
-            <a  href={`#${categoria}`}  >
+            <a  href={`#${categoria}`} key={i} >
               <Button ml={4}>{categoria}</Button>
             </a>
           ))}
